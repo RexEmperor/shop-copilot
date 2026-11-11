@@ -1,0 +1,82 @@
+# shop-copilot 基础设施一键编排
+# 用法: cd infra && docker compose up -d
+name: shop-copilot
+
+services:
+  # ── 业务数据库:商品/订单/会话 ──────────────────
+  mysql:
+    image: mysql:8.4
+    container_name: sc-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}   # 从同目录 .env 注入
+      MYSQL_DATABASE: shop                          # 首次启动自动建库
+      TZ: Asia/Shanghai
+    ports: ["3306:3306"]                            # 宿主机:容器
+    volumes: ["mysql-data:/var/lib/mysql"]          # 具名卷:容器删了数据还在
+    healthcheck:                                    # 健康检查,企业级标配
+      test: ["CMD-SHELL", "mysqladmin ping -h127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  # ── 缓存/限流/会话热数据 ───────────────────────
+  redis:
+    image: redis:7.4-alpine
+    container_name: sc-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]  # 开 AOF 持久化
+    ports: ["6379:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  # ── 向量数据库:RAG 检索专用 ───────────────────
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: sc-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: rag
+      TZ: Asia/Shanghai
+    ports: ["5432:5432"]
+    volumes: ["pg-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  # ── 消息队列:Namesrv(路由)+ Broker(存储)两个角色 ──
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.3.1
+    container_name: sc-mq-namesrv
+    restart: unless-stopped
+    command: ["sh", "mqnamesrv"]
+    environment:
+      JAVA_OPT_EXT: "-Xms256m -Xmx256m"   # 控制内存,别让默认值吃满 16G
+    ports: ["9876:9876"]
+
+  rocketmq-broker:
+    image: apache/rocketmq:5.3.1
+    container_name: sc-mq-broker
+    restart: unless-stopped
+    depends_on: [rocketmq-namesrv]
+    command: ["sh", "mqbroker", "-n", "rocketmq-namesrv:9876", "-c", "/home/rocketmq/conf/broker.conf"]
+    environment:
+      JAVA_OPT_EXT: "-Xms512m -Xmx512m -Xmn128m"
+    ports: ["10911:10911", "10909:10909"]
+    volumes:
+      - ./rocketmq/broker.conf:/home/rocketmq/conf/broker.conf:ro  # 绑定挂载,只读
+
+volumes:
+  mysql-data:
+  redis-data:
+  pg-data:
+  mq-namesrv-logs:
+  mq-broker-logs:
+  mq-broker-store:

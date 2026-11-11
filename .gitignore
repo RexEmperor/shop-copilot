@@ -1,0 +1,17 @@
+# Java
+target/
+*.class
+*.iml
+.idea/
+
+# Python
+__pycache__/
+.venv/
+*.pyc
+.pytest_cache/
+
+# 密钥与本地配置
+.env
+
+# 系统
+.DS_Store

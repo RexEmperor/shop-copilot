@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>shop-copilot 架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f7f8fa;
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #1a1a1a;
+  }
+  .canvas { width: 2040px; padding: 30px 40px 36px; }
+  h1 { font-size: 30px; font-weight: 700; text-align: center; margin-bottom: 56px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 232px 56px 232px 56px 232px 56px 232px 56px 232px 56px 232px 56px 232px;
+    grid-template-rows: 64px 44px auto;
+  }
+  .box {
+    grid-row: 1;
+    position: relative; z-index: 1;
+    height: 64px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 600;
+    border: 1.5px solid;
+  }
+  .box.green  { background: #e6f2e6; border-color: #7fa87f; }
+  .box.gray   { background: #ededed; border-color: #999999; }
+  .box.yellow { background: #fdf5da; border-color: #d7b64a; }
+
+  .arrow {
+    grid-row: 1; align-self: center; justify-self: center;
+    position: relative; z-index: 1;
+    width: 32px; height: 2px; background: #1a1a1a;
+  }
+  .arrow::after {
+    content: ""; position: absolute; right: -1px; top: -4px;
+    border-left: 9px solid #1a1a1a;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .arrow .lbl {
+    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; font-weight: 400; color: #8a8a8a; white-space: nowrap;
+  }
+
+  .enclosure {
+    grid-row: 1; grid-column: 5 / 12;
+    margin: -36px -16px -14px;
+    border: 2px dashed #b9b9b9; border-radius: 12px;
+    position: relative; z-index: 0;
+  }
+  .enclosure span {
+    position: absolute; top: 7px; width: 100%; text-align: center;
+    font-size: 12px; color: #999999;
+  }
+
+  .connector {
+    grid-row: 2; justify-self: center;
+    position: relative; width: 0; height: 100%;
+    border-left: 2px dashed #e06666;
+  }
+  .connector::before {
+    content: ""; position: absolute; top: -3px; left: -4px;
+    width: 6px; height: 6px; border-radius: 50%; background: #e06666;
+  }
+
+  .note {
+    grid-row: 3;
+    background: #ffffff; border: 1.5px solid #e06666; border-radius: 8px;
+    padding: 10px 12px; min-height: 82px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 12.5px; line-height: 1.6; color: #444444; text-align: center;
+  }
+
+  .band {
+    margin-top: 30px; background: #f2f3f5; border-radius: 10px;
+    display: flex; padding: 16px 0;
+  }
+  .band > div { flex: 1; text-align: center; }
+  .band h3 { font-size: 15px; font-weight: 700; color: #222222; }
+  .band p { font-size: 12px; color: #999999; margin-top: 6px; }
+
+  .stats {
+    margin-top: 16px; background: #f2f3f5; border-radius: 10px;
+    display: flex; align-items: center; padding: 18px 0;
+  }
+  .stats > div { flex: 1; text-align: center; }
+  .stats > div + div { border-left: 1px solid #dddddd; }
+  .stats b { font-size: 24px; font-weight: 800; }
+  .stats span { font-size: 12px; color: #666666; margin-left: 8px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <h1>智购助手：从一句「帮我挑台笔记本」到有据可依的导购回答</h1>
+
+  <div class="grid">
+    <div class="enclosure"><span>双语言后端 · Python 编排 × Java 业务（MCP 协议连接）</span></div>
+
+    <div class="box green"  style="grid-column:1">前端聊天 UI</div>
+    <div class="arrow"      style="grid-column:2"><span class="lbl">SSE/HTTP</span></div>
+    <div class="box gray"   style="grid-column:3">意图路由</div>
+    <div class="arrow"      style="grid-column:4"></div>
+    <div class="box yellow" style="grid-column:5">Agent 编排</div>
+    <div class="arrow"      style="grid-column:6"><span class="lbl">检索</span></div>
+    <div class="box yellow" style="grid-column:7">RAG 取证</div>
+    <div class="arrow"      style="grid-column:8"><span class="lbl">MCP</span></div>
+    <div class="box yellow" style="grid-column:9">业务工具调用</div>
+    <div class="arrow"      style="grid-column:10"><span class="lbl">读写</span></div>
+    <div class="box yellow" style="grid-column:11">数据与消息</div>
+    <div class="arrow"      style="grid-column:12"></div>
+    <div class="box yellow" style="grid-column:13">流式回答</div>
+
+    <div class="connector" style="grid-column:1"></div>
+    <div class="connector" style="grid-column:3"></div>
+    <div class="connector" style="grid-column:5"></div>
+    <div class="connector" style="grid-column:7"></div>
+    <div class="connector" style="grid-column:9"></div>
+    <div class="connector" style="grid-column:11"></div>
+    <div class="connector" style="grid-column:13"></div>
+
+    <div class="note" style="grid-column:1">Vue3 / Gradio 聊天界面<br>SSE/HTTP 流式连接<br>逐字渲染、会话历史展示</div>
+    <div class="note" style="grid-column:3">识别导购 / 订单售后 / 商品问答<br>路由到对应 Agent 分支</div>
+    <div class="note" style="grid-column:5">Python FastAPI + LangGraph<br>多 Agent 协作 · 记忆管理<br>安全护栏</div>
+    <div class="note" style="grid-column:7">Ollama bge-m3 向量化<br>PG + pgvector 相似检索<br>商品问答有据可依</div>
+    <div class="note" style="grid-column:9">Java Spring Boot 3 + Spring AI<br>MCP Server 暴露业务工具<br>商品 / 订单 / 售后领域服务</div>
+    <div class="note" style="grid-column:11">MySQL 业务数据<br>Redis 缓存 / 限流 / 会话<br>RocketMQ 异步任务</div>
+    <div class="note" style="grid-column:13">SSE 逐字推送导购结论<br>Langfuse 全链路追踪<br>成本核算</div>
+  </div>
+
+  <div class="band">
+    <div><h3>双语言 MCP 架构</h3><p>Python 管编排、Java 管业务，业务工具经 MCP 协议暴露</p></div>
+    <div><h3>RAG 检索增强</h3><p>bge-m3 + pgvector，回答有据、抑制幻觉</p></div>
+    <div><h3>全链路可观测</h3><p>Langfuse 追踪与成本核算，每次调用可审计</p></div>
+  </div>
+
+  <div class="stats">
+    <div><b>5</b><span>个基础设施容器一键编排</span></div>
+    <div><b>2</b><span>种语言 Python + Java 双运行时</span></div>
+    <div><b>4</b><span>类存储与消息组件</span></div>
+  </div>
+</div>
+</body>
+</html>

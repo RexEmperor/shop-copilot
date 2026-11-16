@@ -58,16 +58,19 @@
 > 每个 Phase 都有:任务清单(工作日小块/周末整块)、产出物、验收标准(可验证)。
 > 原则:**每个 Phase 结束系统都必须是"能跑"的**,不接受长期无法演示的开发方式。
 
-### Phase 0 · 环境与地基(W1,~12h)
+### Phase 0 · 环境与地基(W1,~12h)✅ 2026-11-16 关闭
 - [x] 建 monorepo `shop-copilot`(Java 模块 + Python 模块 + infra)
 - [x] Docker Compose 一键起 MySQL / Redis / RocketMQ / PG(pgvector)(调整:Ollama 移至 Phase 4 本机安装;Langfuse 移至 Phase 1 部署)
-- [ ] 接通 DeepSeek API,封装统一 client(超时/重试/成本记录)
-- [ ] Spring Boot 3 骨架 + FastAPI 骨架,互相 HTTP 打通
-- [ ] 画架构图 v1(mermaid,README 里直接用)
-- **验收**:`docker compose up -d` 全绿;Python 调 Java hello 接口返回成功;DeepSeek 首次调用成功并记录耗时
+- [x] 接通 DeepSeek API,封装统一 client(超时/重试/成本记录)
+- [x] Spring Boot 3 骨架 + FastAPI 骨架,互相 HTTP 打通
+- [x] 画架构图 v1(mermaid,README 里直接用)
+- **验收**:`docker compose up -d` 全绿;Python 调 Java hello 接口返回成功;DeepSeek 首次调用成功并记录耗时 ✅(首调 0.74s / 29 tokens,GitHub 备份完成)
 
 > **进度日志 2026-11-12**:基础设施竣工(5 容器全部 healthy,RocketMQ 集群注册成功,commit 1aa681e)。
 > 排障记录(面试素材):①Homebrew git 配置损坏修复 ②死代理排查 ③本机 MySQL/Redis 与容器端口冲突(3306/6379)④RocketMQ 具名卷 root 属主导致 broker 崩溃,暂改为不挂数据卷(Phase 6 容器化时修正)。
+> **进度日志 2026-11-13**:双语言骨架互调打通(Boot 3.5.7 + FastAPI,commit ce1cb9e)。
+> **进度日志 2026-11-16**:DeepSeek 统一 client 上线,llm-check 冒烟通过;README 架构图 v1;代码推送 GitHub,Phase 0 关闭。
+> **观察记录**:deepseek-chat 首调即出现身份幻觉(自称"阿里云开发")——真实幻觉样本已入库,Phase 4 幻觉护栏与评测环节可引用此案例。
 
 ### Phase 1 · LLM 应用基础工程化(W2–W3,~24h)
 - [ ] 结构化输出:function calling 封装(工具注册、参数校验、循环调用)

@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field
 from app.chat import append_message, build_messages
 from app.llm.client import DeepSeekClient
 
+from app.chat import append_message, build_messages, get_history
+
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="agent-runtime", version="0.1.0")
@@ -46,10 +48,15 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest):
-    """多轮对话:历史存 Redis,同一 session_id 跨请求共享上下文"""
+    # 顺序敏感!必须先读历史(缓存空则触发 MySQL 回源回填),
+    # 再写用户消息。否则新消息会抢先占住空缓存,
+    # 让回源逻辑被"非空假象"绕过(accept-s2-01 事故根因)。
+    await get_history(req.session_id)
     await append_message(req.session_id, "user", req.message)
     messages = await build_messages(req.session_id)
     result = await llm.chat(messages)
-    await append_message(req.session_id, "assistant", result["content"])
+    await append_message(req.session_id, "assistant", result["content"],
+                         model=result["model"], usage=result["usage"],
+                         elapsed_ms=int(result["elapsed_s"] * 1000))
     return {"reply": result["content"], "elapsed_s": result["elapsed_s"],
             "usage": result["usage"]}

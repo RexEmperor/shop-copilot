@@ -8,6 +8,34 @@
 
 ## 架构图
 
-(Phase 0 结束时补上)
+```mermaid
+flowchart TB
+    subgraph client["用户"]
+        UI["聊天 UI(Phase 6: Vue3)"]
+    end
+    subgraph py["agent-runtime · Python"]
+        FA["FastAPI(SSE 流式)"]
+        LG["LangGraph 多 Agent 编排"]
+        LLM["DeepSeek 统一客户端"]
+    end
+    subgraph java["business-api · Java"]
+        SB["Spring Boot 3 业务服务"]
+        MCP["MCP Server(业务工具暴露)"]
+    end
+    subgraph infra["infra · Docker Compose"]
+        MY[("MySQL")]
+        RD[("Redis")]
+        PG[("PG + pgvector")]
+        MQ[["RocketMQ"]]
+    end
 
-![image-20261112233900060](/Users/guoke/Library/Application Support/typora-user-images/image-20261112233900060.png)
+    UI <-- "SSE 流式" --> FA
+    FA --> LG
+    LG --> LLM
+    LG -- "MCP 协议" --> MCP
+    MCP --> SB
+    SB --> MY
+    SB --> RD
+    LG --> PG
+    SB -.异步任务.-> MQ
+```

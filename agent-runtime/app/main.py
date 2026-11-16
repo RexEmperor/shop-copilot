@@ -4,7 +4,9 @@ from datetime import datetime
 
 import httpx
 from fastapi import FastAPI
+from pydantic import BaseModel, Field
 
+from app.chat import append_message, build_messages
 from app.llm.client import DeepSeekClient
 
 logging.basicConfig(level=logging.INFO)
@@ -34,4 +36,20 @@ async def hello(name: str = "world"):
 @app.get("/api/llm-check")
 async def llm_check(prompt: str = "用一句话介绍你自己"):
     """LLM 链路冒烟检查:DeepSeek 连通性 + 耗时 + token 用量(Phase 0 验收项)"""
-    return await llm.chat(prompt)
+    return await llm.chat([{"role": "user", "content": prompt}])
+
+
+class ChatRequest(BaseModel):
+    session_id: str = Field(min_length=8, max_length=64)
+    message: str = Field(min_length=1, max_length=2000)
+
+
+@app.post("/api/chat")
+async def chat(req: ChatRequest):
+    """多轮对话:历史存 Redis,同一 session_id 跨请求共享上下文"""
+    await append_message(req.session_id, "user", req.message)
+    messages = await build_messages(req.session_id)
+    result = await llm.chat(messages)
+    await append_message(req.session_id, "assistant", result["content"])
+    return {"reply": result["content"], "elapsed_s": result["elapsed_s"],
+            "usage": result["usage"]}

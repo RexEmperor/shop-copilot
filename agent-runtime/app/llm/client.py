@@ -27,9 +27,8 @@ class DeepSeekClient:
         self.timeout = timeout
         self.max_retries = max_retries  # 首次失败之外的额外重试次数
 
-    async def chat(self, prompt: str, system: str = "You are a helpful assistant.") -> dict:
-        messages = [{"role": "system", "content": system},
-                    {"role": "user", "content": prompt}]
+    async def chat(self, messages: list[dict]) -> dict:
+        """messages: [{"role": "system"|"user"|"assistant", "content": str}, ...]"""
         payload = {"model": self.model, "messages": messages}
         headers = {"Authorization": f"Bearer {self.api_key}"}
         last_err = None
@@ -52,7 +51,7 @@ class DeepSeekClient:
                 }
             except (httpx.HTTPError, KeyError, IndexError) as exc:
                 last_err = exc
-                backoff = 0.5 * 2 ** (attempt - 1)   # 指数退避:0.5s → 1s → 2s
+                backoff = 0.5 * 2 ** (attempt - 1)
                 logger.warning("deepseek attempt %s failed: %s → retry in %.1fs",
                                attempt, exc, backoff)
                 await asyncio.sleep(backoff)

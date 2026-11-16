@@ -1,7 +1,7 @@
 [project]
 name = "agent-runtime"
 version = "0.1.0"
-description = "Add your description here"
+description = "Shop copilot agent runtime: LLM orchestration with FastAPI + LangGraph"
 readme = "README.md"
 authors = [
     { name = "RexEmperor", email = "1564200378@qq.com" }
@@ -10,12 +10,6 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.162.5",
     "httpx>=0.28.1",
+    "python-dotenv>=1.2.4",
     "uvicorn>=0.54.0",
 ]
-
-[project.scripts]
-agent-runtime = "agent_runtime:main"
-
-[build-system]
-requires = ["uv_build>=0.13.7,<0.14.0"]
-build-backend = "uv_build"

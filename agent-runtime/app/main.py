@@ -11,6 +11,8 @@ from app.llm.client import DeepSeekClient
 
 from app.chat import append_message, build_messages, get_history
 
+from app.agent import run_agent
+
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="agent-runtime", version="0.1.0")
@@ -60,3 +62,9 @@ async def chat(req: ChatRequest):
                          elapsed_ms=int(result["elapsed_s"] * 1000))
     return {"reply": result["content"], "elapsed_s": result["elapsed_s"],
             "usage": result["usage"]}
+
+@app.post("/api/agent-chat")
+async def agent_chat(req: ChatRequest):
+    result = await run_agent(req.session_id, req.message)
+    return {"reply": result["content"], "tool_rounds": result["tool_rounds"],
+            "elapsed_s": result["elapsed_s"], "usage": result["usage"]}

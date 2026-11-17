@@ -72,12 +72,12 @@
 > **进度日志 2026-11-16**:DeepSeek 统一 client 上线,llm-check 冒烟通过;README 架构图 v1;代码推送 GitHub,Phase 0 关闭。
 > **观察记录**:deepseek-chat 首调即出现身份幻觉(自称"阿里云开发")——真实幻觉样本已入库,Phase 4 幻觉护栏与评测环节可引用此案例。
 
-### Phase 1 · LLM 应用基础工程化(W2–W3,~24h)
+### Phase 1 · LLM 应用基础工程化(W2–W3,~24h)✅ 2026-11-18 关闭
 - [x] 结构化输出:function calling 封装(工具注册、参数校验、循环调用)✅(S3 验收通过:mini 工具注册器 + agent 循环,三连全过)
-- [ ] 流式响应:FastAPI SSE,打字机效果
+- [x] 流式响应:FastAPI SSE,打字机效果 ✅(S4:事件流协议 delta/tool_status/tool_result/final,工具过程对用户可见)
 - [x] 多轮会话:消息历史持久化(MySQL)+ 热缓存(Redis),重启不丢 ✅(S1 Redis 版 + S2 MySQL 双写/Cache-aside 均已验收)
 - [x] Prompt 模板管理(版本化目录 prompts/<名字>/<版本>.md + lru_cache;shopping_assistant v1 已上线并实测生效)
-- [ ] 简单聊天页(Gradio 先顶上,Phase 6 换 Vue3)
+- [x] 简单聊天页(Gradio 先顶上,Phase 6 换 Vue3)✅(S5b:app/ui.py,流式回答 + 工具轨迹可视化)
 - **产出**:`agent-runtime` 骨架 + pytest 单测
 - **验收**:多轮对话上下文正确;杀进程重启会话不丢;每次调用在 Langfuse 可见
 - **进度日志 2026-11-16(S1)**:多轮会话 Redis 版上线,POST /api/chat + 截断 + TTL;用户自加 Pydantic 入参校验(422 实战案例);实测 prompt_tokens 随轮次 33→69→97,"记忆=重发历史=成本"有了第一手数据。
@@ -87,6 +87,9 @@
 - **进度日志 2026-11-17(S4)**:SSE 事件流上线(chat_stream 增量协议 + run_agent_stream 事件流 + StreamingResponse;工具轮只发 tool_status/result,最终回答逐字 delta)。验收 A/B/C 全过。两个新认知:①write-ahead 用户消息 + 运行时崩溃 = 重复行入库——设计保住了用户输入,但暴露上下文污染问题(status 列/幂等键进 Phase 5 backlog)②import 缺失的 NameError 发生在"先存后崩"的分界点之后,所以失败请求也有痕迹——审计视角的价值。
 
 - **进度日志 2026-11-17(S5a)**:Langfuse Cloud 接入(@observe 三处装饰 + propagate_attributes 传播 session)。观测:trace 层级 agent-chat→deepseek-chat→tool-execute→deepseek-chat 正确;失败请求也被记录(level=ERROR);选型故事:MinIO 2026-09 撤源导致自托管断裂,评估后切云版。
+- **进度日志 2026-11-17(S5b)**:Gradio 聊天页上线(app/ui.py,Gradio 6.x Blocks):回答逐字流式渲染;工具事件可视化——tool_status→"🔧 调用中…"、tool_result→"✅ 结果",汇入"工具轨迹"框;每会话独立 ui-<uuid8> ID。两处自记取舍:①dev 期进程内直调 run_agent_stream 不走 HTTP,生产改消费 /api/agent-chat/stream ②流式路径 Langfuse 上报暂缺——均已入 backlog。
+- **进度日志 2026-11-18(S5c)**:pytest 回归固化(tests/ 共 8 例,教练实测复跑 0.78s 全绿):chat 3 例(往返、**缓存未命中回源 MySQL——S2 顺序 bug 的专属回归测试**、截断)、agent 1 例(mock LLM 验证"要工具→喂结果→作答"循环)、tools 4 例(schema 跳过上下文键、未知工具兜底、多余参数丢弃+session_id 注入、异常转错误文本)。pytest-asyncio auto 模式配置于 pyproject。价值:cache-aside 与工具注册器的行为契约自此有回归保护,后续重构不再靠肉眼。
+- **Phase 1 关闭小结(2026-11-18)**:地基四件套(结构化输出/流式/记忆/Prompt 管理)+ 可观测(Langfuse Cloud,SDK v5.2)+ 可视化(Gradio)+ 回归(8 例)全部落地,实际用时约两周半(计划 W2–W3 ≈ 24h 场次全部走完)。Phase 2(Java 业务层)待启。
 
 ### Phase 2 · 业务服务层(Java)(W4–W5,~24h)
 - [ ] 领域建模:商品 / 订单 / 售后工单 三模块,表结构设计

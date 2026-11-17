@@ -10,6 +10,7 @@ requires-python = ">=3.13"
 dependencies = [
     "asyncmy>=0.2.18",
     "fastapi>=0.162.5",
+    "gradio>=6.32.0",
     "httpx>=0.28.1",
     "langfuse>=5.2.0",
     "python-dotenv>=1.2.4",

@@ -1,5 +1,6 @@
 """agent-runtime 入口:FastAPI 应用"""
 import logging
+import json
 from datetime import datetime
 
 import httpx
@@ -12,6 +13,9 @@ from app.llm.client import DeepSeekClient
 from app.chat import append_message, build_messages, get_history
 
 from app.agent import run_agent
+
+from fastapi.responses import StreamingResponse
+from app.agent import run_agent, run_agent_stream
 
 logging.basicConfig(level=logging.INFO)
 
@@ -68,3 +72,17 @@ async def agent_chat(req: ChatRequest):
     result = await run_agent(req.session_id, req.message)
     return {"reply": result["content"], "tool_rounds": result["tool_rounds"],
             "elapsed_s": result["elapsed_s"], "usage": result["usage"]}
+
+@app.post("/api/agent-chat/stream")
+async def agent_chat_stream(req: ChatRequest):
+    """SSE 事件流:前端用 fetch + ReadableStream 消费(EventSource 只支持 GET)"""
+    async def sse():
+        try:
+            async for ev in run_agent_stream(req.session_id, req.message):
+                yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
+        except Exception as exc:
+            yield f"data: {json.dumps({'type': 'error', 'message': str(exc)}, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(sse(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache",
+                                      "X-Accel-Buffering": "no"})  # 防将来 nginx 缓冲整个流

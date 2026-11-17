@@ -67,3 +67,62 @@ class DeepSeekClient:
                                attempt, exc, backoff)
                 await asyncio.sleep(backoff)
         raise RuntimeError(f"DeepSeek 调用失败(已重试 {self.max_retries} 次): {last_err}")
+
+    async def chat_stream(self, messages: list[dict], tools: list[dict] | None = None):
+        """流式对话:逐块产出事件。
+        {"type": "delta", "content"}               回答文本增量
+        {"type": "tool_calls", "tool_calls": [...]} 本轮聚合完成的全部工具调用
+        {"type": "done", "usage"}                  结束
+        取舍:流式不做失败重试(流中断后的断点续传是 Phase 5 课题);
+        usage 需显式开启 stream_options,否则 DeepSeek 不在流里返回。
+        """
+        payload = {"model": self.model, "messages": messages, "stream": True,
+                   "stream_options": {"include_usage": True}}
+        if tools:
+            payload["tools"] = tools
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        content_parts: list[str] = []
+        tc_acc: dict[int, dict] = {}          # 工具调用增量按 index 聚合
+        usage = {}
+        start = time.perf_counter()
+
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            async with client.stream("POST", API_URL, headers=headers, json=payload) as resp:
+                resp.raise_for_status()
+                async for line in resp.aiter_lines():
+                    if not line.startswith("data:"):
+                        continue
+                    data = line[5:].strip()
+                    if data == "[DONE]":
+                        break
+                    chunk = json.loads(data)
+                    if chunk.get("usage"):            # include_usage 的尾块
+                        usage = chunk["usage"]
+                    choices = chunk.get("choices") or []
+                    if not choices:                   # usage 尾块 choices 为空,跳过
+                        continue
+                    delta = choices[0].get("delta") or {}
+                    if delta.get("content"):
+                        content_parts.append(delta["content"])
+                        yield {"type": "delta", "content": delta["content"]}
+                    for tc in delta.get("tool_calls") or []:
+                        idx = tc.get("index", 0)
+                        acc = tc_acc.setdefault(idx, {"id": "", "name": "", "arguments": ""})
+                        if tc.get("id"):
+                            acc["id"] = tc["id"]
+                        fn = tc.get("function") or {}
+                        acc["name"] += fn.get("name") or ""
+                        acc["arguments"] += fn.get("arguments") or ""
+
+        logger.info("deepseek stream done: elapsed=%.2fs usage=%s",
+                    time.perf_counter() - start, usage)
+        if tc_acc:
+            calls = []
+            for acc in tc_acc.values():
+                try:
+                    args = json.loads(acc["arguments"] or "{}")
+                except json.JSONDecodeError:
+                    args = {}
+                calls.append({"id": acc["id"], "name": acc["name"], "args": args})
+            yield {"type": "tool_calls", "tool_calls": calls}
+        yield {"type": "done", "usage": usage}

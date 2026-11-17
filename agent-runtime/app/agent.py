@@ -5,6 +5,8 @@ MAX_ROUNDS 防失控:模型可能反复要求调工具,烧钱又烧时间,必须
 import json
 import time
 
+from langfuse import observe, propagate_attributes
+
 from app.chat import append_message, build_messages, get_history
 from app.llm.client import DeepSeekClient
 from app.tools import execute, schemas
@@ -13,29 +15,34 @@ llm = DeepSeekClient()
 MAX_ROUNDS = 4
 
 
+@observe(name="agent-chat")
 async def run_agent(session_id: str, user_message: str) -> dict:
-    await get_history(session_id)                 # 顺序契约:S2 事故的教训,先回源预热
-    await append_message(session_id, "user", user_message)
-    messages = await build_messages(session_id)
+    # Langfuse 5.x:session 要用 propagate_attributes 上下文管理器设置,
+    # 并传播到本 trace 的所有子 span。(3.x 的 update_current_trace 已移除)
+    with propagate_attributes(session_id=session_id):
+        await get_history(session_id)             # 顺序契约:S2 事故的教训,先回源预热
+        await append_message(session_id, "user", user_message)
+        messages = await build_messages(session_id)
 
-    tool_rounds = 0
-    result = None
-    for _ in range(MAX_ROUNDS):
-        result = await llm.chat(messages, tools=schemas())
-        if not result["tool_calls"]:
-            break                                 # 模型不要工具了 = 可以作答
-        tool_rounds += 1
-        messages.append({"role": "assistant",
-                         "content": result["raw_assistant_message"].get("content") or "",
-                         "tool_calls": result["raw_assistant_message"]["tool_calls"]})
-        for call in result["tool_calls"]:
-            output = await execute(call["name"], call["args"],
-                                   context={"session_id": session_id})
-            messages.append({"role": "tool", "tool_call_id": call["id"], "content": output})
+        tool_rounds = 0
+        result = None
+        for _ in range(MAX_ROUNDS):
+            result = await llm.chat(messages, tools=schemas())
+            if not result["tool_calls"]:
+                break                             # 模型不要工具了 = 可以作答
+            tool_rounds += 1
+            messages.append({"role": "assistant",
+                             "content": result["raw_assistant_message"].get("content") or "",
+                             "tool_calls": result["raw_assistant_message"]["tool_calls"]})
+            for call in result["tool_calls"]:
+                output = await execute(call["name"], call["args"],
+                                       context={"session_id": session_id})
+                messages.append({"role": "tool", "tool_call_id": call["id"], "content": output})
 
-    await append_message(session_id, "assistant", result["content"])
-    result["tool_rounds"] = tool_rounds
-    return result
+        await append_message(session_id, "assistant", result["content"])
+        result["tool_rounds"] = tool_rounds
+        return result
+
 
 async def run_agent_stream(session_id: str, user_message: str):
     """事件流版 Agent。协议:tool_status / tool_result / delta / final。

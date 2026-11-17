@@ -8,6 +8,8 @@
 import inspect
 from datetime import datetime, timezone, timedelta
 
+from langfuse import observe
+
 from app.chat import redis
 
 TOOL_REGISTRY: dict[str, dict] = {}
@@ -42,6 +44,7 @@ def schemas() -> list[dict]:
     return [entry["schema"] for entry in TOOL_REGISTRY.values()]
 
 
+@observe(name="tool-execute")
 async def execute(name: str, arguments: dict, context: dict) -> str:
     """执行工具。参数校验三连:未知工具 / 多余参数 / 执行异常,全部兜住——
     工具失败不炸对话,把错误文本交回给模型,让它自己决定下一步。"""

@@ -73,13 +73,20 @@
 > **观察记录**:deepseek-chat 首调即出现身份幻觉(自称"阿里云开发")——真实幻觉样本已入库,Phase 4 幻觉护栏与评测环节可引用此案例。
 
 ### Phase 1 · LLM 应用基础工程化(W2–W3,~24h)
-- [ ] 结构化输出:function calling 封装(工具注册、参数校验、循环调用)
+- [x] 结构化输出:function calling 封装(工具注册、参数校验、循环调用)✅(S3 验收通过:mini 工具注册器 + agent 循环,三连全过)
 - [ ] 流式响应:FastAPI SSE,打字机效果
-- [ ] 多轮会话:消息历史持久化(MySQL)+ 热缓存(Redis),重启不丢
-- [ ] Prompt 模板管理(版本化目录,不硬编码)
+- [x] 多轮会话:消息历史持久化(MySQL)+ 热缓存(Redis),重启不丢 ✅(S1 Redis 版 + S2 MySQL 双写/Cache-aside 均已验收)
+- [x] Prompt 模板管理(版本化目录 prompts/<名字>/<版本>.md + lru_cache;shopping_assistant v1 已上线并实测生效)
 - [ ] 简单聊天页(Gradio 先顶上,Phase 6 换 Vue3)
 - **产出**:`agent-runtime` 骨架 + pytest 单测
 - **验收**:多轮对话上下文正确;杀进程重启会话不丢;每次调用在 Langfuse 可见
+- **进度日志 2026-11-16(S1)**:多轮会话 Redis 版上线,POST /api/chat + 截断 + TTL;用户自加 Pydantic 入参校验(422 实战案例);实测 prompt_tokens 随轮次 33→69→97,"记忆=重发历史=成本"有了第一手数据。
+- **进度日志 2026-11-16(S2)**:MySQL 持久层上线(双写 + Cache-aside 回源回填)。排障记录(面试素材):①SQLAlchemy 无 relationship() 时 flush 顺序不保证 → 父子表 INSERT 乱序触发外键 1452,显式 flush 修复 ②AIOMYSQL 驱动需与 URL +aiomysql 配套安装 ③AUTO_INCREMENT 不回退,失败事务留下 id 空洞。assistant 行 model/tokens/elapsed_ms 元数据落库实测通过。
+- **进度日志 2026-11-17(S3)**:function calling 循环上线(mini 工具注册器:签名反射生成 schema + execute 三重兜底;agent.py 循环 MAX_ROUNDS=4;session_id 代码注入不进 schema)。三连验收:A 动态时间 tool_rounds=1;B 上下文注入——工具返回 3、模型答 4(模型覆盖工具权威数据的风险,记入 Phase 5 护栏 backlog);C 闲聊 tool_rounds=0。观测:工具 schema 稳定前缀使 DeepSeek 前缀缓存首次命中(cache_hit=256);无工具请求也因 schema 随行多付 ~360 tokens/次(Phase 3 意图路由的经济学动机)。
+
+- **进度日志 2026-11-17(S4)**:SSE 事件流上线(chat_stream 增量协议 + run_agent_stream 事件流 + StreamingResponse;工具轮只发 tool_status/result,最终回答逐字 delta)。验收 A/B/C 全过。两个新认知:①write-ahead 用户消息 + 运行时崩溃 = 重复行入库——设计保住了用户输入,但暴露上下文污染问题(status 列/幂等键进 Phase 5 backlog)②import 缺失的 NameError 发生在"先存后崩"的分界点之后,所以失败请求也有痕迹——审计视角的价值。
+
+- **进度日志 2026-11-17(S5a)**:Langfuse Cloud 接入(@observe 三处装饰 + propagate_attributes 传播 session)。观测:trace 层级 agent-chat→deepseek-chat→tool-execute→deepseek-chat 正确;失败请求也被记录(level=ERROR);选型故事:MinIO 2026-09 撤源导致自托管断裂,评估后切云版。
 
 ### Phase 2 · 业务服务层(Java)(W4–W5,~24h)
 - [ ] 领域建模:商品 / 订单 / 售后工单 三模块,表结构设计

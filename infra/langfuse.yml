@@ -1,0 +1,44 @@
+# Langfuse v2 自托管(独立 project,避免与主 infra 混淆)
+# 用法: cd infra && docker compose -f langfuse.yml up -d
+#
+# 设计说明:
+# - v2 的 S3/blob 存储是可选件,不配 S3_* 时退化为纯 Postgres 模式,
+#   trace/generation/span/token 用量全部正常,仅媒体附件类功能不可用(我们用不到)
+# - 因此本文件不含 minio;Phase 4 需要文件存储时再补,并给 langfuse 服务接线 S3_* 环境变量
+# - 升级路径(backlog): v3 需要 clickhouse/worker 等更多组件,迁移时参考官方 compose
+name: shop-langfuse
+
+services:
+  langfuse-db:
+    image: postgres:16
+    container_name: lf-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: langfuse_dev_2026
+      POSTGRES_DB: langfuse
+    ports: ["5433:5432"]              # 5433 避开主 infra 的 sc-pg(5432)
+    volumes: ["langfuse-pg-data:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  langfuse:
+    image: langfuse/langfuse:2
+    container_name: lf-web
+    restart: unless-stopped
+    depends_on:
+      langfuse-db:
+        condition: service_healthy
+    ports: ["3000:3000"]
+    environment:
+      DATABASE_URL: postgresql://langfuse:langfuse_dev_2026@langfuse-db:5432/langfuse
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: dev-secret-shop-copilot-2026
+      SALT: dev-salt-shop-copilot
+      TELEMETRY_DISABLED: "1"
+
+volumes:
+  langfuse-pg-data:

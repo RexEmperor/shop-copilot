@@ -124,10 +124,10 @@
 - 最小种子数据用于 S1/S2 验收;500 条 mock 在 S4 扩充,避免早期 SQL 噪声过大。
 
 ### Phase 3 · Agent 核心(W6–W8,~36h)★核心,不可砍
-- [ ] LangGraph 状态机:意图路由 → 导购 Agent / 订单售后 Agent / 商品问答 Agent
-- [x] Java 侧用 Spring AI 实现 **MCP Server**,暴露:查商品、查订单、查物流、发起退款等工具(S1 已提交 `8b31a50`)
-- [x] Python 侧接入 MCP Client,工具调用全链路打通(S2 已完成并实测跨语言联调通过,待 review 提交)
-- [ ] ReAct 循环 + 工具调用失败重试 + 兜底(转人工话术)
+- [x] LangGraph 状态机:意图路由 → 导购 Agent / 订单售后 Agent / 商品问答 Agent(S3 已完成并实测单域+跨域协作通过,待 review 提交)
+- [x] Java 侧用 Spring AI 实现 **MCP Server**,暴露:查商品、查订单、查物流、发起退款等工具(S1 已提交 `8b31a50`,S2 补 `list_categories` + 零结果提示 `33fd1de`)
+- [x] Python 侧接入 MCP Client,工具调用全链路打通(S2 已提交 `33fd1de`)
+- [x] ReAct 循环 + 工具调用失败重试 + 兜底(转人工话术)(S3 已实现:幂等读重试 + 连续系统故障建议转人工降级,不强行切走会话)
 - **产出**:端到端可演示的多 Agent 系统
 - **验收**:30 条典型 query 全部路由正确、工具调用正确(评测集 v0)
 
@@ -142,7 +142,8 @@
 | **S5 · 评测集 v0(30 题)与收官** | 构建 30 条 query 评测集与自动评测脚本,更新文档与面试题库 | `agent-runtime/evals/`、`docs/PLAN.md`、`docs/面试题库.md` | 30 条 query 路由与工具调用达标,Phase 3 收官 |
 
 > **进度日志 2026-11-26(S1 已提交 `8b31a50`)**:`business-api` 引入 `spring-ai-bom:1.1.8` + `spring-ai-starter-mcp-server-webmvc`,以 Streamable HTTP(`/mcp`, `type: SYNC`)按业务域拆分为 `ProductMcpTools`、`OrderMcpTools`、`AftersaleMcpTools` 并抽离公共能力 `McpToolSupport`,暴露 6 个工具(`search_products` / `get_product_detail` / `list_orders` / `get_order_detail` / `create_aftersale` / `list_aftersales`),统一输出 `McpToolResponse` 并由后端格式化 `priceYuan`/`totalAmountYuan`/`refundYuan`;`mvn test` **218 例全绿**。
-> **进度日志 2026-11-26(S2 实现待 review)**:`agent-runtime` 引入官方 `mcp==2.3.0` SDK(`streamable_http_client`),实现 `app/mcp_client.py`(`McpClientManager`,动态拉取工具转 OpenAI function schema、缓存 + 按 `allowed_names` 白名单裁剪、幂等读工具自动重试/非幂等写工具 `create_aftersale` 禁盲目重试、不可达 fail-open 降级),并与 `app/tools.py`、`app/agent.py`、`app/main.py`(`/api/mcp-tools`)打通;结合真人实测暴露的 `keyword="数码"` 零召回现象,遵循 CQRS 原则保持 MySQL 无全表扫,在 `ProductMcpTools` 新增 `list_categories` 工具与 `search_products` 零结果 `availableCategories` 提示(均走 `idx_category_status` 索引聚合);Java `mvn test` **220 例全绿** + Python `pytest` **14 例全绿**。待确认提交后进入 S3(LangGraph 多 Agent 协作)。
+> **进度日志 2026-11-26(S2 已提交 `33fd1de`)**:`agent-runtime` 引入官方 `mcp==2.3.0` SDK(`streamable_http_client`),实现 `app/mcp_client.py`(`McpClientManager`,动态拉取工具转 OpenAI function schema、缓存 + 按 `allowed_names` 白名单裁剪、幂等读工具自动重试/非幂等写工具 `create_aftersale` 禁盲目重试、不可达 fail-open 降级),并与 `app/tools.py`、`app/agent.py`、`app/main.py`(`/api/mcp-tools`)打通;结合真人实测暴露的 `keyword="数码"` 零召回现象,遵循 CQRS 原则保持 MySQL 无全表扫,在 `ProductMcpTools` 新增 `list_categories` 工具与 `search_products` 零结果 `availableCategories` 提示(均走 `idx_category_status` 索引聚合);Java `mvn test` **220 例全绿** + Python `pytest` **14 例全绿**。
+> **进度日志 2026-11-26(S3 实现待 review)**:`agent-runtime` 引入 `langgraph==1.2.24`,落地 `app/graph/`(`state.py`/`router.py`/`workers.py`/`workflow.py`)与 5 套角色 Prompt(`router`/`guide`/`order_aftersale`/`product_qa`/`chitchat`),支持单域直出(无多余汇总调用)、跨域 2 步接力协作(`order_aftersale → guide → synthesize`)、最小权限工具白名单隔离、导购动态在售类目 `enum` 前置注入、工具连续失败友好降级建议转人工(不强行切走会话)与显式转人工识别,并接入 `POST /api/agent-chat`;pytest **21 例全绿**,真机联调 DeepSeek + Java MCP 验证闲聊(零工具)、“电子产品”直接查齐 4 款数码商品、以及跨域“查订单+推荐耳机”双 Agent 协作均一次通过。待 review 提交后进入 S4(SSE 流式 + Gradio UI)。
 
 ### Phase 4 · RAG(W9–W10,~24h)★核心,不可砍
 - [ ] 语料:平台规则文档(自写 20~30 篇)+ 商品目录

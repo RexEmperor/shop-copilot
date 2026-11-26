@@ -17,6 +17,7 @@ from app.agent import run_agent
 from fastapi.responses import StreamingResponse
 from app import config
 from app.agent import run_agent, run_agent_stream
+from app.graph import run_graph
 from app.mcp_client import mcp_client
 
 logging.basicConfig(level=logging.INFO)
@@ -83,9 +84,16 @@ async def chat(req: ChatRequest):
 
 @app.post("/api/agent-chat")
 async def agent_chat(req: ChatRequest):
-    result = await run_agent(req.session_id, req.message)
-    return {"reply": result["content"], "tool_rounds": result["tool_rounds"],
-            "elapsed_s": result["elapsed_s"], "usage": result["usage"]}
+    result = await run_graph(req.session_id, req.message)
+    return {
+        "reply": result["content"],
+        "route": result["route"],
+        "agents_used": result["agents_used"],
+        "tool_rounds": result["tool_rounds"],
+        "handoff_requested": result["handoff_requested"],
+        "elapsed_s": result["elapsed_s"],
+        "usage": result["usage"],
+    }
 
 @app.post("/api/agent-chat/stream")
 async def agent_chat_stream(req: ChatRequest):

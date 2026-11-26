@@ -13,6 +13,7 @@ dependencies = [
     "gradio>=6.32.0",
     "httpx>=0.28.1",
     "langfuse>=5.2.0",
+    "langgraph>=1.2.24",
     "mcp>=2.3.0",
     "python-dotenv>=1.2.4",
     "redis>=8.1.0",

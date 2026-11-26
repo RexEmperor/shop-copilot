@@ -21,7 +21,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,6 +33,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -52,6 +55,17 @@ class AftersaleApiIntegrationTest {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @BeforeEach
+    void clearRateLimitKeys() {
+        Set<String> keys = stringRedisTemplate.keys("shop:ratelimit:AftersaleController#*");
+        if (keys != null && !keys.isEmpty()) {
+            stringRedisTemplate.delete(keys);
+        }
+    }
 
     @Test
     @DisplayName("售后可依次完成创建、查询、审核通过和确认退款")

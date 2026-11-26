@@ -7,6 +7,7 @@ import com.shopcopilot.business.aftersale.service.AftersaleService;
 import com.shopcopilot.business.aftersale.vo.AftersaleVO;
 import com.shopcopilot.business.common.PageResult;
 import com.shopcopilot.business.common.Result;
+import com.shopcopilot.business.common.ratelimit.RateLimit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "售后管理", description = "售后创建、审核、退款和查询")
+@RateLimit(maxRequests = 30, windowSeconds = 60)
 @RestController
 @RequestMapping("/api/aftersales")
 public class AftersaleController {
@@ -35,12 +37,14 @@ public class AftersaleController {
     }
 
     @GetMapping
+    @RateLimit(maxRequests = 60, windowSeconds = 60)
     @Operation(summary = "售后分页列表")
     public Result<PageResult<AftersaleVO>> list(@Valid AftersaleQuery query) {
         return Result.ok(aftersaleService.page(query));
     }
 
     @GetMapping("/{id}")
+    @RateLimit(maxRequests = 60, windowSeconds = 60)
     @Operation(summary = "售后工单详情")
     public Result<AftersaleVO> detail(@PathVariable Long id) {
         return Result.ok(aftersaleService.getById(id));

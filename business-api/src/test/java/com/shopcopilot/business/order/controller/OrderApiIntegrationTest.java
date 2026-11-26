@@ -1,8 +1,10 @@
 package com.shopcopilot.business.order.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -13,11 +15,14 @@ import com.shopcopilot.business.order.entity.Order;
 import com.shopcopilot.business.order.mapper.OrderMapper;
 import com.shopcopilot.business.product.entity.Product;
 import com.shopcopilot.business.product.mapper.ProductMapper;
+import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -39,6 +44,17 @@ class OrderApiIntegrationTest {
 
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @BeforeEach
+    void clearRateLimitKeys() {
+        Set<String> keys = stringRedisTemplate.keys("shop:ratelimit:OrderController#*");
+        if (keys != null && !keys.isEmpty()) {
+            stringRedisTemplate.delete(keys);
+        }
+    }
 
     @Test
     @DisplayName("创建订单成功后扣减库存并保存后端价格快照")
@@ -169,5 +185,73 @@ class OrderApiIntegrationTest {
             .andExpect(jsonPath("$.code").value(400))
             .andExpect(jsonPath("$.message", org.hamcrest.Matchers.containsString("quantity")))
             .andExpect(jsonPath("$.data").value(nullValue()));
+    }
+
+    @Test
+    @DisplayName("不传过滤条件时分页查询返回全部种子订单")
+    void should_listAllOrders_when_noFiltersProvided() throws Exception {
+        mockMvc.perform(get("/api/orders"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data.total").value(4))
+            .andExpect(jsonPath("$.data.page").value(1))
+            .andExpect(jsonPath("$.data.size").value(20))
+            .andExpect(jsonPath("$.data.records", hasSize(4)));
+    }
+
+    @Test
+    @DisplayName("按订单状态和业务订单号过滤并正确翻页")
+    void should_filterAndPaginateOrders() throws Exception {
+        mockMvc.perform(get("/api/orders").param("status", "1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(1))
+            .andExpect(jsonPath("$.data.records[0].orderNo").value("SO202611240002"))
+            .andExpect(jsonPath("$.data.records[0].status").value(1));
+
+        mockMvc.perform(get("/api/orders").param("orderNo", "SO202611240003"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(1))
+            .andExpect(jsonPath("$.data.records[0].id").value(3))
+            .andExpect(jsonPath("$.data.records[0].statusText").value("已发货"));
+
+        mockMvc.perform(get("/api/orders").param("page", "2").param("size", "2"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.total").value(4))
+            .andExpect(jsonPath("$.data.page").value(2))
+            .andExpect(jsonPath("$.data.size").value(2))
+            .andExpect(jsonPath("$.data.records", hasSize(2)));
+    }
+
+    @Test
+    @DisplayName("查询订单详情：存在返回 200，不存在返回 404，非法 ID 返回 400")
+    void should_getOrderDetail_orReturnError() throws Exception {
+        mockMvc.perform(get("/api/orders/2"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data.id").value(2))
+            .andExpect(jsonPath("$.data.orderNo").value("SO202611240002"))
+            .andExpect(jsonPath("$.data.totalAmountCents").value(89900))
+            .andExpect(jsonPath("$.data.status").value(1));
+
+        mockMvc.perform(get("/api/orders/999999"))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(404))
+            .andExpect(jsonPath("$.message").value("订单不存在"));
+
+        mockMvc.perform(get("/api/orders/abc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(400));
+    }
+
+    @Test
+    @DisplayName("订单列表状态值或分页参数非法时返回 400")
+    void should_returnBadRequest_when_orderQueryInvalid() throws Exception {
+        mockMvc.perform(get("/api/orders").param("status", "5"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(400));
+
+        mockMvc.perform(get("/api/orders").param("page", "0"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(400));
     }
 }

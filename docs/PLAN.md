@@ -92,12 +92,35 @@
 - **Phase 1 关闭小结(2026-11-18)**:地基四件套(结构化输出/流式/记忆/Prompt 管理)+ 可观测(Langfuse Cloud,SDK v5.2)+ 可视化(Gradio)+ 回归(8 例)全部落地,实际用时约两周半(计划 W2–W3 ≈ 24h 场次全部走完)。Phase 2(Java 业务层)待启。
 
 ### Phase 2 · 业务服务层(Java)(W4–W5,~24h)
-- [ ] 领域建模:商品 / 订单 / 售后工单 三模块,表结构设计
-- [ ] Spring Boot 3 + MyBatis-Plus(或 JPA,按你习惯)实现 CRUD + 业务接口
-- [ ] Redis 缓存(商品详情)+ 基于 Redis 的接口限流
-- [ ] OpenAPI 文档;生成 500 条商品 + 订单 mock 数据
+- [x] 领域建模:商品 / 订单 / 售后工单 三模块,表结构设计(S1 已完成并验证)
+- [x] Spring Boot 3 + MyBatis-Plus(或 JPA,按你习惯)实现 CRUD + 业务接口(S2 已完成,含状态机与并发控制)
+- [x] Redis 缓存(商品详情)+ 基于 Redis 的接口限流(S3 已完成,待主人 review)
+- [ ] OpenAPI 文档;生成 500 条商品 + 订单 mock 数据(springdoc 已接入;500 条 mock 待 S4)
 - **产出**:`business-api` 可独立运行
 - **验收**:Swagger 全接口可调;缓存命中可观测;简单并发压测无误
+
+> **进度日志 2026-11-26(S1/S2 验收合并)**:完成 `feature/phase2-s1-modeling` review 与合并。①数据库校验脚本 `infra/schema/verify_shop.sh` 24 项全 PASS;②修复 `AftersaleServiceImpl.page()` 未传 `status` 时因拆箱触发 NPE 的缺陷并补回归测试(`fd8498a`);③`business-api` 全量 `mvn test` 183 例全绿;④已合并回 `master` 并清理 `.worktrees/phase2-s1-modeling`。
+> **进度日志 2026-11-26(S3 实现与 Review 优化)**:完成商品详情 Cache-aside(`ProductCache`,含空值/下架短 TTL 哨兵防穿透、下架商品详情拦截返回 404、TTL 随机抖动防雪崩、事务提交后删键兜底、订单扣减/恢复库存联动失效)、Redis **ZSET + Lua 原子滑动窗口限流**(`@RateLimit` + `RateLimitInterceptor` + `RedisRateLimiter`,默认不信任 `X-Forwarded-For`,仅对白名单受信任代理从右向左解析真实 IP,读写/交易分级阈值,超限 429),并补齐订单查询接口(`GET /api/orders` 分页过滤、`GET /api/orders/{id}` 详情);`mvn test` **213 例全绿**。等待确认提交后推进 S4。
+
+#### Phase 2 执行拆分(2026-11-24 确认)
+
+> 固定前提:三表冻结、Java 侧无物理外键、金额存分、固定 `user_id=10001`、MyBatis-Plus。
+> 代码由 AI 编写,每个阶段完成后由项目主人 review Java 代码再进入下一阶段。
+
+| 步骤 | 主要工作 | 产物 / 文件 | 验收标准 | Review 卡点 |
+|---|---|---|---|---|
+| **S1 领域建模与 DDL** | 确认字段字典、枚举、状态机;编写三表 DDL 和最小种子数据 | `infra/schema/shop.sql`、`infra/schema/shop_seed.sql`;三表 `product/orders/aftersale_ticket` | utf8mb4;列 COMMENT 齐全;`updated_at ON UPDATE`;唯一/业务索引符合 §7;种子 10 商品(1 下架)、4 订单(覆盖四状态)、1 售后 | **S1 完成后暂停**,主人 review 表结构与状态机 |
+| **S2a 工程底座** | 引入 MyBatis-Plus、Validation、springdoc;配置 MySQL;统一响应、异常、分页对象 | `business-api/pom.xml`、`application.yaml`、`common/` 包、Swagger 配置 | 应用可连 shop 库启动;`/v3/api-docs` 可访问;非法入参返回 400;未知异常返回统一错误结构 | 随 S2b 一起 review |
+| **S2b 商品模块** | 商品 CRUD、上下架、分页/关键词/分类查询;实体/Mapper/Service/Controller/DTO | `product/` 包与对应测试 | Swagger 可调;下架商品不出现在在售列表;分页和过滤正确;核心服务单测通过 | 随 S2d 一起 review |
+| **S2c 订单模块与状态机** | 创建订单、支付、发货、确认收货、取消;后端金额计算与非法流转拦截 | `order/` 包、`OrderStatus` 状态机及测试 | `CREATED→PAID→SHIPPED→DELIVERED`,非终态可取消;重复/越级流转返回业务错误;订单金额不信任前端 | **订单状态机单独讲评**,确认后再做售后 |
+| **S2d 售后模块与 Phase 2 业务验收** | 发起售后、查询售后、审核售后;仅允许 PAID/SHIPPED/DELIVERED 发起 | `aftersale/` 包与对应测试;完整 Swagger 接口清单 | 非法状态发起售后被拒;退款金额从订单派生;商品/订单/售后最小闭环可演示;`mvn test` 全绿 | **S2 完成后暂停**,主人 review Java 业务代码 |
+| **S3 Redis 商品缓存与限流** | 商品详情 Cache-aside、更新/下架失效;Redis 原子限流拦截器或注解;命中/拒绝日志 | `config/`、`product/` 缓存代码、`common/ratelimit/`、测试与配置 | 首次 MISS、二次 HIT;修改后旧值不可见;超限返回 429;并发下计数正确 | **S3 完成后暂停**,主人 review 缓存一致性与限流边界 |
+| **S4 数据扩充、压测与收官** | 将商品/订单 mock 扩到 500 条;执行并发压测;记录延迟、错误率、缓存命中;更新文档 | `shop_mock_500.sql`、压测脚本或命令记录、`docs/PLAN.md`、`docs/面试题库.md` | `ab`/JMeter 压测无 5xx;缓存命中可观测;限流按预期触发;Phase 2 验收项逐条打勾 | **Phase 2 收官 review**,确认后再进入 Phase 3 |
+
+**S1 建模补充约定(待主人确认)**:
+- 为维持三表冻结,一期订单按“一单一件商品”建模,订单保存 `product_id`、商品名快照、成交单价与数量,总价由后端计算。
+- 售后退款金额从订单总价派生,Agent 或前端不能直接指定权威金额。
+- 最小种子数据用于 S1/S2 验收;500 条 mock 在 S4 扩充,避免早期 SQL 噪声过大。
 
 ### Phase 3 · Agent 核心(W6–W8,~36h)★核心,不可砍
 - [ ] LangGraph 状态机:意图路由 → 导购 Agent / 订单售后 Agent / 商品问答 Agent

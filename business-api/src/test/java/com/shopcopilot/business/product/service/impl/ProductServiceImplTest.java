@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.shopcopilot.business.common.BusinessException;
+import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.dto.ProductSaveRequest;
 import com.shopcopilot.business.product.entity.Product;
 import com.shopcopilot.business.product.enums.ProductStatus;
@@ -25,6 +26,9 @@ class ProductServiceImplTest {
 
     @Mock
     private ProductMapper productMapper;
+
+    @Mock
+    private ProductCache productCache;
 
     @InjectMocks
     private ProductServiceImpl productService;

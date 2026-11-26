@@ -3,6 +3,7 @@ package com.shopcopilot.business.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shopcopilot.business.common.BusinessException;
 import com.shopcopilot.business.common.PageResult;
+import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.dto.ProductSaveRequest;
 import com.shopcopilot.business.product.entity.Product;
 import com.shopcopilot.business.product.enums.ProductStatus;
@@ -20,9 +21,11 @@ import org.springframework.util.StringUtils;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
+    private final ProductCache productCache;
 
-    public ProductServiceImpl(ProductMapper productMapper) {
+    public ProductServiceImpl(ProductMapper productMapper, ProductCache productCache) {
         this.productMapper = productMapper;
+        this.productCache = productCache;
     }
 
     @Override
@@ -46,7 +49,26 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductVO getById(Long id) {
-        return toVO(requireProduct(id));
+        ProductCache.CacheEntry cached = productCache.get(id);
+        if (cached != null) {
+            return switch (cached.state()) {
+                case HIT -> cached.value();
+                case NOT_FOUND -> throw new BusinessException(HttpStatus.NOT_FOUND, "商品不存在");
+                case OFF_SALE -> throw new BusinessException(HttpStatus.NOT_FOUND, "商品已下架");
+            };
+        }
+        Product product = productMapper.selectById(id);
+        if (product == null) {
+            productCache.putNull(id);
+            throw new BusinessException(HttpStatus.NOT_FOUND, "商品不存在");
+        }
+        if (product.getStatus() != ProductStatus.ON_SALE) {
+            productCache.putOffSale(id);
+            throw new BusinessException(HttpStatus.NOT_FOUND, "商品已下架");
+        }
+        ProductVO vo = toVO(product);
+        productCache.put(vo);
+        return vo;
     }
 
     @Override
@@ -57,6 +79,7 @@ public class ProductServiceImpl implements ProductService {
         product.setStatus(ProductStatus.ON_SALE);
         product.setVersion(0);
         productMapper.insert(product);
+        productCache.evict(product.getId());
         return product.getId();
     }
 
@@ -66,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = requireProduct(id);
         applyRequest(product, request);
         updateProduct(product);
+        productCache.evict(id);
     }
 
     @Override
@@ -78,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setStatus(targetStatus);
         updateProduct(product);
+        productCache.evict(id);
     }
 
     private Product requireProduct(Long id) {

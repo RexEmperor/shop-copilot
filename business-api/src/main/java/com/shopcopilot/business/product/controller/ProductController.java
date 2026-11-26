@@ -2,6 +2,7 @@ package com.shopcopilot.business.product.controller;
 
 import com.shopcopilot.business.common.PageResult;
 import com.shopcopilot.business.common.Result;
+import com.shopcopilot.business.common.ratelimit.RateLimit;
 import com.shopcopilot.business.product.dto.ProductSaveRequest;
 import com.shopcopilot.business.product.dto.ProductStatusRequest;
 import com.shopcopilot.business.product.query.ProductQuery;
@@ -30,24 +31,28 @@ public class ProductController {
     }
 
     @GetMapping
+    @RateLimit(maxRequests = 120, windowSeconds = 60)
     @Operation(summary = "商品分页列表", description = "默认只返回上架商品；传 status=0 可查询下架商品")
     public Result<PageResult<ProductVO>> list(@Valid ProductQuery query) {
         return Result.ok(productService.page(query));
     }
 
     @GetMapping("/{id}")
+    @RateLimit(maxRequests = 120, windowSeconds = 60)
     @Operation(summary = "商品详情")
     public Result<ProductVO> detail(@PathVariable Long id) {
         return Result.ok(productService.getById(id));
     }
 
     @PostMapping
+    @RateLimit(maxRequests = 60, windowSeconds = 60)
     @Operation(summary = "创建商品", description = "新商品默认上架")
     public Result<Long> create(@Valid @RequestBody ProductSaveRequest request) {
         return Result.ok(productService.create(request));
     }
 
     @PutMapping("/{id}")
+    @RateLimit(maxRequests = 60, windowSeconds = 60)
     @Operation(summary = "修改商品")
     public Result<Void> update(@PathVariable Long id,
                                @Valid @RequestBody ProductSaveRequest request) {
@@ -56,6 +61,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/status")
+    @RateLimit(maxRequests = 60, windowSeconds = 60)
     @Operation(summary = "商品上下架")
     public Result<Void> changeStatus(@PathVariable Long id,
                                      @Valid @RequestBody ProductStatusRequest request) {

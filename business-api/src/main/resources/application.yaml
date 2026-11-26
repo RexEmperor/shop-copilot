@@ -8,3 +8,17 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:${MYSQL_ROOT_PASSWORD}}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      timeout: ${REDIS_TIMEOUT:2s}
+
+app:
+  cache:
+    product-ttl-seconds: ${PRODUCT_CACHE_TTL_SECONDS:300}
+    product-ttl-jitter-seconds: ${PRODUCT_CACHE_TTL_JITTER_SECONDS:30}
+    product-null-ttl-seconds: ${PRODUCT_CACHE_NULL_TTL_SECONDS:60}
+  rate-limit:
+    enabled: ${RATE_LIMIT_ENABLED:true}
+    trusted-proxies: ${RATE_LIMIT_TRUSTED_PROXIES:}

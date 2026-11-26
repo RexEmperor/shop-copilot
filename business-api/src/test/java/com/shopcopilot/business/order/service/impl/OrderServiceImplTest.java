@@ -15,6 +15,7 @@ import com.shopcopilot.business.order.entity.Order;
 import com.shopcopilot.business.order.mapper.OrderMapper;
 import com.shopcopilot.business.order.state.OrderStateMachine;
 import com.shopcopilot.business.order.vo.OrderVO;
+import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.entity.Product;
 import com.shopcopilot.business.product.enums.ProductStatus;
 import com.shopcopilot.business.product.mapper.ProductMapper;
@@ -37,6 +38,9 @@ class OrderServiceImplTest {
 
     @Mock
     private OrderStateMachine orderStateMachine;
+
+    @Mock
+    private ProductCache productCache;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -131,6 +135,18 @@ class OrderServiceImplTest {
         assertEquals("订单金额超出范围", exception.getMessage());
         verify(productMapper, never()).deductStock(any(), any());
         verifyNoInteractions(orderMapper);
+    }
+
+    @Test
+    @DisplayName("查询不存在的订单详情返回 404")
+    void should_throwNotFound_when_orderMissing() {
+        when(orderMapper.selectById(999L)).thenReturn(null);
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> orderService.getById(999L));
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        assertEquals("订单不存在", exception.getMessage());
     }
 
     private Product product(Long id, ProductStatus status, long priceCents, int stock, int version) {

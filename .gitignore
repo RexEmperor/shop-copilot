@@ -15,3 +15,6 @@ __pycache__/
 
 # 系统
 .DS_Store
+
+# 本地交接文档
+docs/交接文档.md

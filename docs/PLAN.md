@@ -91,16 +91,17 @@
 - **进度日志 2026-11-18(S5c)**:pytest 回归固化(tests/ 共 8 例,教练实测复跑 0.78s 全绿):chat 3 例(往返、**缓存未命中回源 MySQL——S2 顺序 bug 的专属回归测试**、截断)、agent 1 例(mock LLM 验证"要工具→喂结果→作答"循环)、tools 4 例(schema 跳过上下文键、未知工具兜底、多余参数丢弃+session_id 注入、异常转错误文本)。pytest-asyncio auto 模式配置于 pyproject。价值:cache-aside 与工具注册器的行为契约自此有回归保护,后续重构不再靠肉眼。
 - **Phase 1 关闭小结(2026-11-18)**:地基四件套(结构化输出/流式/记忆/Prompt 管理)+ 可观测(Langfuse Cloud,SDK v5.2)+ 可视化(Gradio)+ 回归(8 例)全部落地,实际用时约两周半(计划 W2–W3 ≈ 24h 场次全部走完)。Phase 2(Java 业务层)待启。
 
-### Phase 2 · 业务服务层(Java)(W4–W5,~24h)
+### Phase 2 · 业务服务层(Java)(W4–W5,~24h)✅ 2026-11-26 关闭
 - [x] 领域建模:商品 / 订单 / 售后工单 三模块,表结构设计(S1 已完成并验证)
-- [x] Spring Boot 3 + MyBatis-Plus(或 JPA,按你习惯)实现 CRUD + 业务接口(S2 已完成,含状态机与并发控制)
-- [x] Redis 缓存(商品详情)+ 基于 Redis 的接口限流(S3 已完成,待主人 review)
-- [ ] OpenAPI 文档;生成 500 条商品 + 订单 mock 数据(springdoc 已接入;500 条 mock 待 S4)
+- [x] Spring Boot 3 + MyBatis-Plus(或 JPA,按你习惯)实现 CRUD + 业务接口(S2 已完成,含状态机与并发控制;S3 补齐订单查询接口)
+- [x] Redis 缓存(商品详情)+ 基于 Redis 的接口限流(S3 已完成:Cache-aside + 下架/空值哨兵 + ZSET Lua 滑动窗口限流)
+- [x] OpenAPI 文档;生成 500 条商品 + 订单 mock 数据(S4 已完成:/v3/api-docs 15 个接口路径 + `shop_mock_500.sql` + `bench_business_api.sh` 并发压测)
 - **产出**:`business-api` 可独立运行
-- **验收**:Swagger 全接口可调;缓存命中可观测;简单并发压测无误
+- **验收**:Swagger 全接口可调;缓存命中可观测;简单并发压测无误 ✅
 
 > **进度日志 2026-11-26(S1/S2 验收合并)**:完成 `feature/phase2-s1-modeling` review 与合并。①数据库校验脚本 `infra/schema/verify_shop.sh` 24 项全 PASS;②修复 `AftersaleServiceImpl.page()` 未传 `status` 时因拆箱触发 NPE 的缺陷并补回归测试(`fd8498a`);③`business-api` 全量 `mvn test` 183 例全绿;④已合并回 `master` 并清理 `.worktrees/phase2-s1-modeling`。
-> **进度日志 2026-11-26(S3 实现与 Review 优化)**:完成商品详情 Cache-aside(`ProductCache`,含空值/下架短 TTL 哨兵防穿透、下架商品详情拦截返回 404、TTL 随机抖动防雪崩、事务提交后删键兜底、订单扣减/恢复库存联动失效)、Redis **ZSET + Lua 原子滑动窗口限流**(`@RateLimit` + `RateLimitInterceptor` + `RedisRateLimiter`,默认不信任 `X-Forwarded-For`,仅对白名单受信任代理从右向左解析真实 IP,读写/交易分级阈值,超限 429),并补齐订单查询接口(`GET /api/orders` 分页过滤、`GET /api/orders/{id}` 详情);`mvn test` **213 例全绿**。等待确认提交后推进 S4。
+> **进度日志 2026-11-26(S3 实现与 Review 优化)**:完成商品详情 Cache-aside(`ProductCache`,含空值/下架短 TTL 哨兵防穿透、下架商品详情拦截返回 404、TTL 随机抖动防雪崩、事务提交后删键兜底、订单扣减/恢复库存联动失效)、Redis **ZSET + Lua 原子滑动窗口限流**(`@RateLimit` + `RateLimitInterceptor` + `RedisRateLimiter`,默认不信任 `X-Forwarded-For`,仅对白名单受信任代理从右向左解析真实 IP,读写/交易分级阈值,超限 429),并补齐订单查询接口(`GET /api/orders` 分页过滤、`GET /api/orders/{id}` 详情);`mvn test` **213 例全绿**(commit `10ab223`)。
+> **进度日志 2026-11-26(S4 数据扩充、压测与收官)**:①新增 `infra/schema/shop_mock_500.sql`(独立 ID 段 `1001~1500` 幂等生成 500 商品 + 500 订单,不破坏最小种子集);②新增 `infra/scripts/bench_business_api.sh`,50 并发实测:热缓存 `GET /api/products/1001` QPS **3,410.58** / P99 **30ms**(MISS=1, HIT=2001, 100% 命中),510 商品分类分页 MySQL 直查 QPS **747.52** / P99 **172ms**,504 订单状态分页 QPS **1,020.64** / P99 **115ms**,全链路 **0 个 5xx**;开启限流后 200 请求/20 并发精确放行 **120**、拒绝 **80**(429,Redis `ZCARD=120`);③`docs/面试题库.md` 追加 Phase 2 问答 6 题。Phase 2 关闭,待收官确认后进入 Phase 3(MCP + LangGraph)。
 
 #### Phase 2 执行拆分(2026-11-24 确认)
 

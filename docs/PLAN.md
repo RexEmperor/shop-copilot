@@ -125,11 +125,23 @@
 
 ### Phase 3 · Agent 核心(W6–W8,~36h)★核心,不可砍
 - [ ] LangGraph 状态机:意图路由 → 导购 Agent / 订单售后 Agent / 商品问答 Agent
-- [ ] Java 侧用 Spring AI 实现 **MCP Server**,暴露:查商品、查订单、查物流、发起退款等工具
+- [x] Java 侧用 Spring AI 实现 **MCP Server**,暴露:查商品、查订单、查物流、发起退款等工具(S1 已完成,待 review 提交)
 - [ ] Python 侧接入 MCP Client,工具调用全链路打通
 - [ ] ReAct 循环 + 工具调用失败重试 + 兜底(转人工话术)
 - **产出**:端到端可演示的多 Agent 系统
 - **验收**:30 条典型 query 全部路由正确、工具调用正确(评测集 v0)
+
+#### Phase 3 执行拆分(2026-11-26 确认)
+
+| 步骤 | 核心工作 | 产物 / 模块 | 验收标准 |
+|---|---|---|---|
+| **S1 · Java MCP Server** | 引入 Spring AI `1.1.8` (`spring-ai-starter-mcp-server-webmvc`, Streamable HTTP `/mcp`),封装 6 个业务工具复用 Phase 2 Service | `business-api/pom.xml`、`mcp/` 包与测试 | MCP `initialize` / `tools/list` / `tools/call` 全链路通过,业务异常转结构化结果不泄露堆栈 |
+| **S2 · Python MCP Client 联调** | 引入 Python 官方 `mcp` SDK,封装 MCP Client + 工具桥接 + 超时/重试 | `agent-runtime/app/mcp_client.py`、`tools.py` | Python 对话跨语言调通 Java 真实商品/订单/售后数据 |
+| **S3 · LangGraph 多 Agent 状态机** | 意图路由 → 导购 / 订单售后 / 商品问答 / 兜底转人工,按角色隔离 Prompt 与工具子集 | `agent-runtime/app/graph/`、`prompts/` | 路由精准、子 Agent 工具隔离、闲聊零工具开销、失败转人工兜底 |
+| **S4 · SSE 流式 + UI + Langfuse 对齐** | LangGraph 接入 `/api/agent-chat/stream` 与 Gradio,Langfuse 串联路由与工具调用 | `app/main.py`、`app/ui.py`、`app/graph/` | Gradio 实时展示路由角色、工具轨迹与流式回复,Trace 完整 |
+| **S5 · 评测集 v0(30 题)与收官** | 构建 30 条 query 评测集与自动评测脚本,更新文档与面试题库 | `agent-runtime/evals/`、`docs/PLAN.md`、`docs/面试题库.md` | 30 条 query 路由与工具调用达标,Phase 3 收官 |
+
+> **进度日志 2026-11-26(S1 实现待 review)**:`business-api` 引入 `spring-ai-bom:1.1.8` + `spring-ai-starter-mcp-server-webmvc`,以 Streamable HTTP(`/mcp`, `type: SYNC`)按业务域拆分为 `ProductMcpTools`、`OrderMcpTools`、`AftersaleMcpTools` 并抽离公共能力 `McpToolSupport`,暴露 6 个工具(`search_products` / `get_product_detail` / `list_orders` / `get_order_detail` / `create_aftersale` / `list_aftersales`),统一输出 `McpToolResponse` 并由后端格式化 `priceYuan`/`totalAmountYuan`/`refundYuan`;新增领域单测与真实 HTTP MCP 协议集成测试,`mvn test` **218 例全绿**。待 review 确认后提交并进入 S2。
 
 ### Phase 4 · RAG(W9–W10,~24h)★核心,不可砍
 - [ ] 语料:平台规则文档(自写 20~30 篇)+ 商品目录

@@ -1,7 +1,7 @@
-"""LangGraph 多 Agent 状态机装配与统一调用入口。"""
+"""LangGraph 多 Agent 状态机装配与统一调用入口（同步 + SSE 流式）。"""
 import time
 
-from langfuse import observe, propagate_attributes
+from langfuse import get_client, observe, propagate_attributes
 from langgraph.graph import END, START, StateGraph
 
 from app import config
@@ -119,6 +119,7 @@ async def run_graph(
             "session_id": session_id,
             "user_message": user_message,
             "history": history,
+            "stream_tokens": False,
             "usage": {},
         })
 
@@ -149,3 +150,69 @@ async def run_graph(
             "elapsed_s": elapsed_s,
             "usage": usage,
         }
+
+
+async def run_graph_stream(
+    session_id: str,
+    user_message: str,
+    *,
+    llm_client: DeepSeekClient | None = None,
+):
+    """事件流版多 Agent 状态机。
+    协议事件：route / agent_status / tool_status / tool_result / delta / final。
+    先持久化 assistant 最终回复，再发 final，保证客户端拿到完成信号时历史已落库。
+    """
+    start = time.perf_counter()
+    client = llm_client or llm
+
+    with get_client().start_as_current_observation(name="agent-graph-stream"):
+        with propagate_attributes(session_id=session_id):
+            await get_history(session_id)
+            await append_message(session_id, "user", user_message)
+            history = (await get_history(session_id))[-config.HISTORY_MAX_MESSAGES:]
+
+            graph = build_graph(client)
+            final_state: AgentState = {}
+            async for mode, chunk in graph.astream(
+                {
+                    "session_id": session_id,
+                    "user_message": user_message,
+                    "history": history,
+                    "stream_tokens": True,
+                    "usage": {},
+                },
+                stream_mode=["custom", "values"],
+            ):
+                if mode == "custom":
+                    yield chunk
+                elif mode == "values":
+                    final_state = chunk
+
+            elapsed_s = round(time.perf_counter() - start, 2)
+            reply = final_state.get("final_reply") or "抱歉，这次没能完成处理，请稍后重试。"
+            usage = final_state.get("usage") or {}
+
+            await append_message(
+                session_id,
+                "assistant",
+                reply,
+                model=getattr(client, "model", None),
+                usage=usage,
+                elapsed_ms=int(elapsed_s * 1000),
+            )
+
+            agents_used = [item["agent"] for item in (final_state.get("agent_outputs") or [])]
+            if not agents_used and final_state.get("route"):
+                agents_used = [final_state["route"]]
+
+            yield {
+                "type": "final",
+                "content": reply,
+                "route": final_state.get("route", "guide"),
+                "plan": final_state.get("plan") or [],
+                "agents_used": agents_used,
+                "tool_rounds": int(final_state.get("tool_rounds", 0)),
+                "handoff_requested": bool(final_state.get("handoff_requested", False)),
+                "usage": usage,
+                "elapsed_s": elapsed_s,
+            }

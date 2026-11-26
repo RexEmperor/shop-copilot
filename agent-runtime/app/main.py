@@ -17,7 +17,7 @@ from app.agent import run_agent
 from fastapi.responses import StreamingResponse
 from app import config
 from app.agent import run_agent, run_agent_stream
-from app.graph import run_graph
+from app.graph import run_graph, run_graph_stream
 from app.mcp_client import mcp_client
 
 logging.basicConfig(level=logging.INFO)
@@ -100,7 +100,7 @@ async def agent_chat_stream(req: ChatRequest):
     """SSE 事件流:前端用 fetch + ReadableStream 消费(EventSource 只支持 GET)"""
     async def sse():
         try:
-            async for ev in run_agent_stream(req.session_id, req.message):
+            async for ev in run_graph_stream(req.session_id, req.message):
                 yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
         except Exception as exc:
             yield f"data: {json.dumps({'type': 'error', 'message': str(exc)}, ensure_ascii=False)}\n\n"

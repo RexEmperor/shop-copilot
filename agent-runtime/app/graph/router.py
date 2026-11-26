@@ -12,6 +12,7 @@ from app.graph.state import (
     ROUTER_HISTORY_LIMIT,
     VALID_ROUTES,
     WORKER_ROLES,
+    emit_event,
     merge_usage,
 )
 from app.llm.client import DeepSeekClient
@@ -76,6 +77,12 @@ async def route_node(state: AgentState, llm: DeepSeekClient) -> dict:
     route, plan, reason = parse_route_decision(result.get("content"))
     logger.info("Router decision: session=%s route=%s plan=%s reason=%s",
                 state.get("session_id"), route, plan, reason)
+    emit_event({
+        "type": "route",
+        "route": route,
+        "plan": plan,
+        "reason": reason,
+    })
     return {
         "route": route,
         "route_reason": reason,

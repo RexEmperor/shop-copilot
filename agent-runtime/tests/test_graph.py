@@ -271,3 +271,68 @@ async def test_explicit_handoff_sets_handoff_requested_true(session_id):
     assert res["route"] == "handoff"
     assert res["handoff_requested"] is True
     assert "人工客服" in res["content"]
+
+
+async def test_run_graph_stream_emits_route_agent_tool_delta_final_and_persists(session_id, monkeypatch):
+    """流式多 Agent 状态机：验证事件顺序 route -> agent_status -> tool_status -> tool_result -> delta -> final 且落库。"""
+    all_mock = _mock_schemas()
+
+    async def fake_all_schemas(*, allowed_names=None, include_local=True, include_mcp=True):
+        return [s for s in all_mock if s["function"]["name"] in (allowed_names or set())]
+
+    async def fake_categories():
+        return ["数码"]
+
+    async def fake_execute(name, args, context):
+        return '{"success":true,"code":200,"data":{"records":[{"name":"无线蓝牙耳机 Pro","priceYuan":"199.00"}],"total":1}}'
+
+    monkeypatch.setattr(workers, "all_schemas", fake_all_schemas)
+    monkeypatch.setattr(workers, "fetch_on_sale_categories", fake_categories)
+    monkeypatch.setattr(workers, "execute", fake_execute)
+
+    stream_round = 0
+
+    class FakeStreamLLM:
+        model = "deepseek-chat"
+
+        async def chat(self, messages, tools=None):
+            return _llm_reply('{"route":"guide","plan":["guide"],"reason":"导购选品"}', tokens=15)
+
+        async def chat_stream(self, messages, tools=None):
+            nonlocal stream_round
+            stream_round += 1
+            if stream_round == 1:
+                yield {
+                    "type": "tool_calls",
+                    "tool_calls": [{"id": "s1", "name": "search_products", "args": {"category": "数码"}}],
+                }
+                yield {"type": "done", "usage": {"prompt_tokens": 20, "completion_tokens": 5, "total_tokens": 25}}
+                return
+            yield {"type": "delta", "content": "推荐无线"}
+            yield {"type": "delta", "content": "蓝牙耳机 Pro"}
+            yield {"type": "done", "usage": {"prompt_tokens": 30, "completion_tokens": 8, "total_tokens": 38}}
+
+    events = [
+        ev async for ev in workflow.run_graph_stream(session_id, "推荐数码", llm_client=FakeStreamLLM())
+    ]
+    types = [e["type"] for e in events]
+
+    assert types[0] == "route"
+    assert events[0]["route"] == "guide"
+    assert "agent_status" in types
+    assert "tool_status" in types
+    assert "tool_result" in types
+    assert types.count("delta") == 2
+    assert types[-1] == "final"
+
+    final = events[-1]
+    assert final["content"] == "推荐无线蓝牙耳机 Pro"
+    assert final["tool_rounds"] == 1
+    assert final["agents_used"] == ["guide"]
+    assert final["usage"]["total_tokens"] == 83  # 20 + 25 + 38
+
+    from app.chat import get_history
+    history = await get_history(session_id)
+    assert [m["role"] for m in history] == ["user", "assistant"]
+    assert history[1]["content"] == "推荐无线蓝牙耳机 Pro"
+

@@ -96,33 +96,45 @@ class DeepSeekClient:
         usage = {}
         start = time.perf_counter()
 
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            async with client.stream("POST", API_URL, headers=headers, json=payload) as resp:
-                resp.raise_for_status()
-                async for line in resp.aiter_lines():
-                    if not line.startswith("data:"):
-                        continue
-                    data = line[5:].strip()
-                    if data == "[DONE]":
-                        break
-                    chunk = json.loads(data)
-                    if chunk.get("usage"):            # include_usage 的尾块
-                        usage = chunk["usage"]
-                    choices = chunk.get("choices") or []
-                    if not choices:                   # usage 尾块 choices 为空,跳过
-                        continue
-                    delta = choices[0].get("delta") or {}
-                    if delta.get("content"):
-                        content_parts.append(delta["content"])
-                        yield {"type": "delta", "content": delta["content"]}
-                    for tc in delta.get("tool_calls") or []:
-                        idx = tc.get("index", 0)
-                        acc = tc_acc.setdefault(idx, {"id": "", "name": "", "arguments": ""})
-                        if tc.get("id"):
-                            acc["id"] = tc["id"]
-                        fn = tc.get("function") or {}
-                        acc["name"] += fn.get("name") or ""
-                        acc["arguments"] += fn.get("arguments") or ""
+        with get_client().start_as_current_observation(
+            name="deepseek-chat-stream", as_type="generation"
+        ) as generation:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                async with client.stream("POST", API_URL, headers=headers, json=payload) as resp:
+                    resp.raise_for_status()
+                    async for line in resp.aiter_lines():
+                        if not line.startswith("data:"):
+                            continue
+                        data = line[5:].strip()
+                        if data == "[DONE]":
+                            break
+                        chunk = json.loads(data)
+                        if chunk.get("usage"):            # include_usage 的尾块
+                            usage = chunk["usage"]
+                        choices = chunk.get("choices") or []
+                        if not choices:                   # usage 尾块 choices 为空,跳过
+                            continue
+                        delta = choices[0].get("delta") or {}
+                        if delta.get("content"):
+                            content_parts.append(delta["content"])
+                            yield {"type": "delta", "content": delta["content"]}
+                        for tc in delta.get("tool_calls") or []:
+                            idx = tc.get("index", 0)
+                            acc = tc_acc.setdefault(idx, {"id": "", "name": "", "arguments": ""})
+                            if tc.get("id"):
+                                acc["id"] = tc["id"]
+                            fn = tc.get("function") or {}
+                            acc["name"] += fn.get("name") or ""
+                            acc["arguments"] += fn.get("arguments") or ""
+
+            generation.update(
+                model=self.model,
+                usage_details={
+                    "input": usage.get("prompt_tokens", 0),
+                    "output": usage.get("completion_tokens", 0),
+                    "total": usage.get("total_tokens", 0),
+                },
+            )
 
         logger.info("deepseek stream done: elapsed=%.2fs usage=%s",
                     time.perf_counter() - start, usage)

@@ -1,6 +1,8 @@
 """多 Agent 共享状态定义、工具权限白名单与 token 聚合工具。"""
 from typing import TypedDict
 
+from langgraph.config import get_stream_writer
+
 VALID_ROUTES = frozenset({"guide", "order_aftersale", "product_qa", "chitchat", "handoff"})
 WORKER_ROLES = frozenset({"guide", "order_aftersale", "product_qa"})
 
@@ -37,8 +39,19 @@ class AgentState(TypedDict, total=False):
     tool_failed: bool
     failed_agent: str | None
     handoff_requested: bool
+    stream_tokens: bool
     final_reply: str
     usage: dict
+
+
+def emit_event(event: dict) -> None:
+    """在 LangGraph stream_mode='custom' 下实时推送事件；非流式 ainvoke 时安全静默。"""
+    try:
+        writer = get_stream_writer()
+        if writer is not None:
+            writer(event)
+    except RuntimeError:
+        pass
 
 
 def merge_usage(acc: dict | None, delta: dict | None) -> dict:

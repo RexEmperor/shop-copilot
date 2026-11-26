@@ -12,6 +12,7 @@ from app.graph.state import (
     MAX_CONSECUTIVE_TOOL_FAILURES,
     MAX_WORKER_TOOL_ROUNDS,
     ROLE_TOOL_ALLOWLIST,
+    emit_event,
     merge_usage,
 )
 from app.llm.client import DeepSeekClient
@@ -24,10 +25,14 @@ logger = logging.getLogger("graph.workers")
 _CATEGORY_CACHE_TTL_S = 120.0
 _category_cache: tuple[float, list[str]] | None = None
 
-_ROLE_LABELS = {
+ROLE_LABELS = {
     "guide": "导购专员",
     "order_aftersale": "订单售后专员",
     "product_qa": "商品问答专员",
+    "chitchat": "闲聊助手",
+    "synthesize": "汇总专员",
+    "fallback": "兜底服务",
+    "handoff": "人工客服转接",
 }
 
 
@@ -94,12 +99,59 @@ def is_tool_system_failure(output: str) -> bool:
     return False
 
 
+async def _chat_maybe_stream(
+    llm: DeepSeekClient,
+    messages: list[dict],
+    *,
+    tools: list[dict] | None = None,
+    stream_tokens: bool = False,
+) -> dict:
+    """统一封装非流式与流式调用；流式模式下实时推送 delta 事件并返回同构结果字典。"""
+    if not stream_tokens or not hasattr(llm, "chat_stream"):
+        return await llm.chat(messages, tools=tools)
+
+    content_parts: list[str] = []
+    tool_calls: list[dict] = []
+    usage: dict = {}
+    async for ev in llm.chat_stream(messages, tools=tools):
+        ev_type = ev.get("type")
+        if ev_type == "delta" and ev.get("content"):
+            content_parts.append(ev["content"])
+            emit_event({"type": "delta", "content": ev["content"]})
+        elif ev_type == "tool_calls":
+            tool_calls = ev.get("tool_calls") or []
+        elif ev_type == "done":
+            usage = ev.get("usage") or {}
+
+    content = "".join(content_parts)
+    raw_msg: dict = {"role": "assistant", "content": content or None}
+    if tool_calls:
+        raw_msg["tool_calls"] = [
+            {
+                "id": c["id"],
+                "type": "function",
+                "function": {
+                    "name": c["name"],
+                    "arguments": json.dumps(c["args"], ensure_ascii=False),
+                },
+            }
+            for c in tool_calls
+        ]
+    return {
+        "content": content,
+        "raw_assistant_message": raw_msg,
+        "tool_calls": tool_calls,
+        "model": getattr(llm, "model", None),
+        "usage": usage,
+    }
+
+
 def _build_worker_messages(role: str, state: AgentState) -> list[dict]:
     system_prompt = load_prompt(role, config.PROMPT_VERSION)
     prior_outputs = state.get("agent_outputs") or []
     if prior_outputs:
         summary_lines = [
-            f"- {_ROLE_LABELS.get(item['agent'], item['agent'])}已处理结果：{item['reply']}"
+            f"- {ROLE_LABELS.get(item['agent'], item['agent'])}已处理结果：{item['reply']}"
             for item in prior_outputs
         ]
         system_prompt = (
@@ -114,6 +166,9 @@ def _build_worker_messages(role: str, state: AgentState) -> list[dict]:
 @observe(name="graph-worker")
 async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> dict:
     """通用领域专家执行器：按白名单绑定工具并执行受限 ReAct 循环。"""
+    label = ROLE_LABELS.get(role, role)
+    emit_event({"type": "agent_status", "agent": role, "label": label, "status": "start"})
+
     allowed = ROLE_TOOL_ALLOWLIST.get(role, set())
     tool_schemas = await all_schemas(
         allowed_names=allowed, include_local=False, include_mcp=bool(allowed)
@@ -130,8 +185,14 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
     tool_failed = False
     reply = ""
 
+    plan = state.get("plan") or [role]
+    # 仅单域直出时实时吐字；跨域协作时由最后的 synthesize 节点统一流式吐字
+    stream_this_worker = bool(state.get("stream_tokens")) and len(plan) == 1
+
     for _ in range(MAX_WORKER_TOOL_ROUNDS):
-        result = await llm.chat(messages, tools=tool_schemas or None)
+        result = await _chat_maybe_stream(
+            llm, messages, tools=tool_schemas or None, stream_tokens=stream_this_worker
+        )
         usage = merge_usage(usage, result.get("usage"))
         tool_calls = result.get("tool_calls") or []
         if not tool_calls:
@@ -147,9 +208,21 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
         })
 
         for call in tool_calls:
+            emit_event({
+                "type": "tool_status",
+                "agent": role,
+                "name": call["name"],
+                "args": call["args"],
+            })
             output = await execute(
                 call["name"], call["args"], context={"session_id": state["session_id"]}
             )
+            emit_event({
+                "type": "tool_result",
+                "agent": role,
+                "name": call["name"],
+                "output": output,
+            })
             tool_trace.append({"name": call["name"], "args": call["args"], "output": output})
             messages.append({"role": "tool", "tool_call_id": call["id"], "content": output})
 
@@ -168,6 +241,16 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
 
     if not reply and not tool_failed:
         reply = "抱歉，这次查询轮次较多暂未整理出完整结果，您可以换一种更具体的描述再试试。"
+        if stream_this_worker:
+            emit_event({"type": "delta", "content": reply})
+
+    emit_event({
+        "type": "agent_status",
+        "agent": role,
+        "label": label,
+        "status": "done",
+        "failed": tool_failed,
+    })
 
     outputs = list(state.get("agent_outputs") or [])
     outputs.append({
@@ -176,7 +259,6 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
         "tool_trace": tool_trace,
         "failed": tool_failed,
     })
-    plan = state.get("plan") or [role]
     next_index = int(state.get("step_index", 0)) + 1
 
     patch: dict = {
@@ -187,7 +269,6 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
         "failed_agent": role if tool_failed else None,
         "usage": usage,
     }
-    # 单域成功直出，无需额外汇总 LLM 调用
     if not tool_failed and next_index >= len(plan) and len(outputs) == 1:
         patch["final_reply"] = reply
     return patch
@@ -196,10 +277,17 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
 @observe(name="graph-chitchat")
 async def chitchat_node(state: AgentState, llm: DeepSeekClient) -> dict:
     """闲聊节点：零工具 Schema 开销，直接响应。"""
+    emit_event({"type": "agent_status", "agent": "chitchat", "label": ROLE_LABELS["chitchat"], "status": "start"})
     system_prompt = load_prompt("chitchat", config.PROMPT_VERSION)
     history = state.get("history") or [{"role": "user", "content": state["user_message"]}]
-    result = await llm.chat([{"role": "system", "content": system_prompt}, *history], tools=None)
+    result = await _chat_maybe_stream(
+        llm,
+        [{"role": "system", "content": system_prompt}, *history],
+        tools=None,
+        stream_tokens=bool(state.get("stream_tokens")),
+    )
     reply = (result.get("content") or "您好！请问有什么可以帮您？").strip()
+    emit_event({"type": "agent_status", "agent": "chitchat", "label": ROLE_LABELS["chitchat"], "status": "done"})
     return {
         "final_reply": reply,
         "usage": merge_usage(state.get("usage"), result.get("usage")),
@@ -209,9 +297,10 @@ async def chitchat_node(state: AgentState, llm: DeepSeekClient) -> dict:
 @observe(name="graph-synthesize")
 async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
     """多专家协同汇总节点：把 2 个专家的查询结论整合成一段自然连贯的回复。"""
+    emit_event({"type": "agent_status", "agent": "synthesize", "label": ROLE_LABELS["synthesize"], "status": "start"})
     outputs = state.get("agent_outputs") or []
     parts = [
-        f"【{_ROLE_LABELS.get(item['agent'], item['agent'])}】\n{item['reply']}"
+        f"【{ROLE_LABELS.get(item['agent'], item['agent'])}】\n{item['reply']}"
         for item in outputs
         if item.get("reply")
     ]
@@ -229,8 +318,11 @@ async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
             "content": f"用户原问题：{state['user_message']}\n\n各专家处理结果：\n" + "\n\n".join(parts),
         },
     ]
-    result = await llm.chat(messages, tools=None)
+    result = await _chat_maybe_stream(
+        llm, messages, tools=None, stream_tokens=bool(state.get("stream_tokens"))
+    )
     reply = (result.get("content") or "\n\n".join(parts)).strip()
+    emit_event({"type": "agent_status", "agent": "synthesize", "label": ROLE_LABELS["synthesize"], "status": "done"})
     return {
         "final_reply": reply,
         "usage": merge_usage(state.get("usage"), result.get("usage")),
@@ -240,22 +332,31 @@ async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
 @observe(name="graph-fallback")
 async def fallback_node(state: AgentState) -> dict:
     """兜底节点：区分“用户主动要人工”与“工具连续失败降级建议（不强行切走会话）”。"""
+    emit_event({"type": "agent_status", "agent": "fallback", "label": ROLE_LABELS["fallback"], "status": "start"})
     if state.get("handoff_requested"):
-        return {
-            "final_reply": (
-                "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；"
-                "您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。"
-            ),
-            "handoff_requested": True,
-        }
-
-    failed_role = _ROLE_LABELS.get(state.get("failed_agent") or "", "业务查询")
-    prior_ok = [item["reply"] for item in (state.get("agent_outputs") or []) if not item.get("failed") and item.get("reply")]
-    prefix = (prior_ok[0] + "\n\n") if prior_ok else ""
-    return {
-        "final_reply": (
+        reply = (
+            "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；"
+            "您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。"
+        )
+        handoff = True
+    else:
+        failed_role = ROLE_LABELS.get(state.get("failed_agent") or "", "业务查询")
+        prior_ok = [
+            item["reply"]
+            for item in (state.get("agent_outputs") or [])
+            if not item.get("failed") and item.get("reply")
+        ]
+        prefix = (prior_ok[0] + "\n\n") if prior_ok else ""
+        reply = (
             f"{prefix}抱歉，当前{failed_role}服务暂时遇到波动，未能获取到准确数据（我不会凭空猜测结果）。"
             "建议您稍后重试，或回复“转人工”由人工客服为您继续处理。"
-        ),
-        "handoff_requested": False,
+        )
+        handoff = False
+
+    if state.get("stream_tokens"):
+        emit_event({"type": "delta", "content": reply})
+    emit_event({"type": "agent_status", "agent": "fallback", "label": ROLE_LABELS["fallback"], "status": "done"})
+    return {
+        "final_reply": reply,
+        "handoff_requested": handoff,
     }

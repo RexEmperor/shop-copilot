@@ -173,3 +173,99 @@ class RagVectorStore:
                     "total_docs": sum(v["docs"] for v in by_type.values()),
                     "total_chunks": total_chunks,
                 }
+
+    async def vector_search(
+        self,
+        query_vector: list[float],
+        *,
+        top_k: int = 8,
+        source_type: str | None = None,
+    ) -> list[dict[str, Any]]:
+        """使用 pgvector HNSW 余弦距离检索最相似分块。"""
+        vec = Vector(query_vector)
+        sql = """
+            SELECT
+                c.id AS chunk_id,
+                c.chunk_index,
+                c.heading_path,
+                c.content,
+                c.metadata AS chunk_metadata,
+                d.doc_key,
+                d.source_type,
+                d.title,
+                d.category,
+                d.source_path,
+                1.0 - (c.embedding <=> %s) AS similarity
+            FROM kb_chunk c
+            JOIN kb_document d ON d.id = c.document_id
+        """
+        params: list[Any] = [vec]
+        if source_type:
+            sql += " WHERE d.source_type = %s"
+            params.append(source_type)
+        sql += " ORDER BY c.embedding <=> %s ASC LIMIT %s"
+        params.extend([vec, max(1, top_k)])
+
+        async with self._connect() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(sql, params)
+                rows = await cur.fetchall()
+                return [
+                    {
+                        "chunk_id": int(r["chunk_id"]),
+                        "chunk_index": int(r["chunk_index"]),
+                        "heading_path": r["heading_path"],
+                        "content": r["content"],
+                        "metadata": r["chunk_metadata"] or {},
+                        "doc_key": r["doc_key"],
+                        "source_type": r["source_type"],
+                        "title": r["title"],
+                        "category": r["category"],
+                        "source_path": r["source_path"],
+                        "vector_score": float(r["similarity"]),
+                    }
+                    for r in rows
+                ]
+
+    async def list_chunks(self, *, source_type: str | None = None) -> list[dict[str, Any]]:
+        """拉取分块文本用于构建本地中文 BM25 索引。"""
+        sql = """
+            SELECT
+                c.id AS chunk_id,
+                c.chunk_index,
+                c.heading_path,
+                c.content,
+                c.metadata AS chunk_metadata,
+                d.doc_key,
+                d.source_type,
+                d.title,
+                d.category,
+                d.source_path
+            FROM kb_chunk c
+            JOIN kb_document d ON d.id = c.document_id
+        """
+        params: list[Any] = []
+        if source_type:
+            sql += " WHERE d.source_type = %s"
+            params.append(source_type)
+        sql += " ORDER BY c.id ASC"
+
+        async with self._connect() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(sql, params)
+                rows = await cur.fetchall()
+                return [
+                    {
+                        "chunk_id": int(r["chunk_id"]),
+                        "chunk_index": int(r["chunk_index"]),
+                        "heading_path": r["heading_path"],
+                        "content": r["content"],
+                        "metadata": r["chunk_metadata"] or {},
+                        "doc_key": r["doc_key"],
+                        "source_type": r["source_type"],
+                        "title": r["title"],
+                        "category": r["category"],
+                        "source_path": r["source_path"],
+                    }
+                    for r in rows
+                ]

@@ -202,6 +202,7 @@ class HybridRetriever:
         source_type: str | None = None,
         mode: str = "hybrid",
         min_vector_score: float | None = None,
+        strict_vector_threshold: bool = False,
     ) -> list[RagHit]:
         """执行向量、BM25 或 RRF 混合检索。
 
@@ -286,14 +287,18 @@ class HybridRetriever:
             for h in candidates:
                 h.final_score = h.bm25_score or 0.0
         else:
-            # 混合模式过滤纯低相关噪声：若既不在高语义区又无强关键词命中，过滤掉防误召回
+            # 混合模式过滤低相关噪声：规则问答可开启 strict_vector_threshold 硬拦截库外问题
             filtered: list[RagHit] = []
             for h in candidates:
                 v_score = h.vector_score
-                if v_score is not None and v_score < threshold and h.bm25_score is None:
-                    continue
-                if v_score is not None and v_score < (threshold * 0.78):
-                    continue
+                if strict_vector_threshold:
+                    if v_score is None or v_score < threshold:
+                        continue
+                else:
+                    if v_score is not None and v_score < threshold and h.bm25_score is None:
+                        continue
+                    if v_score is not None and v_score < (threshold * 0.78):
+                        continue
                 h.final_score = h.rrf_score
                 filtered.append(h)
             candidates = filtered

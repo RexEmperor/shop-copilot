@@ -12,6 +12,7 @@ from langfuse import observe
 
 from app.chat import redis
 from app.mcp_client import mcp_client
+from app.rag.tools import search_knowledge_base_impl, semantic_search_products_impl
 
 TOOL_REGISTRY: dict[str, dict] = {}
 _CONTEXT_KEYS = {"session_id"}
@@ -97,3 +98,15 @@ def get_current_time() -> str:
 async def count_chat_history(session_id: str) -> str:
     """统计当前会话已存储的消息总条数"""
     return str(await redis.llen(f"chat:{session_id}"))
+
+
+@tool
+async def search_knowledge_base(query: str, top_k: int = 3) -> str:
+    """混合检索电商平台规则知识库（退换货、延迟发货赔付、运费险、价保、发票、三包质保、延保、食安、物流、积分、团购、锂电池登机等），返回原文条款与引用来源。"""
+    return await search_knowledge_base_impl(query, top_k=top_k)
+
+
+@tool
+async def semantic_search_products(query: str, top_k: int = 3) -> str:
+    """按场景或送礼等模糊意图语义搜索商品（如送长辈的健康礼物、卧室助眠好物、出差办公供电装备），并实时回源校验在售价格与库存。"""
+    return await semantic_search_products_impl(query, top_k=top_k)

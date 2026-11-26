@@ -171,7 +171,7 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
 
     allowed = ROLE_TOOL_ALLOWLIST.get(role, set())
     tool_schemas = await all_schemas(
-        allowed_names=allowed, include_local=False, include_mcp=bool(allowed)
+        allowed_names=allowed, include_local=bool(allowed), include_mcp=bool(allowed)
     )
     if role == "guide" and tool_schemas:
         categories = await fetch_on_sale_categories()
@@ -181,6 +181,8 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
     usage = dict(state.get("usage") or {})
     tool_rounds = int(state.get("tool_rounds", 0))
     tool_trace: list[dict] = []
+    citations = list(state.get("citations") or [])
+    seen_citation_keys = {(c.get("doc_key"), c.get("heading_path")) for c in citations}
     consecutive_failures = 0
     tool_failed = False
     reply = ""
@@ -223,6 +225,30 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
                 "name": call["name"],
                 "output": output,
             })
+            # 提取 RAG 检索工具返回的引用来源元数据，供 SSE 与 UI 溯源展示
+            try:
+                parsed_out = json.loads(output)
+                if isinstance(parsed_out, dict) and isinstance(parsed_out.get("citations"), list):
+                    added: list[dict] = []
+                    for c in parsed_out["citations"]:
+                        if not isinstance(c, dict):
+                            continue
+                        ck = (c.get("doc_key"), c.get("heading_path"))
+                        if ck not in seen_citation_keys:
+                            seen_citation_keys.add(ck)
+                            summary_c = {
+                                "doc_key": c.get("doc_key"),
+                                "title": c.get("title"),
+                                "heading_path": c.get("heading_path"),
+                                "source_path": c.get("source_path"),
+                                "vector_score": c.get("vector_score"),
+                            }
+                            citations.append(summary_c)
+                            added.append(summary_c)
+                    if added:
+                        emit_event({"type": "citations", "agent": role, "citations": added})
+            except json.JSONDecodeError:
+                pass
             tool_trace.append({"name": call["name"], "args": call["args"], "output": output})
             messages.append({"role": "tool", "tool_call_id": call["id"], "content": output})
 
@@ -263,6 +289,7 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
 
     patch: dict = {
         "agent_outputs": outputs,
+        "citations": citations,
         "step_index": next_index,
         "tool_rounds": tool_rounds,
         "tool_failed": tool_failed,
@@ -309,8 +336,8 @@ async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
             "role": "system",
             "content": (
                 "你是“智购助手”的回复汇总员。请将多位业务专家的查询结果整合为一段条理清晰、"
-                "自然友好的中文答复给用户。严格保留原专家给出的所有价格、库存、订单号、状态和金额，"
-                "禁止修改数字或编造额外信息。"
+                "自然友好的中文答复给用户。严格保留原专家给出的所有价格、库存、订单号、状态、金额"
+                "以及 `[来源: ...]` 引用标注，禁止修改数字或编造额外信息。"
             ),
         },
         {

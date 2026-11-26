@@ -13,14 +13,19 @@ ROUTER_HISTORY_LIMIT = 6
 
 # 最小权限工具白名单：Python 编排层按 Agent 角色隔离工具访问权限
 ROLE_TOOL_ALLOWLIST: dict[str, set[str]] = {
-    "guide": {"list_categories", "search_products", "get_product_detail"},
+    "guide": {
+        "list_categories",
+        "search_products",
+        "get_product_detail",
+        "semantic_search_products",
+    },
     "order_aftersale": {
         "list_orders",
         "get_order_detail",
         "create_aftersale",
         "list_aftersales",
     },
-    "product_qa": {"get_product_detail"},
+    "product_qa": {"get_product_detail", "search_knowledge_base"},
     "chitchat": set(),
     "handoff": set(),
 }
@@ -35,6 +40,7 @@ class AgentState(TypedDict, total=False):
     plan: list[str]
     step_index: int
     agent_outputs: list[dict]
+    citations: list[dict]
     tool_rounds: int
     tool_failed: bool
     failed_agent: str | None

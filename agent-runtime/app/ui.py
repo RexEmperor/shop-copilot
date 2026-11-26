@@ -44,6 +44,11 @@ async def respond(message: str, history: list, state: dict):
                 preview = preview[:180] + "…"
             trace_text += f"✅ {ev['name']} → {preview}\n"
             yield "", history, trace_text
+        elif ev_type == "citations":
+            titles = [c.get("title") or c.get("doc_key") for c in (ev.get("citations") or [])]
+            if titles:
+                trace_text += f"📚 命中引用：{'、'.join(titles)}\n"
+                yield "", history, trace_text
         elif ev_type == "delta":
             reply += ev["content"]
             yield "", history + [{"role": "assistant", "content": reply}], trace_text

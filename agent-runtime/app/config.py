@@ -16,3 +16,4 @@ MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", f"{BUSINESS_API_BASE}/mcp")
 MCP_ENABLED = os.environ.get("MCP_ENABLED", "true").lower() in {"1", "true", "yes"}
 MCP_TIMEOUT_SECONDS = float(os.environ.get("MCP_TIMEOUT_SECONDS", "10.0"))
 MCP_MAX_RETRIES = int(os.environ.get("MCP_MAX_RETRIES", "1"))
+MCP_TOOLS_CACHE_TTL_SECONDS = float(os.environ.get("MCP_TOOLS_CACHE_TTL_SECONDS", "60.0"))

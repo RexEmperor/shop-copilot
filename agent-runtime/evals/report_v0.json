@@ -1,0 +1,1170 @@
+{
+  "run_id": "0531f0",
+  "generated_at": "2026-11-26T11:53:18Z",
+  "dataset": "eval_set_v0.json",
+  "concurrency": 3,
+  "wall_time_s": 28.68,
+  "summary": {
+    "overall": {
+      "total": 30,
+      "passed": 30,
+      "route_ok": 30,
+      "tool_ok": 30,
+      "fact_ok": 30,
+      "route_acc": 100.0,
+      "tool_acc": 100.0,
+      "fact_acc": 100.0,
+      "pass_rate": 100.0,
+      "avg_elapsed_s": 2.81,
+      "total_tokens": 89892
+    },
+    "by_category": {
+      "guide": {
+        "total": 8,
+        "passed": 8,
+        "route_ok": 8,
+        "tool_ok": 8,
+        "fact_ok": 8,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 2.44,
+        "total_tokens": 23371
+      },
+      "order_aftersale": {
+        "total": 8,
+        "passed": 8,
+        "route_ok": 8,
+        "tool_ok": 8,
+        "fact_ok": 8,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 3.18,
+        "total_tokens": 28683
+      },
+      "product_qa": {
+        "total": 4,
+        "passed": 4,
+        "route_ok": 4,
+        "tool_ok": 4,
+        "fact_ok": 4,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 1.68,
+        "total_tokens": 5727
+      },
+      "cross_domain": {
+        "total": 4,
+        "passed": 4,
+        "route_ok": 4,
+        "tool_ok": 4,
+        "fact_ok": 4,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 6.46,
+        "total_tokens": 28753
+      },
+      "chitchat": {
+        "total": 3,
+        "passed": 3,
+        "route_ok": 3,
+        "tool_ok": 3,
+        "fact_ok": 3,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 1.47,
+        "total_tokens": 1873
+      },
+      "handoff": {
+        "total": 3,
+        "passed": 3,
+        "route_ok": 3,
+        "tool_ok": 3,
+        "fact_ok": 3,
+        "route_acc": 100.0,
+        "tool_acc": 100.0,
+        "fact_acc": 100.0,
+        "pass_rate": 100.0,
+        "avg_elapsed_s": 0.72,
+        "total_tokens": 1485
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "G01",
+      "category": "guide",
+      "description": "查全店在售品类",
+      "query": "你们店里都卖哪些品类的商品？",
+      "session_id": "eval-v0-0531f0-G01",
+      "elapsed_s": 2.29,
+      "usage": {
+        "prompt_tokens": 2453,
+        "completion_tokens": 132,
+        "total_tokens": 2585
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "list_categories"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "店铺当前在售 4 个品类：\n\n| 品类 | 在售商品数 |\n|---|---|\n| 数码 | 4 |\n| 服饰 | 2 |\n| 食品 | 2 |\n| 家居 | 1 |\n\n其中数码类商品最多。您想先看哪个品类？我可以帮您列出具体商品和价格。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G02",
+      "category": "guide",
+      "description": "按精确分类查数码商品",
+      "query": "我想看看数码类的商品，都有哪些？",
+      "session_id": "eval-v0-0531f0-G02",
+      "elapsed_s": 2.91,
+      "usage": {
+        "prompt_tokens": 2695,
+        "completion_tokens": 260,
+        "total_tokens": 2955
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "数码类目前在售共 4 款商品：\n\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 便携充电宝 20000mAh | 129.00 元 | 200 | 双向快充，支持笔记本应急供电 |\n| 机械键盘 87键 | 329.00 元 | 60 | 热插拔轴体，有线/2.4G/蓝牙三模 |\n| 智能手表 S2 | 899.00 元 | 80 | 血氧监测、全天候心率，续航14天 |\n| 无线蓝牙耳机 Pro | 199.00 元 | 120 | 主动降噪，蓝牙5.4，双设备连接 |\n\n您是想找办公外设、运动健康还是日常通勤听音？告诉我使用场景，我可以帮您锁定更合适的一款。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G03",
+      "category": "guide",
+      "description": "同义泛化词电子产品映射数码类目",
+      "query": "你们店里有什么电子产品卖吗？",
+      "session_id": "eval-v0-0531f0-G03",
+      "elapsed_s": 3.11,
+      "usage": {
+        "prompt_tokens": 3982,
+        "completion_tokens": 324,
+        "total_tokens": 4306
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products",
+          "list_categories",
+          "search_products"
+        ],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "店里目前「数码」类共有 4 款在售商品：\n\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 无线蓝牙耳机 Pro | ¥199.00 | 120 | 主动降噪，蓝牙5.4，双设备连接 |\n| 智能手表 S2 | ¥899.00 | 80 | 血氧监测、全天心率记录，续航14天 |\n| 机械键盘 87键 | ¥329.00 | 60 | 热插拔轴体，有线/2.4G/蓝牙三模 |\n| 便携充电宝 20000mAh | ¥129.00 | 200 | 双向快充，可给笔记本应急供电 |\n\n您是想买来自己用还是送人？告诉我预算或具体用途（比如通勤听歌、办公打字），我帮您精准挑一款。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G04",
+      "category": "guide",
+      "description": "按关键词查机械键盘价格与库存",
+      "query": "有机械键盘吗？多少钱，还有货吗？",
+      "session_id": "eval-v0-0531f0-G04",
+      "elapsed_s": 2.76,
+      "usage": {
+        "prompt_tokens": 2510,
+        "completion_tokens": 165,
+        "total_tokens": 2675
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到一款，符合你的需求：\n\n**机械键盘 87键** — ¥329.00\n- 分类：数码\n- 库存：60 件，有货 ✅\n- 卖点：热插拔轴体，支持有线 / 2.4G / 蓝牙三模连接\n\n如果你想要其他配列（比如 104 键全尺寸）或特定轴体手感（青轴/红轴），告诉我，我再帮你看看有没有合适的。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G05",
+      "category": "guide",
+      "description": "按预算查食品类推荐",
+      "query": "帮我推荐 100 元以内的零食或吃的",
+      "session_id": "eval-v0-0531f0-G05",
+      "elapsed_s": 2.32,
+      "usage": {
+        "prompt_tokens": 2580,
+        "completion_tokens": 228,
+        "total_tokens": 2808
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "食品类目下 100 元以内的商品有这两款：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 挂耳咖啡 10包装 | 69.00 元 | 180 | 中度烘焙，坚果巧克力风味 |\n| 每日坚果礼盒 | 89.00 元 | 150 | 30日独立小包装，六种坚果科学配比 |\n\n目前店铺在售的食品就是这两款，都符合 100 元预算。如果您想找的是薯片、饼干这类休闲零食，可以告诉我具体口味偏好，我再帮您留意；或者需要我查一下其他品类吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G06",
+      "category": "guide",
+      "description": "按商品ID查在售商品详情",
+      "query": "帮我查一下商品ID 2 的详细信息和价格",
+      "session_id": "eval-v0-0531f0-G06",
+      "elapsed_s": 2.03,
+      "usage": {
+        "prompt_tokens": 2502,
+        "completion_tokens": 200,
+        "total_tokens": 2702
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已查到商品 ID 2 的详细信息：\n\n| 项目 | 内容 |\n|---|---|\n| 商品名称 | 智能手表 S2 |\n| 分类 | 数码 |\n| 价格 | **899.00 元** |\n| 库存 | 80 件 |\n| 状态 | 上架中 |\n| 核心卖点 | 血氧监测、全天候心率记录，续航 14 天 |\n\n这款智能手表主打健康监测和长续航，性价比较高。如果您希望我帮您对比同类数码商品的其他款式或不同价位，告诉我预算就可以～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G07",
+      "category": "guide",
+      "description": "查询已下架商品ID 10 拦截反馈",
+      "query": "查一下商品ID 10 的复古台灯还能买吗？",
+      "session_id": "eval-v0-0531f0-G07",
+      "elapsed_s": 1.93,
+      "usage": {
+        "prompt_tokens": 2450,
+        "completion_tokens": 116,
+        "total_tokens": 2566
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "很抱歉，商品 ID 10 的这款台灯已经下架了，目前无法购买。\n\n需要我帮你在「家居」类目里找找在售的台灯或其他灯具吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "G08",
+      "category": "guide",
+      "description": "按场景同义词查服饰商品",
+      "query": "店里有什么秋冬穿的衣服推荐？",
+      "session_id": "eval-v0-0531f0-G08",
+      "elapsed_s": 2.21,
+      "usage": {
+        "prompt_tokens": 2570,
+        "completion_tokens": 204,
+        "total_tokens": 2774
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "店里目前服饰类在售的只有 2 款，秋冬能穿的是这件：\n\n🌤 **轻薄羽绒服** —— ¥499.00（库存 50 件）\n- 90% 白鸭绒，适合秋冬通勤，轻薄好搭\n\n另外一款是 **纯棉圆领T恤** ¥59.00（260克重磅纯棉，宽松版型），偏春夏/内搭穿着。\n\n如果还想补充秋冬单品，可以告诉我你更需要外套、内搭还是裤装，我按关键词再帮你找找～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O01",
+      "category": "order_aftersale",
+      "description": "查全部订单列表",
+      "query": "帮我查一下我的全部订单列表",
+      "session_id": "eval-v0-0531f0-O01",
+      "elapsed_s": 2.04,
+      "usage": {
+        "prompt_tokens": 3646,
+        "completion_tokens": 277,
+        "total_tokens": 3923
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已为您查到全部订单，共 **4 笔**，明细如下：\n\n| 订单号 | 商品 | 数量 | 订单金额 | 当前状态 |\n|---|---|---|---|---|\n| SO202611240003 | 机械键盘 87键 | 2 | 658.00 元 | 已发货（11月24日 14:00 已发出） |\n| SO202611240002 | 智能手表 S2 | 1 | 899.00 元 | 已支付，暂未发货 |\n| SO202611240001 | 无线蓝牙耳机 Pro | 1 | 199.00 元 | 待支付 |\n| SO202611240004 | 纯棉圆领T恤 | 3 | 177.00 元 | 已完成（11月24日已确认收货） |\n\n收货信息均为：郭克，13800000001，北京市朝阳区示例路1号。\n\n您需要针对哪一笔订单查询详情或办理售后？告诉我订单号，我可以继续帮您处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O02",
+      "category": "order_aftersale",
+      "description": "按状态筛选已发货订单",
+      "query": "我有哪些已经发货的订单？",
+      "session_id": "eval-v0-0531f0-O02",
+      "elapsed_s": 2.6,
+      "usage": {
+        "prompt_tokens": 3204,
+        "completion_tokens": 230,
+        "total_tokens": 3434
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "您当前有 **1 笔已发货订单**：\n\n**订单号：SO202611240003**\n- 商品：机械键盘 87键 × 2\n- 订单金额：658.00 元\n- 订单状态：已发货\n- 收货人：郭克（13800000001）\n- 收货地址：北京市朝阳区示例路1号\n- 下单时间：2026-11-24 10:55\n- 付款时间：2026-11-24 11:00\n- 发货时间：2026-11-24 14:00\n- 收货时间：暂未确认收货\n\n如果您需要了解这笔订单的详细进度或办理售后，请告诉我具体需求。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O03",
+      "category": "order_aftersale",
+      "description": "按订单号查已支付订单详情",
+      "query": "查一下订单 SO202611240002 的详细状态和金额",
+      "session_id": "eval-v0-0531f0-O03",
+      "elapsed_s": 4.8,
+      "usage": {
+        "prompt_tokens": 3220,
+        "completion_tokens": 287,
+        "total_tokens": 3507
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "我已查到订单信息，也获取了完整的时间线明细，为您整理如下：\n\n**订单 SO202611240002**\n\n- **商品**：智能手表 S2\n- **单价**：899.00 元 × 1 件\n- **订单金额**：**899.00 元**\n- **当前状态**：已支付，暂未发货\n- **收货人**：郭克，13800000001\n- **收货地址**：北京市朝阳区示例路1号\n\n**时间线**\n- 下单时间：2026-11-24 10:00\n- 支付时间：2026-11-24 10:05\n- 发货时间：暂未发货\n- 收货时间：暂无\n\n该订单目前已付款但尚未发货。由于订单尚未发货，如果这个订单需要处理，按规则只能申请“仅退款”，不支持“退货退款”。需要我帮您发起售后吗？如需办理，请告知具体退款原因。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O04",
+      "category": "order_aftersale",
+      "description": "查已签收订单数量与金额",
+      "query": "帮我查下订单 SO202611240004 买了几件、总价多少、签收了吗？",
+      "session_id": "eval-v0-0531f0-O04",
+      "elapsed_s": 4.35,
+      "usage": {
+        "prompt_tokens": 3264,
+        "completion_tokens": 216,
+        "total_tokens": 3480
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已为您查到订单 **SO202611240004** 的信息：\n\n- **商品**：纯棉圆领T恤\n- **单价**：59.00 元\n- **数量**：3 件\n- **订单总价**：177.00 元\n- **订单状态**：已完成，且已于 11 月 24 日 08:00 签收\n\n小结：这笔订单买了 **3 件**，总价 **177.00 元**，**已经签收**（订单已完成）。\n\n如需查看物流时间线细节或办理售后，可以告诉我。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O05",
+      "category": "order_aftersale",
+      "description": "查售后工单列表与拒绝状态",
+      "query": "帮我查下我的售后工单进度",
+      "session_id": "eval-v0-0531f0-O05",
+      "elapsed_s": 4.11,
+      "usage": {
+        "prompt_tokens": 3151,
+        "completion_tokens": 265,
+        "total_tokens": 3416
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_aftersales"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已查到您名下有 1 笔售后工单，情况如下：\n\n**工单号：AS202611240001**\n- 关联订单：SO202611240002\n- 售后类型：仅退款\n- 退款金额：899.00 元\n- 申请原因：商品与描述不符，申请仅退款\n- 当前状态：**已拒绝**\n- 审核说明：证据不足，已拒绝\n- 申请时间：2026-11-24 12:00\n- 审核时间：2026-11-24 12:30\n\n这笔工单目前未通过审核，退款未发生。如果您补充了更充分的凭证（如商品与描述不符的照片、聊天记录等），可以重新提交售后申请；若对审核结果仍有异议，可回复“转人工”，由人工客服进一步为您核实处理。\n\n需要我帮您查看该订单的详情，或协助重新提交售后申请吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O06",
+      "category": "order_aftersale",
+      "description": "待支付订单申请仅退款规则拦截(无副作用)",
+      "query": "帮我把订单 SO202611240001 申请仅退款，原因是不想要了",
+      "session_id": "eval-v0-0531f0-O06",
+      "elapsed_s": 2.33,
+      "usage": {
+        "prompt_tokens": 3226,
+        "completion_tokens": 193,
+        "total_tokens": 3419
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "这笔订单 **SO202611240001**（无线蓝牙耳机 Pro，1 件，金额 ¥199.00）目前处于**待支付**状态，还没有付款，所以暂时无法申请退款。\n\n按照售后规则：待支付订单不支持发起售后申请。如果您不需要这件商品，可以直接让订单自然失效或在订单页取消，不会产生扣款。\n\n如果您其实是想对另一笔**已支付或已发货**的订单申请退款，告诉我订单号，我可以帮您查出订单列表并确认处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O07",
+      "category": "order_aftersale",
+      "description": "已支付未发货订单申请退货退款规则拦截(无副作用)",
+      "query": "订单 SO202611240002 我想申请退货退款，原因是买贵了",
+      "session_id": "eval-v0-0531f0-O07",
+      "elapsed_s": 2.07,
+      "usage": {
+        "prompt_tokens": 3230,
+        "completion_tokens": 254,
+        "total_tokens": 3484
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "我查到这笔订单的情况如下：\n\n- **订单号**：SO202611240002\n- **商品**：智能手表 S2 × 1\n- **订单金额**：899.00 元\n- **当前状态**：已支付，**暂未发货**\n\n很抱歉，这笔订单目前还**未发货**，按售后规则，已支付但未发货的订单**只能申请“仅退款”，不支持“退货退款”**（因为还没有商品需要退回）。\n\n如果您希望继续，我可以帮您按“仅退款”为您提交申请，退款金额将由系统按订单总额自动计算（899.00 元），请确认：\n\n1. 是否改为申请**仅退款**？\n2. 售后原因是否仍填写“买贵了”？\n\n您确认后我就为您提交。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "O08",
+      "category": "order_aftersale",
+      "description": "模糊退款诉求不盲目写库先查单确认",
+      "query": "我想申请退款",
+      "session_id": "eval-v0-0531f0-O08",
+      "elapsed_s": 3.17,
+      "usage": {
+        "prompt_tokens": 3653,
+        "completion_tokens": 367,
+        "total_tokens": 4020
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "以下是您当前的订单列表，请确认您想申请退款的是哪一笔：\n\n| 订单号 | 商品 | 数量 | 金额 | 订单状态 |\n|---|---|---|---|---|\n| SO202611240003 | 机械键盘 87键 | 2 | ¥658.00 | 已发货 |\n| SO202611240002 | 智能手表 S2 | 1 | ¥899.00 | 已支付（暂未发货） |\n| SO202611240001 | 无线蓝牙耳机 Pro | 1 | ¥199.00 | 待支付 |\n| SO202611240004 | 纯棉圆领T恤 | 3 | ¥177.00 | 已完成 |\n\n关于售后类型，请您留意规则：\n- **已支付、暂未发货**（如 SO202611240002）：仅支持申请「仅退款」，不支持「退货退款」。\n- **已发货 / 已完成**（如 SO202611240003、SO202611240004）：可申请「仅退款」或「退货退款」。\n- **待支付**（如 SO202611240001）：不支持发起售后。\n\n请告诉我：\n1. 您要申请售后的**订单号**；\n2. 需要的**售后类型**（仅退款 / 退货退款）；\n3. **售后原因**（如商品破损、不想要了等）。\n\n确认后我再为您提交申请。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "Q01",
+      "category": "product_qa",
+      "description": "查商品ID 1 规格参数问答",
+      "query": "商品ID 1 的无线蓝牙耳机 Pro 支持蓝牙几代、有没有主动降噪？",
+      "session_id": "eval-v0-0531f0-Q01",
+      "elapsed_s": 1.87,
+      "usage": {
+        "prompt_tokens": 1635,
+        "completion_tokens": 138,
+        "total_tokens": 1773
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已核实（商品ID 1 无线蓝牙耳机 Pro）：\n\n- **蓝牙版本**：蓝牙 5.4\n- **主动降噪**：支持，同时支持双设备连接\n- **价格**：199.00 元\n- **库存**：120 件（上架中）\n\n需要了解其他细节可以继续问我。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "Q02",
+      "category": "product_qa",
+      "description": "查商品ID 4 笔记本供电使用场景",
+      "query": "商品ID 4 的便携充电宝支持给笔记本应急供电吗？",
+      "session_id": "eval-v0-0531f0-Q02",
+      "elapsed_s": 1.95,
+      "usage": {
+        "prompt_tokens": 1619,
+        "completion_tokens": 157,
+        "total_tokens": 1776
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "商品ID 4「便携充电宝 20000mAh」的商品描述写明：**双向快充，支持笔记本应急供电**。因此可以给笔记本应急供电。\n\n- 价格：129.00 元\n- 库存：200 件，上架中\n\n提示：具体能带动哪些笔记本型号、输出功率上限等细节，商品描述中未标明，如需确认请回复“转人工”咨询人工客服。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "Q03",
+      "category": "product_qa",
+      "description": "未知延保收费细则防幻觉拒答",
+      "query": "你们店铺买延保服务一年多少钱？包含进水保修吗？",
+      "session_id": "eval-v0-0531f0-Q03",
+      "elapsed_s": 1.47,
+      "usage": {
+        "prompt_tokens": 983,
+        "completion_tokens": 143,
+        "total_tokens": 1126
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "您好！关于延保服务，目前您还没有提供具体的商品ID，我无法确认该商品对应的延保价格和保障范围，因此不能凭空给出价格或条款。\n\n麻烦您提供一下商品ID，我帮您核实该商品的延保详情。另外，进水是否在保修范围内属于具体条款细则，若商品页未明确标注，建议您回复“转人工”由人工客服为您确认。\n\n关于这类不在商品页明码标价的服务，也建议您直接查看该商品详情页的“服务说明”，避免信息偏差。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "Q04",
+      "category": "product_qa",
+      "description": "未知延迟发货赔付比例防幻觉拒答",
+      "query": "商家延迟发货超过48小时，平台具体按订单金额的百分之多少赔付？",
+      "session_id": "eval-v0-0531f0-Q04",
+      "elapsed_s": 1.43,
+      "usage": {
+        "prompt_tokens": 989,
+        "completion_tokens": 63,
+        "total_tokens": 1052
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "关于延迟发货赔付比例，当前暂未查到该具体条款，我不能凭空给你一个百分比。\n\n建议你回复“转人工”，由人工客服为你核实最新的赔付标准。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "X01",
+      "category": "cross_domain",
+      "description": "跨域协作: 查订单状态 + 推荐200元左右耳机",
+      "query": "帮我查下订单 SO202611240002 的状态，顺便推荐一款 200 元左右的耳机",
+      "session_id": "eval-v0-0531f0-X01",
+      "elapsed_s": 8.13,
+      "usage": {
+        "prompt_tokens": 6503,
+        "completion_tokens": 905,
+        "total_tokens": 7408
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_orders",
+          "search_products"
+        ],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "好的，您要的订单状态和耳机推荐都帮您查到了，整理如下：\n\n**一、订单 SO202611240002 状态**\n\n| 项目 | 内容 |\n|---|---|\n| 商品 | 智能手表 S2 × 1 |\n| 订单金额 | 899.00 元 |\n| 当前状态 | 已支付，暂未发货 |\n| 下单时间 | 2026-11-24 10:00 |\n| 支付时间 | 2026-11-24 10:05 |\n| 收货人 | 郭克（138****0001） |\n| 收货地址 | 北京市朝阳区示例路1号 |\n\n订单已付款成功，目前在等商家发货，如果着急可以联系商家催一下。另外提醒：这笔订单目前在“已支付、未发货”状态，如果之后有退款需求，按规则只能申请「仅退款」，不支持「退货退款」，需要的话可以随时告诉我。\n\n**二、200 元左右耳机推荐**\n\n为您找到这款很合适的：\n\n- **无线蓝牙耳机 Pro**\n- 价格：**199.00 元**（正好在预算内）\n- 库存：120 件，现货充足\n- 核心卖点：主动降噪、蓝牙 5.4、支持双设备连接\n- 分类：数码\n\n这是目前店里唯一在售且贴合预算的耳机，降噪加双设备连接在这个价位挺实用。如果您更看重音质或想要有线款，可以告诉我使用场景（通勤降噪 / 运动 / 办公通话），我再帮您看看其他方向～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "X02",
+      "category": "cross_domain",
+      "description": "跨域协作: 查已发货订单 + 推荐食品",
+      "query": "查一下我已发货的订单是哪笔，另外你们店里有什么食品推荐吗？",
+      "session_id": "eval-v0-0531f0-X02",
+      "elapsed_s": 5.5,
+      "usage": {
+        "prompt_tokens": 6374,
+        "completion_tokens": 858,
+        "total_tokens": 7232
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_orders",
+          "search_products"
+        ],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，已为您汇总如下：\n\n**一、已发货订单查询**\n\n您目前有 **1 笔已发货订单**：\n\n| 项目 | 内容 |\n|---|---|\n| 订单号 | SO202611240003 |\n| 商品 | 机械键盘 87键 × 2 |\n| 订单金额 | 658.00 元 |\n| 当前状态 | 已发货（尚未确认收货） |\n| 下单时间 | 2026-11-24 10:55 |\n| 发货时间 | 2026-11-24 14:00 |\n| 收货人 | 郭克，北京市朝阳区示例路1号 |\n\n如果这笔订单需要办理售后（例如运输破损、不想要了），可以告诉我具体原因，我帮您判断是否可申请“仅退款”或“退货退款”。\n\n**二、食品推荐**\n\n店里目前在售的食品有 2 款：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 挂耳咖啡 10包装 | 69.00 元 | 180 | 中度烘焙，坚果巧克力风味 |\n| 每日坚果礼盒 | 89.00 元 | 150 | 30日独立小包装，六种坚果科学配比 |\n\n简单建议：想自己喝提神，可以看看挂耳咖啡；送礼或办公室囤货，每日坚果礼盒更合适。您更偏向哪种用途？我可以再帮您细看。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "X03",
+      "category": "cross_domain",
+      "description": "跨域协作: 查售后工单状态 + 查在售家居",
+      "query": "帮我看看售后单 AS202611240001 现在什么状态，顺便查下店里有哪些在售家居商品",
+      "session_id": "eval-v0-0531f0-X03",
+      "elapsed_s": 6.41,
+      "usage": {
+        "prompt_tokens": 6320,
+        "completion_tokens": 854,
+        "total_tokens": 7174
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_aftersales",
+          "search_products"
+        ],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，您查询的售后单 **AS202611240001** 情况如下：\n\n- **关联订单**：SO202611240002\n- **售后类型**：仅退款\n- **当前状态**：已拒绝\n- **申请退款金额**：899.00 元\n- **申请原因**：商品与描述不符，申请仅退款\n- **审核意见**：证据不足，已拒绝\n- **审核时间**：2026年11月24日 12:30\n- **退款时间**：无（未退款）\n\n也就是说，这笔仅退款申请因证据不足被驳回，目前没有实际退款。如果您对结果有异议，可以补充有效凭证后重新申请，或回复“**转人工**”由人工客服进一步协助核实处理。\n\n关于在售家居商品，目前店里家居类目在售的有 1 款：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 香薰蜡烛礼盒 | 159.00 元 | 70 件 | 天然大豆蜡，雪松与白茶香型 |\n\n目前家居类目在售比较单一，主要就是这款香薰礼盒。如果您想找其他家居用途（比如收纳、床品、装饰），可以告诉我具体方向，我再帮您看看是否匹配得上～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "X04",
+      "category": "cross_domain",
+      "description": "跨域协作: 查羽绒服 + 查订单签收状态",
+      "query": "我想看下店里有什么羽绒服，另外帮我查一下订单 SO202611240004 是不是已经签收了",
+      "session_id": "eval-v0-0531f0-X04",
+      "elapsed_s": 5.8,
+      "usage": {
+        "prompt_tokens": 6167,
+        "completion_tokens": 772,
+        "total_tokens": 6939
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide",
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "guide",
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "search_products",
+          "list_orders"
+        ],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，已为您汇总羽绒服库存和订单 SO202611240004 的查询结果：\n\n**一、羽绒服在售情况**\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 轻薄羽绒服 | ¥499.00 | 50 件 | 90% 白鸭绒，适合秋冬通勤 |\n\n目前店里在售的就是这一款轻薄羽绒服。如果您想要更厚实抗寒的款式，可以再帮您看看同类秋冬外套。\n\n**二、订单 SO202611240004 签收状态**\n\n| 项目 | 内容 |\n|---|---|\n| 订单号 | SO202611240004 |\n| 商品 | 纯棉圆领T恤 × 3 |\n| 订单金额 | ¥177.00 |\n| 当前状态 | 已完成 |\n\n时间线：2026-11-23 08:55 下单，09:00 付款，15:00 发货，**2026-11-24 08:00 已确认收货**。\n\n也就是说，这笔订单已经妥投签收，订单流程已完结。如果您需要，也可以进一步帮您在这笔订单上办理售后（如“仅退款”或“退货退款”），告诉我具体需求及原因即可。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "C01",
+      "category": "chitchat",
+      "description": "日常打招呼零工具",
+      "query": "你好呀！",
+      "session_id": "eval-v0-0531f0-C01",
+      "elapsed_s": 1.14,
+      "usage": {
+        "prompt_tokens": 561,
+        "completion_tokens": 52,
+        "total_tokens": 613
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "你好呀！很高兴见到你～ 我可以帮你推荐选购商品、查询订单/发货进度，或者查询与申请售后。需要我帮点什么？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "C02",
+      "category": "chitchat",
+      "description": "询问助手身份与能力零工具",
+      "query": "你是谁？你能帮我做什么？",
+      "session_id": "eval-v0-0531f0-C02",
+      "elapsed_s": 1.51,
+      "usage": {
+        "prompt_tokens": 567,
+        "completion_tokens": 57,
+        "total_tokens": 624
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "我是“智购助手”，很高兴为你服务！我可以帮你推荐选购商品、查询订单或发货进度，也能协助查询与申请售后。你随时告诉我需求就行～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "C03",
+      "category": "chitchat",
+      "description": "用户致谢零工具",
+      "query": "太感谢了，今天帮大忙了！",
+      "session_id": "eval-v0-0531f0-C03",
+      "elapsed_s": 1.75,
+      "usage": {
+        "prompt_tokens": 575,
+        "completion_tokens": 61,
+        "total_tokens": 636
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "不客气，能帮上忙就好！之后如果需要推荐选购商品、查询订单或发货进度，或者处理售后问题，随时找我就行。祝你今天顺利！",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "H01",
+      "category": "handoff",
+      "description": "明确要求转人工客服",
+      "query": "帮我转人工客服",
+      "session_id": "eval-v0-0531f0-H01",
+      "elapsed_s": 0.53,
+      "usage": {
+        "prompt_tokens": 469,
+        "completion_tokens": 21,
+        "total_tokens": 490
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "H02",
+      "category": "handoff",
+      "description": "投诉升级拒绝机器人要求接人工",
+      "query": "我不要机器人，立刻给我接人工处理投诉！",
+      "session_id": "eval-v0-0531f0-H02",
+      "elapsed_s": 0.49,
+      "usage": {
+        "prompt_tokens": 475,
+        "completion_tokens": 23,
+        "total_tokens": 498
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    },
+    {
+      "id": "H03",
+      "category": "handoff",
+      "description": "复杂问题主动申请人工介入",
+      "query": "这个问题太复杂了，请安排人工客服介入",
+      "session_id": "eval-v0-0531f0-H03",
+      "elapsed_s": 1.14,
+      "usage": {
+        "prompt_tokens": 475,
+        "completion_tokens": 22,
+        "total_tokens": 497
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": []
+      }
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import asyncio
 from contextlib import asynccontextmanager
 import json
 import logging
+import time
 from typing import Any
 
 import httpx
@@ -26,8 +27,14 @@ NON_IDEMPOTENT_TOOLS = frozenset({"create_aftersale"})
 
 
 def mcp_tool_to_openai_schema(tool: Any) -> dict:
-    """将 MCP Tool 对象转换为 DeepSeek / OpenAI 兼容的 function tool schema。"""
-    raw_schema = getattr(tool, "inputSchema", None) or {"type": "object", "properties": {}}
+    """将 MCP Tool 对象转换为 DeepSeek / OpenAI 兼容的 function tool schema。
+    兼容 mcp 2.x（input_schema）与 1.x（inputSchema）字段命名。
+    """
+    raw_schema = (
+        getattr(tool, "input_schema", None)
+        or getattr(tool, "inputSchema", None)
+        or {"type": "object", "properties": {}}
+    )
     return {
         "type": "function",
         "function": {
@@ -39,7 +46,7 @@ def mcp_tool_to_openai_schema(tool: Any) -> dict:
 
 
 def extract_tool_result_text(result: Any) -> str:
-    """提取 MCP CallToolResult 中的文本内容。"""
+    """提取 MCP CallToolResult 中的文本内容（兼容 is_error / isError）。"""
     content = getattr(result, "content", None) or []
     parts: list[str] = []
     for block in content:
@@ -51,7 +58,8 @@ def extract_tool_result_text(result: Any) -> str:
         else:
             parts.append(str(block))
     text = "\n".join(parts).strip()
-    if getattr(result, "isError", False):
+    is_error = bool(getattr(result, "is_error", False) or getattr(result, "isError", False))
+    if is_error:
         return f"外部业务工具返回错误: {text or '未知错误'}"
     return text or "{}"
 
@@ -64,6 +72,8 @@ class McpClientManager:
         enabled: bool | None = None,
         timeout_seconds: float | None = None,
         max_retries: int | None = None,
+        cache_ttl_seconds: float | None = None,
+        clock=time.monotonic,
         session_factory=None,
     ):
         self.url = url or config.MCP_SERVER_URL
@@ -72,8 +82,15 @@ class McpClientManager:
             config.MCP_TIMEOUT_SECONDS if timeout_seconds is None else timeout_seconds
         )
         self.max_retries = config.MCP_MAX_RETRIES if max_retries is None else max_retries
+        self.cache_ttl_seconds = (
+            config.MCP_TOOLS_CACHE_TTL_SECONDS
+            if cache_ttl_seconds is None
+            else cache_ttl_seconds
+        )
+        self._clock = clock
         self._session_factory = session_factory or self._default_session
         self._tools_cache: dict[str, dict] | None = None
+        self._cache_loaded_at: float = 0.0
         self._cache_lock = asyncio.Lock()
 
     @asynccontextmanager
@@ -90,17 +107,27 @@ class McpClientManager:
 
     def invalidate_cache(self) -> None:
         self._tools_cache = None
+        self._cache_loaded_at = 0.0
+
+    def _is_cache_valid(self) -> bool:
+        if self._tools_cache is None:
+            return False
+        if self.cache_ttl_seconds <= 0:
+            return False
+        return (self._clock() - self._cache_loaded_at) < self.cache_ttl_seconds
 
     async def list_tools(self, *, force_refresh: bool = False) -> dict[str, dict]:
-        """返回 {tool_name: openai_schema}，默认内存缓存；失败时 fail-open 返回空字典。"""
+        """返回 {tool_name: openai_schema}，带 TTL 内存缓存与双重检查锁；
+        TTL 过期后刷新失败时优先兜底返回上一次有效缓存（stale fallback），首次失败则 fail-open 返回空字典。
+        """
         if not self.enabled:
             return {}
-        if self._tools_cache is not None and not force_refresh:
-            return dict(self._tools_cache)
+        if not force_refresh and self._is_cache_valid():
+            return dict(self._tools_cache or {})
 
         async with self._cache_lock:
-            if self._tools_cache is not None and not force_refresh:
-                return dict(self._tools_cache)
+            if not force_refresh and self._is_cache_valid():
+                return dict(self._tools_cache or {})
             try:
                 async with self._session_factory() as session:
                     response = await session.list_tools()
@@ -109,9 +136,16 @@ class McpClientManager:
                     for t in (getattr(response, "tools", None) or [])
                 }
                 self._tools_cache = tools
+                self._cache_loaded_at = self._clock()
                 logger.info("MCP tools loaded from %s: %s", self.url, sorted(tools))
                 return dict(tools)
             except Exception as exc:
+                if self._tools_cache is not None:
+                    logger.warning(
+                        "MCP list_tools refresh failed (%s), serving stale cache (%s tools): %r",
+                        self.url, len(self._tools_cache), exc,
+                    )
+                    return dict(self._tools_cache)
                 logger.warning("MCP list_tools failed (%s), fail-open with empty tools: %r",
                                self.url, exc)
                 return {}

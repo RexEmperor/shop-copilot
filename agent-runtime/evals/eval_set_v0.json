@@ -1,0 +1,353 @@
+[
+  {
+    "id": "G01",
+    "category": "guide",
+    "description": "查全店在售品类",
+    "query": "你们店里都卖哪些品类的商品？",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["list_categories"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["数码", "服饰", "食品", "家居"]
+  },
+  {
+    "id": "G02",
+    "category": "guide",
+    "description": "按精确分类查数码商品",
+    "query": "我想看看数码类的商品，都有哪些？",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["search_products", "list_categories"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["无线蓝牙耳机 Pro", "智能手表 S2", "机械键盘 87键", "便携充电宝 20000mAh"]
+  },
+  {
+    "id": "G03",
+    "category": "guide",
+    "description": "同义泛化词电子产品映射数码类目",
+    "query": "你们店里有什么电子产品卖吗？",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["search_products", "list_categories"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["无线蓝牙耳机 Pro", "智能手表 S2"]
+  },
+  {
+    "id": "G04",
+    "category": "guide",
+    "description": "按关键词查机械键盘价格与库存",
+    "query": "有机械键盘吗？多少钱，还有货吗？",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["search_products", "get_product_detail"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["机械键盘 87键", "329", "60"]
+  },
+  {
+    "id": "G05",
+    "category": "guide",
+    "description": "按预算查食品类推荐",
+    "query": "帮我推荐 100 元以内的零食或吃的",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["search_products", "list_categories"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_any": ["每日坚果礼盒", "挂耳咖啡"],
+    "must_contain_all": []
+  },
+  {
+    "id": "G06",
+    "category": "guide",
+    "description": "按商品ID查在售商品详情",
+    "query": "帮我查一下商品ID 2 的详细信息和价格",
+    "expected_routes": ["guide", "product_qa"],
+    "expected_agents_all": [],
+    "expected_tool_groups": [["get_product_detail", "search_products"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["智能手表 S2", "899", "14"]
+  },
+  {
+    "id": "G07",
+    "category": "guide",
+    "description": "查询已下架商品ID 10 拦截反馈",
+    "query": "查一下商品ID 10 的复古台灯还能买吗？",
+    "expected_routes": ["guide", "product_qa"],
+    "expected_agents_all": [],
+    "expected_tool_groups": [["get_product_detail", "search_products"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_any": ["下架", "不可购买", "无法购买", "未在售", "暂不可售", "无货", "停售"]
+  },
+  {
+    "id": "G08",
+    "category": "guide",
+    "description": "按场景同义词查服饰商品",
+    "query": "店里有什么秋冬穿的衣服推荐？",
+    "expected_routes": ["guide"],
+    "expected_agents_all": ["guide"],
+    "expected_tool_groups": [["search_products", "list_categories"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["轻薄羽绒服", "499"]
+  },
+  {
+    "id": "O01",
+    "category": "order_aftersale",
+    "description": "查全部订单列表",
+    "query": "帮我查一下我的全部订单列表",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["list_orders"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["SO202611240001", "SO202611240002", "SO202611240003", "SO202611240004"]
+  },
+  {
+    "id": "O02",
+    "category": "order_aftersale",
+    "description": "按状态筛选已发货订单",
+    "query": "我有哪些已经发货的订单？",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["list_orders"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["SO202611240003", "机械键盘"]
+  },
+  {
+    "id": "O03",
+    "category": "order_aftersale",
+    "description": "按订单号查已支付订单详情",
+    "query": "查一下订单 SO202611240002 的详细状态和金额",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["get_order_detail", "list_orders"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["SO202611240002", "智能手表 S2", "899"]
+  },
+  {
+    "id": "O04",
+    "category": "order_aftersale",
+    "description": "查已签收订单数量与金额",
+    "query": "帮我查下订单 SO202611240004 买了几件、总价多少、签收了吗？",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["get_order_detail", "list_orders"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["纯棉圆领T恤", "3", "177"],
+    "must_contain_any": ["签收", "送达", "完成"]
+  },
+  {
+    "id": "O05",
+    "category": "order_aftersale",
+    "description": "查售后工单列表与拒绝状态",
+    "query": "帮我查下我的售后工单进度",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["list_aftersales"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["AS202611240001", "SO202611240002"],
+    "must_contain_any": ["拒绝", "已拒绝"]
+  },
+  {
+    "id": "O06",
+    "category": "order_aftersale",
+    "description": "待支付订单申请仅退款规则拦截(无副作用)",
+    "query": "帮我把订单 SO202611240001 申请仅退款，原因是不想要了",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["get_order_detail", "create_aftersale", "list_orders"]],
+    "forbidden_tools": [],
+    "must_contain_all": ["SO202611240001"],
+    "must_contain_any": ["未支付", "待支付", "无法", "不能", "不支持"]
+  },
+  {
+    "id": "O07",
+    "category": "order_aftersale",
+    "description": "已支付未发货订单申请退货退款规则拦截(无副作用)",
+    "query": "订单 SO202611240002 我想申请退货退款，原因是买贵了",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["get_order_detail", "create_aftersale", "list_orders"]],
+    "forbidden_tools": [],
+    "must_contain_all": ["SO202611240002"],
+    "must_contain_any": ["未发货", "仅退款", "不支持", "无法", "不能"]
+  },
+  {
+    "id": "O08",
+    "category": "order_aftersale",
+    "description": "模糊退款诉求不盲目写库先查单确认",
+    "query": "我想申请退款",
+    "expected_routes": ["order_aftersale"],
+    "expected_agents_all": ["order_aftersale"],
+    "expected_tool_groups": [["list_orders", "list_aftersales"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_any": ["订单号", "哪一笔", "哪个订单", "SO20261124", "原因"]
+  },
+  {
+    "id": "Q01",
+    "category": "product_qa",
+    "description": "查商品ID 1 规格参数问答",
+    "query": "商品ID 1 的无线蓝牙耳机 Pro 支持蓝牙几代、有没有主动降噪？",
+    "expected_routes": ["product_qa", "guide"],
+    "expected_agents_all": [],
+    "expected_tool_groups": [["get_product_detail", "search_products"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["5.4", "降噪"]
+  },
+  {
+    "id": "Q02",
+    "category": "product_qa",
+    "description": "查商品ID 4 笔记本供电使用场景",
+    "query": "商品ID 4 的便携充电宝支持给笔记本应急供电吗？",
+    "expected_routes": ["product_qa", "guide"],
+    "expected_agents_all": [],
+    "expected_tool_groups": [["get_product_detail", "search_products"]],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["笔记本"],
+    "must_contain_any": ["支持", "可以", "应急供电"]
+  },
+  {
+    "id": "Q03",
+    "category": "product_qa",
+    "description": "未知延保收费细则防幻觉拒答",
+    "query": "你们店铺买延保服务一年多少钱？包含进水保修吗？",
+    "expected_routes": ["product_qa"],
+    "expected_agents_all": ["product_qa"],
+    "expect_zero_tools": true,
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_any": ["暂未", "没有", "未查到", "无法", "不清楚", "转人工"]
+  },
+  {
+    "id": "Q04",
+    "category": "product_qa",
+    "description": "未知延迟发货赔付比例防幻觉拒答",
+    "query": "商家延迟发货超过48小时，平台具体按订单金额的百分之多少赔付？",
+    "expected_routes": ["product_qa"],
+    "expected_agents_all": ["product_qa"],
+    "expect_zero_tools": true,
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_any": ["暂未", "没有", "未查到", "无法", "不清楚", "转人工"]
+  },
+  {
+    "id": "X01",
+    "category": "cross_domain",
+    "description": "跨域协作: 查订单状态 + 推荐200元左右耳机",
+    "query": "帮我查下订单 SO202611240002 的状态，顺便推荐一款 200 元左右的耳机",
+    "expected_routes": ["order_aftersale", "guide"],
+    "expected_agents_all": ["order_aftersale", "guide"],
+    "expected_tool_groups": [
+      ["get_order_detail", "list_orders"],
+      ["search_products", "get_product_detail", "list_categories"]
+    ],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["SO202611240002", "无线蓝牙耳机 Pro", "199"]
+  },
+  {
+    "id": "X02",
+    "category": "cross_domain",
+    "description": "跨域协作: 查已发货订单 + 推荐食品",
+    "query": "查一下我已发货的订单是哪笔，另外你们店里有什么食品推荐吗？",
+    "expected_routes": ["order_aftersale", "guide"],
+    "expected_agents_all": ["order_aftersale", "guide"],
+    "expected_tool_groups": [
+      ["list_orders"],
+      ["search_products", "list_categories"]
+    ],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["SO202611240003"],
+    "must_contain_any": ["每日坚果礼盒", "挂耳咖啡"]
+  },
+  {
+    "id": "X03",
+    "category": "cross_domain",
+    "description": "跨域协作: 查售后工单状态 + 查在售家居",
+    "query": "帮我看看售后单 AS202611240001 现在什么状态，顺便查下店里有哪些在售家居商品",
+    "expected_routes": ["order_aftersale", "guide"],
+    "expected_agents_all": ["order_aftersale", "guide"],
+    "expected_tool_groups": [
+      ["list_aftersales"],
+      ["search_products", "list_categories"]
+    ],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["AS202611240001", "香薰蜡烛礼盒"],
+    "must_contain_any": ["拒绝", "已拒绝"]
+  },
+  {
+    "id": "X04",
+    "category": "cross_domain",
+    "description": "跨域协作: 查羽绒服 + 查订单签收状态",
+    "query": "我想看下店里有什么羽绒服，另外帮我查一下订单 SO202611240004 是不是已经签收了",
+    "expected_routes": ["guide", "order_aftersale"],
+    "expected_agents_all": ["guide", "order_aftersale"],
+    "expected_tool_groups": [
+      ["search_products", "list_categories"],
+      ["get_order_detail", "list_orders"]
+    ],
+    "forbidden_tools": ["create_aftersale"],
+    "must_contain_all": ["轻薄羽绒服", "499", "SO202611240004"],
+    "must_contain_any": ["签收", "送达", "完成"]
+  },
+  {
+    "id": "C01",
+    "category": "chitchat",
+    "description": "日常打招呼零工具",
+    "query": "你好呀！",
+    "expected_routes": ["chitchat"],
+    "expected_agents_all": ["chitchat"],
+    "expect_zero_tools": true,
+    "expected_handoff": false,
+    "must_contain_any": ["你好", "您好", "帮", "欢迎"]
+  },
+  {
+    "id": "C02",
+    "category": "chitchat",
+    "description": "询问助手身份与能力零工具",
+    "query": "你是谁？你能帮我做什么？",
+    "expected_routes": ["chitchat"],
+    "expected_agents_all": ["chitchat"],
+    "expect_zero_tools": true,
+    "expected_handoff": false,
+    "must_contain_any": ["智购助手", "商品", "订单", "售后", "导购"]
+  },
+  {
+    "id": "C03",
+    "category": "chitchat",
+    "description": "用户致谢零工具",
+    "query": "太感谢了，今天帮大忙了！",
+    "expected_routes": ["chitchat"],
+    "expected_agents_all": ["chitchat"],
+    "expect_zero_tools": true,
+    "expected_handoff": false,
+    "must_contain_any": ["不客气", "很高兴", "随时", "欢迎"]
+  },
+  {
+    "id": "H01",
+    "category": "handoff",
+    "description": "明确要求转人工客服",
+    "query": "帮我转人工客服",
+    "expected_routes": ["handoff"],
+    "expected_agents_all": ["handoff"],
+    "expect_zero_tools": true,
+    "expected_handoff": true,
+    "must_contain_any": ["人工客服", "转人工"]
+  },
+  {
+    "id": "H02",
+    "category": "handoff",
+    "description": "投诉升级拒绝机器人要求接人工",
+    "query": "我不要机器人，立刻给我接人工处理投诉！",
+    "expected_routes": ["handoff"],
+    "expected_agents_all": ["handoff"],
+    "expect_zero_tools": true,
+    "expected_handoff": true,
+    "must_contain_any": ["人工客服", "转人工"]
+  },
+  {
+    "id": "H03",
+    "category": "handoff",
+    "description": "复杂问题主动申请人工介入",
+    "query": "这个问题太复杂了，请安排人工客服介入",
+    "expected_routes": ["handoff"],
+    "expected_agents_all": ["handoff"],
+    "expect_zero_tools": true,
+    "expected_handoff": true,
+    "must_contain_any": ["人工客服", "转人工"]
+  }
+]

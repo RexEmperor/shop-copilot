@@ -242,6 +242,29 @@ class AftersaleApiIntegrationTest {
     }
 
     @Test
+    @DisplayName("不传 status 时查询全部状态的售后工单")
+    void should_listAllStatuses_when_statusOmitted() throws Exception {
+        Order order = insertOrder(OrderStatus.PAID);
+        long rejectedId = createTicket(order, 0, "第一次申请");
+        rejectTicket(rejectedId);
+        long pendingId = createTicket(order, 0, "第二次申请");
+
+        mockMvc.perform(get("/api/aftersales")
+                .param("orderNo", order.getOrderNo()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data.total").value(2))
+            .andExpect(jsonPath("$.data.records[0].id").value(pendingId))
+            .andExpect(jsonPath("$.data.records[1].id").value(rejectedId));
+
+        mockMvc.perform(get("/api/aftersales"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value(200))
+            .andExpect(jsonPath("$.data.records", org.hamcrest.Matchers.hasSize(
+                org.hamcrest.Matchers.greaterThanOrEqualTo(2))));
+    }
+
+    @Test
     @DisplayName("客户端不能覆盖退款金额、用户和售后状态")
     void should_ignoreClientControlledFields_when_creatingTicket() throws Exception {
         Order order = insertOrder(OrderStatus.PAID);

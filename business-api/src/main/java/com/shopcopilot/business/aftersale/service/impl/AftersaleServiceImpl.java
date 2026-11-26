@@ -132,10 +132,12 @@ public class AftersaleServiceImpl implements AftersaleService {
     @Override
     public PageResult<AftersaleVO> page(AftersaleQuery query) {
         String orderNo = StringUtils.hasText(query.getOrderNo()) ? query.getOrderNo().trim() : null;
+        AftersaleStatus status = query.getStatus() == null
+            ? null
+            : AftersaleStatus.fromCode(query.getStatus());
         LambdaQueryWrapper<AftersaleTicket> wrapper = new LambdaQueryWrapper<AftersaleTicket>()
             .eq(orderNo != null, AftersaleTicket::getOrderNo, orderNo)
-            .eq(query.getStatus() != null, AftersaleTicket::getStatus,
-                AftersaleStatus.fromCode(query.getStatus()))
+            .eq(status != null, AftersaleTicket::getStatus, status)
             .orderByDesc(AftersaleTicket::getCreatedAt)
             .orderByDesc(AftersaleTicket::getId);
 

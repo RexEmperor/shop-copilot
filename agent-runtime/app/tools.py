@@ -11,6 +11,7 @@ from datetime import datetime, timezone, timedelta
 from langfuse import observe
 
 from app.chat import redis
+from app.mcp_client import mcp_client
 
 TOOL_REGISTRY: dict[str, dict] = {}
 _CONTEXT_KEYS = {"session_id"}
@@ -40,16 +41,36 @@ def tool(fn):
     return fn
 
 
-def schemas() -> list[dict]:
-    return [entry["schema"] for entry in TOOL_REGISTRY.values()]
+def schemas(allowed_names: set[str] | None = None) -> list[dict]:
+    if allowed_names is None:
+        return [entry["schema"] for entry in TOOL_REGISTRY.values()]
+    return [entry["schema"] for name, entry in TOOL_REGISTRY.items() if name in allowed_names]
+
+
+async def all_schemas(
+    *,
+    allowed_names: set[str] | None = None,
+    include_local: bool = True,
+    include_mcp: bool = True,
+) -> list[dict]:
+    """合并本地工具与远端 MCP 工具 schema；支持按 Agent 角色白名单过滤。"""
+    result: list[dict] = []
+    if include_local:
+        result.extend(schemas(allowed_names=allowed_names))
+    if include_mcp:
+        result.extend(await mcp_client.get_schemas(allowed_names=allowed_names))
+    return result
 
 
 @observe(name="tool-execute")
 async def execute(name: str, arguments: dict, context: dict) -> str:
-    """执行工具。参数校验三连:未知工具 / 多余参数 / 执行异常,全部兜住——
+    """执行工具（优先本地注册表，其次远端 MCP Server）。
+    参数校验三连:未知工具 / 多余参数 / 执行异常,全部兜住——
     工具失败不炸对话,把错误文本交回给模型,让它自己决定下一步。"""
     entry = TOOL_REGISTRY.get(name)
     if entry is None:
+        if await mcp_client.has_tool(name):
+            return await mcp_client.call_tool(name, arguments or {})
         return f"错误:未注册的工具 {name}"
     sig_params = set(inspect.signature(entry["fn"]).parameters)
     kwargs = {k: v for k, v in arguments.items() if k in sig_params}

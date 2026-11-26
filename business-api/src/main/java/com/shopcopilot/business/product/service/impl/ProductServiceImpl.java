@@ -10,6 +10,7 @@ import com.shopcopilot.business.product.enums.ProductStatus;
 import com.shopcopilot.business.product.mapper.ProductMapper;
 import com.shopcopilot.business.product.query.ProductQuery;
 import com.shopcopilot.business.product.service.ProductService;
+import com.shopcopilot.business.product.vo.ProductCategoryCount;
 import com.shopcopilot.business.product.vo.ProductVO;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
         var page = productMapper.selectPage(query.toPage(), wrapper);
         List<ProductVO> records = page.getRecords().stream().map(this::toVO).toList();
         return new PageResult<>(records, page.getTotal(), page.getCurrent(), page.getSize());
+    }
+
+    @Override
+    public List<ProductCategoryCount> listOnSaleCategories() {
+        return productMapper.listOnSaleCategoryCounts();
     }
 
     @Override

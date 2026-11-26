@@ -9,7 +9,7 @@ from langfuse import observe, propagate_attributes
 
 from app.chat import append_message, build_messages, get_history
 from app.llm.client import DeepSeekClient
-from app.tools import execute, schemas
+from app.tools import all_schemas, execute
 
 llm = DeepSeekClient()
 MAX_ROUNDS = 4
@@ -24,10 +24,11 @@ async def run_agent(session_id: str, user_message: str) -> dict:
         await append_message(session_id, "user", user_message)
         messages = await build_messages(session_id)
 
+        tool_schemas = await all_schemas()
         tool_rounds = 0
         result = None
         for _ in range(MAX_ROUNDS):
-            result = await llm.chat(messages, tools=schemas())
+            result = await llm.chat(messages, tools=tool_schemas)
             if not result["tool_calls"]:
                 break                             # 模型不要工具了 = 可以作答
             tool_rounds += 1
@@ -53,6 +54,7 @@ async def run_agent_stream(session_id: str, user_message: str):
     await append_message(session_id, "user", user_message)
     messages = await build_messages(session_id)
 
+    tool_schemas = await all_schemas()
     tool_rounds = 0
     content_parts: list[str] = []
     usage = {}
@@ -61,7 +63,7 @@ async def run_agent_stream(session_id: str, user_message: str):
 
     for _ in range(MAX_ROUNDS):
         round_tool_calls = None
-        async for ev in llm.chat_stream(messages, tools=schemas()):
+        async for ev in llm.chat_stream(messages, tools=tool_schemas):
             if ev["type"] == "delta":
                 content_parts.append(ev["content"])
                 yield {"type": "delta", "content": ev["content"]}

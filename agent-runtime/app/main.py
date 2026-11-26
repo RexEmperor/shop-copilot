@@ -15,13 +15,15 @@ from app.chat import append_message, build_messages, get_history
 from app.agent import run_agent
 
 from fastapi.responses import StreamingResponse
+from app import config
 from app.agent import run_agent, run_agent_stream
+from app.mcp_client import mcp_client
 
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="agent-runtime", version="0.1.0")
 
-BUSINESS_API_BASE = "http://localhost:8080"  # Phase 6 容器化后改为服务名
+BUSINESS_API_BASE = config.BUSINESS_API_BASE  # Phase 6 容器化后改为服务名
 
 llm = DeepSeekClient()
 
@@ -45,6 +47,18 @@ async def hello(name: str = "world"):
 async def llm_check(prompt: str = "用一句话介绍你自己"):
     """LLM 链路冒烟检查:DeepSeek 连通性 + 耗时 + token 用量(Phase 0 验收项)"""
     return await llm.chat([{"role": "user", "content": prompt}])
+
+
+@app.get("/api/mcp-tools")
+async def list_mcp_tools(refresh: bool = False):
+    """查看当前已连接的 Java MCP Server 暴露的业务工具清单"""
+    tools = await mcp_client.list_tools(force_refresh=refresh)
+    return {
+        "mcp_server_url": mcp_client.url,
+        "enabled": mcp_client.enabled,
+        "count": len(tools),
+        "tools": sorted(tools.keys()),
+    }
 
 
 class ChatRequest(BaseModel):

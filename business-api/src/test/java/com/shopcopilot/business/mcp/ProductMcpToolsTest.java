@@ -5,16 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.shopcopilot.business.common.BusinessException;
 import com.shopcopilot.business.common.PageResult;
-import com.shopcopilot.business.mcp.McpModels.McpPageData;
+import com.shopcopilot.business.mcp.McpModels.McpCategoryItem;
 import com.shopcopilot.business.mcp.McpModels.McpProductItem;
+import com.shopcopilot.business.mcp.McpModels.McpProductSearchData;
 import com.shopcopilot.business.product.query.ProductQuery;
 import com.shopcopilot.business.product.service.ProductService;
+import com.shopcopilot.business.product.vo.ProductCategoryCount;
 import com.shopcopilot.business.product.vo.ProductVO;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,7 +44,23 @@ class ProductMcpToolsTest {
     }
 
     @Test
-    @DisplayName("search_products 自动限制分页上限为 20 并格式化价格为元")
+    @DisplayName("list_categories 返回在售分类列表与商品数")
+    void should_listOnSaleCategories() {
+        when(productService.listOnSaleCategories()).thenReturn(List.of(
+            new ProductCategoryCount("数码", 4L),
+            new ProductCategoryCount("服饰", 2L)
+        ));
+
+        McpToolResponse<List<McpCategoryItem>> resp = tools.listCategories();
+
+        assertTrue(resp.success());
+        assertEquals(2, resp.data().size());
+        assertEquals("数码", resp.data().get(0).category());
+        assertEquals(4L, resp.data().get(0).productCount());
+    }
+
+    @Test
+    @DisplayName("search_products 有结果时不额外查类目，并限制分页上限为 20 且格式化价格")
     void should_clampPagination_andFormatYuan_when_searchingProducts() {
         LocalDateTime now = LocalDateTime.of(2026, 11, 26, 10, 0, 0);
         ProductVO vo = new ProductVO(
@@ -49,18 +68,37 @@ class ProductMcpToolsTest {
         when(productService.page(any(ProductQuery.class)))
             .thenReturn(new PageResult<>(List.of(vo), 1, 1, 20));
 
-        McpToolResponse<McpPageData<McpProductItem>> resp = tools.searchProducts("耳机", "数码", 0, 99);
+        McpToolResponse<McpProductSearchData> resp = tools.searchProducts("耳机", "数码", 0, 99);
 
         assertTrue(resp.success());
         assertEquals(200, resp.code());
         assertEquals("199.00", resp.data().records().get(0).priceYuan());
         assertEquals(19900L, resp.data().records().get(0).priceCents());
+        assertNull(resp.data().availableCategories());
+        verify(productService, never()).listOnSaleCategories();
 
         ArgumentCaptor<ProductQuery> captor = ArgumentCaptor.forClass(ProductQuery.class);
         verify(productService).page(captor.capture());
         assertEquals(1, captor.getValue().getPage());
         assertEquals(20, captor.getValue().getSize());
         assertEquals(1, captor.getValue().getStatus());
+    }
+
+    @Test
+    @DisplayName("search_products 零结果时附带 availableCategories 供模型纠偏")
+    void should_includeAvailableCategories_when_searchReturnsEmpty() {
+        when(productService.page(any(ProductQuery.class)))
+            .thenReturn(new PageResult<>(List.of(), 0, 1, 10));
+        when(productService.listOnSaleCategories()).thenReturn(List.of(
+            new ProductCategoryCount("数码", 4L),
+            new ProductCategoryCount("食品", 2L)
+        ));
+
+        McpToolResponse<McpProductSearchData> resp = tools.searchProducts("数码", null, 1, 10);
+
+        assertTrue(resp.success());
+        assertEquals(0, resp.data().total());
+        assertEquals(List.of("数码", "食品"), resp.data().availableCategories());
     }
 
     @Test

@@ -57,6 +57,7 @@ class McpServerIntegrationTest {
             toolNames.add(tool.path("name").asText());
         }
         assertEquals(Set.of(
+            "list_categories",
             "search_products",
             "get_product_detail",
             "list_orders",
@@ -65,10 +66,25 @@ class McpServerIntegrationTest {
             "list_aftersales"
         ), toolNames);
 
+        // 1.5 调用 list_categories 验证类目统计走真实数据（含 4 个数码，不含下架台灯）
+        JsonNode categoriesPayload = callTool(sessionId, 21, "list_categories", Map.of());
+        assertTrue(categoriesPayload.path("success").asBoolean());
+        assertEquals(4, categoriesPayload.path("data").size());
+        assertEquals("数码", categoriesPayload.path("data").get(0).path("category").asText());
+        assertEquals(4, categoriesPayload.path("data").get(0).path("productCount").asInt());
+
         // 2. 调用 search_products（按类目过滤且不含下架商品）
         JsonNode searchPayload = callTool(sessionId, 3, "search_products", Map.of("category", "数码"));
         assertTrue(searchPayload.path("success").asBoolean());
         assertEquals(4, searchPayload.path("data").path("total").asInt());
+        assertTrue(searchPayload.path("data").path("availableCategories").isMissingNode());
+
+        // 2.5 调用 search_products 零结果时附带 availableCategories 供模型纠偏
+        JsonNode emptyPayload = callTool(sessionId, 31, "search_products", Map.of("keyword", "数码"));
+        assertTrue(emptyPayload.path("success").asBoolean());
+        assertEquals(0, emptyPayload.path("data").path("total").asInt());
+        assertEquals(4, emptyPayload.path("data").path("availableCategories").size());
+        assertEquals("数码", emptyPayload.path("data").path("availableCategories").get(0).asText());
 
         // 3. 调用 get_product_detail 查下架商品 #10 -> 404 结构化拦截
         JsonNode offSalePayload = callTool(sessionId, 4, "get_product_detail", Map.of("productId", 10));

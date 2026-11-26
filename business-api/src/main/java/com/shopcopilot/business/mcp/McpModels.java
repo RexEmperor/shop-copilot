@@ -1,8 +1,10 @@
 package com.shopcopilot.business.mcp;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shopcopilot.business.aftersale.vo.AftersaleVO;
 import com.shopcopilot.business.common.PageResult;
 import com.shopcopilot.business.order.vo.OrderVO;
+import com.shopcopilot.business.product.vo.ProductCategoryCount;
 import com.shopcopilot.business.product.vo.ProductVO;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +26,32 @@ public final class McpModels {
     ) {
         public static <S, T> McpPageData<T> from(PageResult<S> source, List<T> mapped) {
             return new McpPageData<>(mapped, source.total(), source.page(), source.size());
+        }
+    }
+
+    public record McpCategoryItem(
+        String category,
+        long productCount
+    ) {
+        public static McpCategoryItem from(ProductCategoryCount source) {
+            return new McpCategoryItem(source.category(), source.productCount());
+        }
+    }
+
+    public record McpProductSearchData(
+        List<McpProductItem> records,
+        long total,
+        long page,
+        long size,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        List<String> availableCategories
+    ) {
+        public static McpProductSearchData of(
+                PageResult<ProductVO> source,
+                List<McpProductItem> mapped,
+                List<String> availableCategories) {
+            return new McpProductSearchData(
+                mapped, source.total(), source.page(), source.size(), availableCategories);
         }
     }
 

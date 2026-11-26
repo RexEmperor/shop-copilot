@@ -17,3 +17,12 @@ MCP_ENABLED = os.environ.get("MCP_ENABLED", "true").lower() in {"1", "true", "ye
 MCP_TIMEOUT_SECONDS = float(os.environ.get("MCP_TIMEOUT_SECONDS", "10.0"))
 MCP_MAX_RETRIES = int(os.environ.get("MCP_MAX_RETRIES", "1"))
 MCP_TOOLS_CACHE_TTL_SECONDS = float(os.environ.get("MCP_TOOLS_CACHE_TTL_SECONDS", "60.0"))
+
+# Phase 4 RAG 配置（PostgreSQL pgvector + 本地 Ollama BGE-M3）
+RAG_DATABASE_URL = os.environ.get("RAG_DATABASE_URL", "")
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "bge-m3")
+OLLAMA_TIMEOUT_SECONDS = float(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "30.0"))
+RAG_EMBED_DIM = 1024
+RAG_CHUNK_MAX_CHARS = int(os.environ.get("RAG_CHUNK_MAX_CHARS", "450"))
+RAG_CHUNK_OVERLAP_CHARS = int(os.environ.get("RAG_CHUNK_OVERLAP_CHARS", "60"))

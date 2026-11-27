@@ -147,13 +147,19 @@
 > **进度日志 2026-11-26(S4 已提交 `46b9897`)**:通过 LangGraph `get_stream_writer()` + `stream_mode=["custom", "values"]` 实现 `run_graph_stream`,事件协议升级为 `route`/`agent_status`/`tool_status`/`tool_result`/`delta`/`final`;`llm.chat_stream` 补齐 Langfuse generation 级成本上报;`/api/agent-chat/stream` 与 Gradio `app/ui.py`(`uv run python -m app.ui`)均切换至多 Agent 流式引擎,实时展示路由决策、专家接力与工具调用轨迹;pytest **22 例全绿**。
 > **进度日志 2026-11-26(S5 评测集 v0 与收官)**:①构建 30 题无副作用、可重复评测集 `agent-runtime/evals/eval_set_v0.json`(8 导购 + 8 订单售后 + 4 商品问答/防幻觉 + 4 跨域协作 + 3 闲聊 + 3 转人工)及并发自动评测器 `evals/run_eval_v0.py`、契约单测 `tests/test_eval_v0.py`;②首轮真机评测(`ec514b`:25/30, 83.3%, Avg 3.68s)直接暴露隐蔽跨版本 Bug——`mcp==2.3.0` 将 `Tool.inputSchema`/`CallToolResult.isError` 改为 `input_schema`/`is_error`,导致所有 7 个 MCP 工具入参 schema 静默退化为空 `{}`(单测因使用 `SimpleNamespace` 假对象未拦住),同时暴露 `O08` 模糊退款未主动列订单;修复兼容性并改用真实 `mcp.types` 补回归单测(`pytest` **27 例全绿**)后,二轮(`4a38d0`)升至 28/30(93.3%, Avg 3.05s),并暴露 `Q03` 在无商品 ID 时试探性猜测 `productId=1`;在 `prompts/product_qa/v1.md` 补禁猜 ID 约束后,三轮(`0531f0`)达成 **30/30(100.0%)**(路由 100%、工具 100%、事实 100%、平均耗时 **2.81s**、总消耗 **89,892 tokens**、总墙钟 **28.68s**),评测后 `verify_shop.sh` 24/24 PASS 证实零副作用;③`docs/面试题库.md` 追加 Phase 3 问答 6 题。Phase 3 关闭,待 review 提交后进入 Phase 4(RAG)。
 
-### Phase 4 · RAG(W9–W10,~24h)★核心,不可砍
-- [ ] 语料:平台规则文档(自写 20~30 篇)+ 商品目录
-- [ ] 切分 → BGE-M3 向量化 → pgvector 入库;增量更新脚本
-- [ ] 混合检索(向量 + 关键词)+ rerank(可选 SiliconFlow bge-reranker)
-- [ ] 引用溯源(回答带来源)+ 幻觉护栏(检索不到就明说/转人工)
-- [ ] 评测集扩到 100 条,开始记录指标
-- **验收**:检索 top3 命中率 ≥80%;有引用、无编造;Langfuse 可见每次检索链路
+### Phase 4 · RAG(W9–W10,~24h)★核心,不可砍 ✅ 2026-11-26 关闭
+- [x] 语料:平台规则文档(自写 24 篇)+ 在售商品目录(通过 Java MCP 同步,恪守数据隔离)
+- [x] 切分 → 本地 Ollama BGE-M3(1024 维)向量化 → pgvector(HNSW 余弦索引)入库;按 `content_hash` 幂等增量更新脚本
+- [x] 混合检索(pgvector 稠密向量 + jieba BM25 关键词 + RRF 融合)+ 可插拔 Rerank 接口 + Langfuse 检索链路追踪
+- [x] 引用溯源(回答带 `[来源: 文档标题]` + SSE/Gradio 引用展示)+ 双层幻觉护栏(检索硬阈值拦截 + 模型拒答转人工)+ 语义导购回源 Java 实时校验价格库存
+- [x] 评测集扩到 100 条,记录消融对比、引用溯源率与 LLM-as-Judge 忠实度/幻觉率
+- **验收**:检索 top3 命中率 ≥80%;有引用、无编造;Langfuse 可见每次检索链路 ✅(批次 `0505d1`:57 题混合检索 Top-1 **100%** / Top-3 **100%** / MRR@3 **1.000**;100 题端到端综合通过 **95/100 (95.0%)**、引用率 **95.2%**、LLM-as-Judge 忠实度 **57/57 (100%)**、幻觉率 **0/57 (0.0%)**)
+
+> **进度日志 2026-11-26(S1 已提交 `f4d2abd`)**:本机安装 Ollama + `bge-m3`(1024 维,排障记录:Clash TUN Fake-IP `198.18.x.x` 触发新版 Ollama SSRF 重定向保护,关 TUN 走 HTTP 代理拉取解决);落地 `infra/schema/rag.sql`(`kb_document` + `kb_chunk` + `vector(1024)` + HNSW 余弦索引 + `ON DELETE CASCADE`)与 `verify_rag.sh`(7/7 PASS);编写 24 篇高质量电商平台规则文档(`agent-runtime/kb/policies/*.md`),刻意保留跨境关税/以旧换新/线下自提/分期免息等库外空白条款供防幻觉评测。
+> **进度日志 2026-11-26(S2 已提交 `761a50f`)**:实现 Markdown 标题感知切分器(`chunker.py`)、Ollama BGE-M3 异步批量客户端(`embedder.py`)、`pgvector` 事务存储(`store.py`)与 `content_hash` 幂等增量入库(`ingest.py`);首轮入库 24 篇规则(53 chunks)+ 9 件在售商品(9 chunks,自动排除下架商品 ID 10),共 33 文档 / 62 chunks,二次重跑全量跳过(0 次向量化);pytest 32 例全绿。
+> **进度日志 2026-11-26(S3 已提交 `4ed4a15`)**:实现 `HybridRetriever`(pgvector 余弦向量 + jieba BM25 + RRF 融合 + 相关性阈值过滤 + 可插拔 SiliconFlow Rerank 接口 + Langfuse `@observe`),20 题初测混合检索 Top-3 达 100%(71.5ms),并标定出规则问答硬拦截阈值 `0.55`;pytest 34 例全绿。
+> **进度日志 2026-11-26(S4 已提交 `1a12119`)**:接入多 Agent 状态机——`product_qa` 挂载 `search_knowledge_base`(强制 `[来源: 文档标题]` 引用 + `strict_vector_threshold=0.55` 检索硬护栏 + 模型软拒答护栏),`guide` 挂载 `semantic_search_products`(语义召回 ID + 回源 Java MCP 校验实时在售价格库存),SSE/Gradio 透出 `citations` 引用展示;pytest 36 例全绿,3 场景真机冒烟全过。
+> **进度日志 2026-11-26(S5 100 题评测集 v1 与收官)**:构建 100 题无副作用评测集 `eval_set_v1.json`(30 回归 + 40 政策问答 + 15 语义导购 + 15 库外防幻觉)、检索消融器与 LLM-as-Judge 裁判(`run_eval_v1.py`),pytest **38 例全绿**。批次 `0505d1` 实测:①57 题检索消融——`bm25` Top-1 94.7% / Top-3 96.5%(MRR 0.956, 11.7ms) → `vector` Top-1 98.2% / Top-3 100.0%(MRR 0.991, 104.5ms) → **`hybrid` Top-1 100.0% / Top-3 100.0%(MRR 1.000, 68.3ms)**;②100 题端到端综合通过 **95/100(95.0%)**(路由 97%、工具 96%、事实 97%、语义导购 15/15 100%、规则引用率 40/42 95.2%、均耗时 3.16s,总耗时 86.15s);③57 题 LLM-as-Judge 忠实度 **100%(57/57)**、**幻觉率 0.0%(0/57)**;④`verify_shop.sh` 24/24 PASS 证实零副作用;⑤`docs/面试题库.md` 追加 Phase 4 口语化面试问答 6 题(含千万级大厂演进路径)。Phase 4 关闭。
 
 ### Phase 5 · 企业级工程化(W11–W12,~24h)
 - [ ] RocketMQ:订单状态变更 → 异步通知 Agent 主动播报;批量向量索引任务

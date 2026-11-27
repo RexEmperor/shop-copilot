@@ -1,0 +1,5956 @@
+{
+  "run_id": "0505d1",
+  "generated_at": "2026-11-26T15:52:19Z",
+  "dataset": "eval_set_v1.json",
+  "concurrency": 5,
+  "wall_time_s": 86.15,
+  "retrieval_ablation": {
+    "modes": {
+      "vector": {
+        "total": 57,
+        "top1": 56,
+        "top1_rate": 98.2,
+        "top3": 57,
+        "top3_rate": 100.0,
+        "mrr3": 0.991,
+        "avg_ms": 104.5,
+        "by_source_type": {
+          "policy": {
+            "total": 42,
+            "top1": 41,
+            "top3": 42,
+            "top3_rate": 100.0
+          },
+          "product": {
+            "total": 15,
+            "top1": 15,
+            "top3": 15,
+            "top3_rate": 100.0
+          }
+        },
+        "misses": []
+      },
+      "bm25": {
+        "total": 57,
+        "top1": 54,
+        "top1_rate": 94.7,
+        "top3": 55,
+        "top3_rate": 96.5,
+        "mrr3": 0.956,
+        "avg_ms": 11.7,
+        "by_source_type": {
+          "policy": {
+            "total": 42,
+            "top1": 42,
+            "top3": 42,
+            "top3_rate": 100.0
+          },
+          "product": {
+            "total": 15,
+            "top1": 12,
+            "top3": 13,
+            "top3_rate": 86.7
+          }
+        },
+        "misses": [
+          {
+            "id": "S05",
+            "got": [],
+            "expected": [
+              "product:9"
+            ]
+          },
+          {
+            "id": "S15",
+            "got": [],
+            "expected": [
+              "product:8",
+              "product:7"
+            ]
+          }
+        ]
+      },
+      "hybrid": {
+        "total": 57,
+        "top1": 57,
+        "top1_rate": 100.0,
+        "top3": 57,
+        "top3_rate": 100.0,
+        "mrr3": 1.0,
+        "avg_ms": 68.3,
+        "by_source_type": {
+          "policy": {
+            "total": 42,
+            "top1": 42,
+            "top3": 42,
+            "top3_rate": 100.0
+          },
+          "product": {
+            "total": 15,
+            "top1": 15,
+            "top3": 15,
+            "top3_rate": 100.0
+          }
+        },
+        "misses": []
+      }
+    },
+    "ood_guardrail": {
+      "total": 15,
+      "hard_blocked": 8,
+      "hard_block_rate": 53.3
+    }
+  },
+  "e2e_summary": {
+    "overall": {
+      "total": 100,
+      "passed": 95,
+      "pass_rate": 95.0,
+      "route_ok": 97,
+      "route_acc": 97.0,
+      "tool_ok": 96,
+      "tool_acc": 96.0,
+      "fact_ok": 97,
+      "fact_acc": 97.0,
+      "citation_total": 42,
+      "citation_ok": 40,
+      "citation_rate": 95.2,
+      "judged_total": 57,
+      "faithful_count": 57,
+      "faithfulness_rate": 100.0,
+      "hallucination_count": 0,
+      "hallucination_rate": 0.0,
+      "avg_elapsed_s": 3.16,
+      "total_tokens": 345403
+    },
+    "by_category": {
+      "guide": {
+        "total": 8,
+        "passed": 8,
+        "pass_rate": 100.0,
+        "route_ok": 8,
+        "route_acc": 100.0,
+        "tool_ok": 8,
+        "tool_acc": 100.0,
+        "fact_ok": 8,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 2.89,
+        "total_tokens": 24770
+      },
+      "order_aftersale": {
+        "total": 8,
+        "passed": 8,
+        "pass_rate": 100.0,
+        "route_ok": 8,
+        "route_acc": 100.0,
+        "tool_ok": 8,
+        "tool_acc": 100.0,
+        "fact_ok": 8,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 2.88,
+        "total_tokens": 28757
+      },
+      "product_qa": {
+        "total": 2,
+        "passed": 2,
+        "pass_rate": 100.0,
+        "route_ok": 2,
+        "route_acc": 100.0,
+        "tool_ok": 2,
+        "tool_acc": 100.0,
+        "fact_ok": 2,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 2.91,
+        "total_tokens": 5013
+      },
+      "policy_rag": {
+        "total": 42,
+        "passed": 40,
+        "pass_rate": 95.2,
+        "route_ok": 41,
+        "route_acc": 97.6,
+        "tool_ok": 40,
+        "tool_acc": 95.2,
+        "fact_ok": 40,
+        "fact_acc": 95.2,
+        "citation_total": 42,
+        "citation_ok": 40,
+        "citation_rate": 95.2,
+        "judged_total": 42,
+        "faithful_count": 42,
+        "faithfulness_rate": 100.0,
+        "hallucination_count": 0,
+        "hallucination_rate": 0.0,
+        "avg_elapsed_s": 3.14,
+        "total_tokens": 151506
+      },
+      "cross_domain": {
+        "total": 4,
+        "passed": 3,
+        "pass_rate": 75.0,
+        "route_ok": 4,
+        "route_acc": 100.0,
+        "tool_ok": 4,
+        "tool_acc": 100.0,
+        "fact_ok": 3,
+        "fact_acc": 75.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 6.52,
+        "total_tokens": 29074
+      },
+      "chitchat": {
+        "total": 3,
+        "passed": 3,
+        "pass_rate": 100.0,
+        "route_ok": 3,
+        "route_acc": 100.0,
+        "tool_ok": 3,
+        "tool_acc": 100.0,
+        "fact_ok": 3,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 1.32,
+        "total_tokens": 1877
+      },
+      "handoff": {
+        "total": 3,
+        "passed": 3,
+        "pass_rate": 100.0,
+        "route_ok": 3,
+        "route_acc": 100.0,
+        "tool_ok": 3,
+        "tool_acc": 100.0,
+        "fact_ok": 3,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 0.64,
+        "total_tokens": 1485
+      },
+      "semantic_guide": {
+        "total": 15,
+        "passed": 15,
+        "pass_rate": 100.0,
+        "route_ok": 15,
+        "route_acc": 100.0,
+        "tool_ok": 15,
+        "tool_acc": 100.0,
+        "fact_ok": 15,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 0,
+        "faithful_count": 0,
+        "faithfulness_rate": null,
+        "hallucination_count": 0,
+        "hallucination_rate": null,
+        "avg_elapsed_s": 3.34,
+        "total_tokens": 54363
+      },
+      "anti_hallucination": {
+        "total": 15,
+        "passed": 13,
+        "pass_rate": 86.7,
+        "route_ok": 13,
+        "route_acc": 86.7,
+        "tool_ok": 13,
+        "tool_acc": 86.7,
+        "fact_ok": 15,
+        "fact_acc": 100.0,
+        "citation_total": 0,
+        "citation_ok": 0,
+        "citation_rate": null,
+        "judged_total": 15,
+        "faithful_count": 15,
+        "faithfulness_rate": 100.0,
+        "hallucination_count": 0,
+        "hallucination_rate": 0.0,
+        "avg_elapsed_s": 3.32,
+        "total_tokens": 48558
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "G01",
+      "category": "guide",
+      "description": "查全店在售品类",
+      "query": "你们店里都卖哪些品类的商品？",
+      "elapsed_s": 3.32,
+      "usage": {
+        "prompt_tokens": 2794,
+        "completion_tokens": 144,
+        "total_tokens": 2938
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "list_categories"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "我们店里目前有 4 个在售品类：\n\n- **数码**：4 件商品\n- **服饰**：2 件商品\n- **食品**：2 件商品\n- **家居**：1 件商品\n\n一共 9 件在售商品。您想先看看哪个品类？或者告诉我具体需求（比如送礼、出差备用），我帮您直接筛选。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G02",
+      "category": "guide",
+      "description": "按精确分类查数码商品",
+      "query": "我想看看数码类的商品，都有哪些？",
+      "elapsed_s": 3.13,
+      "usage": {
+        "prompt_tokens": 3053,
+        "completion_tokens": 269,
+        "total_tokens": 3322
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "数码类目前有 4 款在售商品：\n\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 无线蓝牙耳机 Pro | ¥199.00 | 120 | 主动降噪，蓝牙5.4，双设备连接 |\n| 智能手表 S2 | ¥899.00 | 80 | 血氧监测、全天候心率记录，续航14天 |\n| 机械键盘 87键 | ¥329.00 | 60 | 热插拔轴体，有线/2.4G/蓝牙三模 |\n| 便携充电宝 20000mAh | ¥129.00 | 200 | 双向快充，支持笔记本应急供电 |\n\n如果您有具体用途（如通勤听歌、办公打字、出差供电），我可以帮您进一步挑选更合适的那一款。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G03",
+      "category": "guide",
+      "description": "同义泛化词电子产品映射数码类目",
+      "query": "你们店里有什么电子产品卖吗？",
+      "elapsed_s": 3.16,
+      "usage": {
+        "prompt_tokens": 3048,
+        "completion_tokens": 271,
+        "total_tokens": 3319
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "有的，店里「数码」类目目前有 4 款在售：\n\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 无线蓝牙耳机 Pro | ¥199.00 | 120 | 主动降噪，蓝牙5.4，双设备连接 |\n| 智能手表 S2 | ¥899.00 | 80 | 血氧监测、全天心率记录，续航14天 |\n| 机械键盘 87键 | ¥329.00 | 60 | 热插拔轴体，有线/2.4G/蓝牙三模 |\n| 便携充电宝 20000mAh | ¥129.00 | 200 | 双向快充，可给笔记本应急供电 |\n\n您主要是想找办公外设、运动健康还是出行供电类的？告诉我用途，我帮您缩小范围～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G04",
+      "category": "guide",
+      "description": "按关键词查机械键盘价格与库存",
+      "query": "有机械键盘吗？多少钱，还有货吗？",
+      "elapsed_s": 3.08,
+      "usage": {
+        "prompt_tokens": 2858,
+        "completion_tokens": 173,
+        "total_tokens": 3031
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "有的，正好一款在售：\n\n**机械键盘 87键**（数码）\n- 价格：**329.00 元**\n- 库存：**60 件**（现货充足）\n- 卖点：热插拔轴体，支持有线 / 2.4G / 蓝牙三模连接\n\n如果对键位数量（比如要不要带小键盘的 104 键）或轴体手感有偏好，告诉我可以再帮你细挑。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G05",
+      "category": "guide",
+      "description": "按预算查食品类推荐",
+      "query": "帮我推荐 100 元以内的零食或吃的",
+      "elapsed_s": 3.18,
+      "usage": {
+        "prompt_tokens": 2914,
+        "completion_tokens": 205,
+        "total_tokens": 3119
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "食品类中有商品价格在 100 元内：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 每日坚果礼盒 | ¥89.00 | 150 | 30日独立小包装，六种坚果科学配比 |\n| 挂耳咖啡 10包装 | ¥69.00 | 180 | 中度烘焙，坚果巧克力风味 |\n\n两款都在 100 元以内。想送人或囤货可选坚果礼盒；如果是自己日常喝，可优先选挂耳咖啡。要不要我再看看其他品类或帮你对比这两款？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G06",
+      "category": "guide",
+      "description": "按商品ID查在售商品详情",
+      "query": "帮我查一下商品ID 2 的详细信息和价格",
+      "elapsed_s": 1.88,
+      "usage": {
+        "prompt_tokens": 2833,
+        "completion_tokens": 159,
+        "total_tokens": 2992
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "商品 ID 2 的详细信息如下：\n\n- **名称**：智能手表 S2\n- **分类**：数码\n- **价格**：899.00 元\n- **库存**：80 件（上架在售）\n- **核心卖点**：血氧监测、全天候心率记录，续航 14 天\n\n如果你在意续航或健康监测功能，这款是不错的选择；需要我再对比同类手表吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G07",
+      "category": "guide",
+      "description": "查询已下架商品ID 10 拦截反馈",
+      "query": "查一下商品ID 10 的复古台灯还能买吗？",
+      "elapsed_s": 2.98,
+      "usage": {
+        "prompt_tokens": 2786,
+        "completion_tokens": 131,
+        "total_tokens": 2917
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "商品 ID 10 的复古台灯已经下架，目前无法购买了。\n\n需要我帮你在**家居**类目里找找其他在售的台灯或灯具类商品吗？如果你方便说一下用途（卧室阅读、床头氛围、书桌照明），我可以帮你缩小到更合适的一两款。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "G08",
+      "category": "guide",
+      "description": "按场景同义词查服饰商品",
+      "query": "店里有什么秋冬穿的衣服推荐？",
+      "elapsed_s": 2.38,
+      "usage": {
+        "prompt_tokens": 2912,
+        "completion_tokens": 220,
+        "total_tokens": 3132
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "服饰类目前有 2 款在售：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 轻薄羽绒服 | ¥499.00 | 50 | 90% 白鸭绒，适合秋冬通勤 |\n| 纯棉圆领 T 恤 | ¥59.00 | 300 | 260 克重磅纯棉，宽松版型 |\n\n秋冬外套目前只有「轻薄羽绒服」这一款比较合适，T 恤更适合内搭或初秋单穿。\n\n想问一下你更偏向通勤防风，还是室内保暖内搭？我可以帮你缩小范围～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O01",
+      "category": "order_aftersale",
+      "description": "查全部订单列表",
+      "query": "帮我查一下我的全部订单列表",
+      "elapsed_s": 3.23,
+      "usage": {
+        "prompt_tokens": 3662,
+        "completion_tokens": 315,
+        "total_tokens": 3977
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已为您查到全部 4 笔订单，明细如下：\n\n| 序号 | 订单号 | 商品 | 数量 | 金额 | 订单状态 |\n|---|---|---|---|---|---|\n| 1 | SO202611240003 | 机械键盘 87键 | 2 | ¥658.00 | 已发货（2026-11-24 14:00 发货） |\n| 2 | SO202611240002 | 智能手表 S2 | 1 | ¥899.00 | 已支付，暂未发货 |\n| 3 | SO202611240001 | 无线蓝牙耳机 Pro | 1 | ¥199.00 | 待支付 |\n| 4 | SO202611240004 | 纯棉圆领T恤 | 3 | ¥177.00 | 已完成（2026-11-24 08:00 已收货） |\n\n收货信息均为：郭克，13800000001，北京市朝阳区示例路1号。\n\n需要我帮您查看某笔订单的详细进度，或办理售后（退款/退货退款）吗？如需售后，请告诉我具体订单号和原因。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O02",
+      "category": "order_aftersale",
+      "description": "按状态筛选已发货订单",
+      "query": "我有哪些已经发货的订单？",
+      "elapsed_s": 2.4,
+      "usage": {
+        "prompt_tokens": 3204,
+        "completion_tokens": 217,
+        "total_tokens": 3421
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "您当前有 **1 笔已发货订单**：\n\n| 订单号 | 商品 | 数量 | 订单金额 | 状态 | 发货时间 |\n|---|---|---|---|---|---|\n| SO202611240003 | 机械键盘 87键 | 2 | ¥658.00 | 已发货 | 2026-11-24 14:00 |\n\n收货信息：郭克，13800000001，北京市朝阳区示例路1号。\n\n这笔订单目前尚未显示签收。如需办理售后（已发货订单支持“仅退款”或“退货退款”），或想查询物流进度，请告诉我订单号和具体原因，我来为您处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O03",
+      "category": "order_aftersale",
+      "description": "按订单号查已支付订单详情",
+      "query": "查一下订单 SO202611240002 的详细状态和金额",
+      "elapsed_s": 2.72,
+      "usage": {
+        "prompt_tokens": 3225,
+        "completion_tokens": 269,
+        "total_tokens": 3494
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已为您查到订单 **SO202611240002** 的详情：\n\n**商品信息**\n- 商品：智能手表 S2\n- 单价：899.00 元\n- 数量：1\n- **订单金额：899.00 元**\n\n**订单状态**\n- 当前状态：**已支付，暂未发货**\n\n**收货信息**\n- 收货人：郭克\n- 联系电话：13800000001\n- 收货地址：北京市朝阳区示例路1号\n\n**时间线**\n- 下单时间：2026-11-24 10:00\n- 支付时间：2026-11-24 10:05\n- 发货时间：暂未发货\n- 收货时间：暂无\n\n如需了解物流进度或办理售后（该订单未发货，目前可申请“仅退款”），请告诉我。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O04",
+      "category": "order_aftersale",
+      "description": "查已签收订单数量与金额",
+      "query": "帮我查下订单 SO202611240004 买了几件、总价多少、签收了吗？",
+      "elapsed_s": 2.37,
+      "usage": {
+        "prompt_tokens": 3263,
+        "completion_tokens": 221,
+        "total_tokens": 3484
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "已为您查到该订单信息，具体情况如下：\n\n**订单号：SO202611240004**\n- 商品：纯棉圆领T恤（单价 59.00 元）\n- 购买数量：**3 件**\n- 订单总价：**177.00 元**\n- 订单状态：已完成\n- 收货人：郭克\n- 收货地址：北京市朝阳区示例路1号\n\n**物流与签收情况：** 该订单已于 2026-11-24 08:00 完成签收，目前订单状态为“已完成”。\n\n如需办理售后或有其他问题，随时告诉我。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O05",
+      "category": "order_aftersale",
+      "description": "查售后工单列表与拒绝状态",
+      "query": "帮我查下我的售后工单进度",
+      "elapsed_s": 3.09,
+      "usage": {
+        "prompt_tokens": 3153,
+        "completion_tokens": 244,
+        "total_tokens": 3397
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_aftersales"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "您好，查询到您当前共有 **1 笔**售后工单，详情如下：\n\n**工单编号：AS202611240001**\n- 关联订单：SO202611240002\n- 售后类型：仅退款\n- 申请退款金额：899.00 元\n- 申请原因：商品与描述不符，申请仅退款\n- 提交时间：2026年11月24日 12:00\n- 当前进度：**已拒绝**\n- 审核时间：2026年11月24日 12:30\n- 审核说明：证据不足，已拒绝\n\n该工单已被审核拒绝，退款未成功发起。如果您对该结果有异议，可以补充相关证据材料后重新申请，或回复“转人工”，由人工客服进一步协助处理。\n\n请问还有什么可以帮您？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O06",
+      "category": "order_aftersale",
+      "description": "待支付订单申请仅退款规则拦截",
+      "query": "帮我把订单 SO202611240001 申请仅退款，原因是不想要了",
+      "elapsed_s": 3.61,
+      "usage": {
+        "prompt_tokens": 3226,
+        "completion_tokens": 238,
+        "total_tokens": 3464
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "很抱歉，这笔订单目前**无法申请仅退款**。\n\n订单信息如下：\n- 订单号：SO202611240001\n- 商品：无线蓝牙耳机 Pro × 1\n- 订单金额：199.00 元\n- 当前状态：**待支付**（尚未付款）\n\n按照售后规则，**待支付或已取消的订单不支持发起任何售后申请**。由于这笔订单还没有付款，也就不存在需要退款的情况，因此系统无法提交仅退款。\n\n您可以选择：如果不再需要这笔订单，可以等订单自动关闭，或直接不付款即可；如果该订单已被您误认为已付款，也可以回复“转人工”，由人工客服进一步为您核实处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O07",
+      "category": "order_aftersale",
+      "description": "已支付未发货订单申请退货退款规则拦截",
+      "query": "订单 SO202611240002 我想申请退货退款，原因是买贵了",
+      "elapsed_s": 2.59,
+      "usage": {
+        "prompt_tokens": 3253,
+        "completion_tokens": 279,
+        "total_tokens": 3532
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "很抱歉，这笔订单目前**无法申请退货退款**。\n\n订单 SO202611240002 的详情如下：\n- 商品：智能手表 S2 × 1\n- 订单金额：899.00 元\n- 当前状态：**已支付，暂未发货**\n\n按照售后规则：**已支付但尚未发货的订单，仅支持申请\"仅退款\"，不支持\"退货退款\"**（因为商品尚未寄出，不存在退货环节）。\n\n如果您确实希望取消这笔订单，我可以帮您按\"仅退款\"提交申请，退款金额将由系统按订单金额自动计算。请问您是否要改为申请**仅退款**？如果确认，请告诉我退款原因（例如\"买贵了\"即可）。\n\n如您对此仍有疑问，也可以回复\"转人工\"，由人工客服进一步协助您。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "O08",
+      "category": "order_aftersale",
+      "description": "模糊退款诉求不盲目写库先查单确认",
+      "query": "我想申请退款",
+      "elapsed_s": 3.04,
+      "usage": {
+        "prompt_tokens": 3648,
+        "completion_tokens": 340,
+        "total_tokens": 3988
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "您好，这是您当前的订单列表，请确认您想申请退款的是哪一笔：\n\n| 序号 | 订单号 | 商品 | 金额 | 订单状态 | 可申请的售后类型 |\n|---|---|---|---|---|---|\n| 1 | SO202611240003 | 机械键盘 87键 ×2 | 658.00 元 | 已发货 | 仅退款 / 退货退款 |\n| 2 | SO202611240002 | 智能手表 S2 ×1 | 899.00 元 | 已支付（暂未发货） | 仅退款 |\n| 3 | SO202611240001 | 无线蓝牙耳机 Pro ×1 | 199.00 元 | 待支付 | 暂不支持售后 |\n| 4 | SO202611240004 | 纯棉圆领T恤 ×3 | 177.00 元 | 已完成 | 仅退款 / 退货退款 |\n\n请您告知：\n1. 要申请售后的**订单号**；\n2. 售后类型（**仅退款** 还是 **退货退款**）；\n3. 具体**退款原因**。\n\n您确认后我再为您提交申请。另外提醒一下：第3笔「无线蓝牙耳机 Pro」目前是待支付状态，暂不支持发起售后。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "Q01",
+      "category": "product_qa",
+      "description": "查商品ID 1 规格参数问答",
+      "query": "商品ID 1 的无线蓝牙耳机 Pro 支持蓝牙几代、有没有主动降噪？",
+      "elapsed_s": 2.9,
+      "usage": {
+        "prompt_tokens": 2329,
+        "completion_tokens": 165,
+        "total_tokens": 2494
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "商品 ID 1「无线蓝牙耳机 Pro」的规格如下：\n\n- **蓝牙版本**：蓝牙 5.4，并支持双设备同时连接\n- **主动降噪**：支持\n- **价格**：199.00 元\n- **库存**：120 件，当前为在售，状态为上架中\n- **品类**：数码\n\n如需了解该商品的售后或退换货规则，可以继续问我～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "Q02",
+      "category": "product_qa",
+      "description": "查商品ID 4 笔记本供电使用场景",
+      "query": "商品ID 4 的便携充电宝支持给笔记本应急供电吗？",
+      "elapsed_s": 2.91,
+      "usage": {
+        "prompt_tokens": 2316,
+        "completion_tokens": 203,
+        "total_tokens": 2519
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "get_product_detail"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**商品ID 4｜便携充电宝 20000mAh**\n\n- 支持：商品描述明确标注\"双向快充，**支持笔记本应急供电**\"，可用于笔记本应急充电。\n- 价格：129.00 元\n- 库存：200 件，当前上架中\n\n补充提醒：是否能为你的具体笔记本型号供电，还取决于该笔记本的充电接口与功率需求（如 PD 协议、所需瓦数），商品描述未标注输出功率参数。如需确认具体功率规格，或咨询充电宝登机规则，建议回复\"转人工\"或告知想了解的规则方向。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "Q03",
+      "category": "policy_rag",
+      "description": "延保收费与进水免责(Phase 3升级RAG)",
+      "query": "你们店铺买延保服务一年多少钱？包含进水保修吗？",
+      "elapsed_s": 3.52,
+      "usage": {
+        "prompt_tokens": 3427,
+        "completion_tokens": 368,
+        "total_tokens": 3795
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.7521
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保保障范围与免责条款",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.7156
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 常见故障界定",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.5919
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 质保申请方式",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.6224
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 价保周期与适用条件",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.5884
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**延保价格：一年 69 元**，这是 1 年延长保修，质保延至第 2 年；另有 2 年延保 119 元，质保延至第 3 年。\n\n**进水不在保修范围内**：店铺延保仅保自然性能故障，如主板失灵、按键失效、电池充不进电、传感器故障；明确免责：**不包含意外进水、液体浸泡、人为摔裂、磕碰变形及外观自然磨损**。\n\n其他要点：\n- 适用范围：仅数码类在售商品（耳机、智能手表、机械键盘、充电宝）；服饰、食品、家居类不支持延保\n- 购买方式：下单时随单加购，或签收后 7 日内联系人工客服补购\n- 出险：同一故障维修 2 次仍无法修复，免费换同款或等值新品\n- 退保：主商品 7 天内整单退货退款，延保同步全额退款；超过 7 天且未出险则不支持单独退保\n\n[来源: 店铺延长保修服务说明]\n\n如需针对某款具体商品确认是否支持延保，可提供商品ID，我帮您核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "价格69元及进水免责均与证据一致"
+      }
+    },
+    {
+      "id": "Q04",
+      "category": "policy_rag",
+      "description": "延迟发货48h赔付比例(Phase 3升级RAG)",
+      "query": "商家延迟发货超过48小时，平台具体按订单金额的百分之多少赔付？",
+      "elapsed_s": 2.75,
+      "usage": {
+        "prompt_tokens": 2931,
+        "completion_tokens": 258,
+        "total_tokens": 3189
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.8605
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.7296
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 免责情形",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.7064
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**赔付比例：按该笔订单实际支付商品金额的 5%**（以快递公司首次揽收记录为准，超过承诺的 48 小时未发货即视为延迟发货）。\n\n补充要点：\n- **上下限**：单笔订单最低赔 5 元，最高赔 50 元\n- **赔付形式**：审核确认后，以无门槛现金红包或原路赔付款发放至买家账户，且**不影响买家继续申请仅退款**\n- **免责情形**：极端天气、自然灾害、交通管制、法定节假日快递停运，或买家地址不详导致无法揽收，商家提前公告或通知后不计入违约\n- 预售、定制及大促商品的发货时效，以商品详情页承诺为准\n\n[来源: 发货时效与延迟发货赔付规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "赔付5%及上下限与证据一致，无编造"
+      }
+    },
+    {
+      "id": "X01",
+      "category": "cross_domain",
+      "description": "跨域: 查订单状态 + 推荐200元左右耳机",
+      "query": "帮我查下订单 SO202611240002 的状态，顺便推荐一款 200 元左右的耳机",
+      "elapsed_s": 6.49,
+      "usage": {
+        "prompt_tokens": 6517,
+        "completion_tokens": 699,
+        "total_tokens": 7216
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_orders",
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，您的订单和耳机推荐都已查好，整理如下：\n\n**📍 订单 SO202611240002**\n- 商品：智能手表 S2 ×1\n- 订单金额：899.00 元\n- 状态：**已支付，暂未发货**（支付时间：2026-11-24 10:05）\n- 收货人：郭克，北京市朝阳区示例路1号\n\n如需催发货或办理售后，随时告诉我。\n\n**🎧 200 元左右耳机推荐**\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 无线蓝牙耳机 Pro | 199.00 元 | 120 件 | 主动降噪、蓝牙 5.4、支持双设备连接 |\n\n这款刚好在预算内，降噪和双设备连接在日常通勤、办公切换手机/电脑的场景比较实用。如果您更看重音质、长续航或运动防水，告诉我侧重点，我再帮您缩小范围～\n\n[来源: 订单售后专员；导购专员]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "X02",
+      "category": "cross_domain",
+      "description": "跨域: 查已发货订单 + 推荐食品",
+      "query": "查一下我已发货的订单是哪笔，另外你们店里有什么食品推荐吗？",
+      "elapsed_s": 6.33,
+      "usage": {
+        "prompt_tokens": 6687,
+        "completion_tokens": 809,
+        "total_tokens": 7496
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_orders",
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，已经帮您查到啦，您目前有 **1 笔已发货订单**：\n\n- **订单号**：SO202611240003\n- **商品**：机械键盘 87键 × 2\n- **订单金额**：658.00 元\n- **状态**：已发货（发货时间 2026-11-24 14:00）\n- **收货信息**：郭克，13800000001，北京市朝阳区示例路1号\n\n这笔订单目前尚未显示签收，您可以留意物流进度。另外，如果后续需要售后，这笔订单支持申请“仅退款”或“退货退款”，到时告诉我具体原因就可以帮您办理。[来源: 订单售后专员]\n\n食品方面，店内目前有 2 款在售：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 每日坚果礼盒 | 89.00 元 | 150 | 30日独立小包装，六种坚果科学配比 |\n| 挂耳咖啡 10 包装 | 69.00 元 | 180 | 中度烘焙，坚果巧克力风味 |\n\n日常零食补给我更推荐**每日坚果礼盒**，提神办公则可以选**挂耳咖啡**。您是想自己吃还是送人呢？告诉我用途，我可以再帮您缩小范围～[来源: 导购专员]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "X03",
+      "category": "cross_domain",
+      "description": "跨域: 查售后工单状态 + 查在售家居",
+      "query": "帮我看看售后单 AS202611240001 现在什么状态，顺便查下店里有哪些在售家居商品",
+      "elapsed_s": 6.44,
+      "usage": {
+        "prompt_tokens": 6379,
+        "completion_tokens": 698,
+        "total_tokens": 7077
+      },
+      "actual": {
+        "route": "order_aftersale",
+        "plan": [
+          "order_aftersale",
+          "guide"
+        ],
+        "agents_used": [
+          "order_aftersale",
+          "guide"
+        ],
+        "tools_called": [
+          "list_aftersales",
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "帮您查询了这两件事，情况如下：\n\n**关于售后单 AS202611240001**\n售后专员按这个单号查询后，没有找到匹配的售后工单记录，可能有两种情况：\n1. **单号可能输错了**：系统的售后单号通常与业务订单号关联，`AS202611240001` 这个格式没有查到对应记录。\n2. 这笔售后可能不属于当前账号。\n\n方便的话，请提供一下**对应的业务订单号**（形如 `SO202611240002`），或告诉我大概的下单时间，售后专员可以帮您继续查售后进度。如果您不确定是哪一笔，也可以让售后专员先查一下您近期的订单列表，看看是哪一笔有售后需求。\n\n**关于在售家居商品**\n目前店里有 1 款在售家居商品：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 香薰蜡烛礼盒 | 159.00 元 | 70 件 | 天然大豆蜡，雪松与白茶香型 |\n\n如果这款香薰蜡烛是想送人或卧室用，导购专员还可以按场景帮您找找同类好物，需要的话可以告诉我。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": false,
+        "passed": false,
+        "reasons": [
+          "none of ['拒绝', '已拒绝'] found in reply"
+        ],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "X04",
+      "category": "cross_domain",
+      "description": "跨域: 查羽绒服 + 查订单签收状态",
+      "query": "我想看下店里有什么羽绒服，另外帮我查一下订单 SO202611240004 是不是已经签收了",
+      "elapsed_s": 6.82,
+      "usage": {
+        "prompt_tokens": 6439,
+        "completion_tokens": 846,
+        "total_tokens": 7285
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide",
+          "order_aftersale"
+        ],
+        "agents_used": [
+          "guide",
+          "order_aftersale"
+        ],
+        "tools_called": [
+          "search_products",
+          "list_orders"
+        ],
+        "citations": [],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，帮您把羽绒服库存和订单签收情况都查好了：\n\n**关于羽绒服**\n目前店里在售的羽绒服只有这一款：\n\n**轻薄羽绒服** —— ¥499.00\n- 分类：服饰\n- 库存：50 件\n- 卖点：90% 白鸭绒，适合秋冬通勤\n\n如果您想要更厚实的极寒款或长款，可以告诉我具体需求（比如充绒量、颜色、预算），我再帮您看看是否有同类商品。[来源: 导购专员]\n\n**关于订单 SO202611240004**\n查询结果如下：\n\n**订单状态：已完成（已签收）**\n- 商品：纯棉圆领 T 恤 × 3\n- 订单金额：¥177.00\n- 收货人：郭克，13800000001\n- 收货地址：北京市朝阳区示例路1号\n- 关键时间线：\n  - 下单：2026-11-23 08:55\n  - 付款：2026-11-23 09:00\n  - 发货：2026-11-23 15:00\n  - 签收：2026-11-24 08:00\n\n确认已经签收了 ✅\n\n这笔已签收的订单如需退款或退换货，也可以告诉我具体原因，我帮您发起售后（已发货/已完成订单支持仅退款或退货退款）。[来源: 订单售后专员]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "C01",
+      "category": "chitchat",
+      "description": "日常打招呼零工具",
+      "query": "你好呀！",
+      "elapsed_s": 1.47,
+      "usage": {
+        "prompt_tokens": 561,
+        "completion_tokens": 54,
+        "total_tokens": 615
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "你好呀！很高兴见到你～ 我可以帮你推荐选购商品、查询订单/发货进度，或者协助查询与申请售后。需要我帮点什么？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "C02",
+      "category": "chitchat",
+      "description": "询问助手身份与能力零工具",
+      "query": "你是谁？你能帮我做什么？",
+      "elapsed_s": 1.41,
+      "usage": {
+        "prompt_tokens": 567,
+        "completion_tokens": 58,
+        "total_tokens": 625
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "我是“智购助手”，可以帮你推荐选购商品、查询订单和发货进度，也能协助查询或申请售后。你想先看哪一类呢？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "C03",
+      "category": "chitchat",
+      "description": "用户致谢零工具",
+      "query": "太感谢了，今天帮大忙了！",
+      "elapsed_s": 1.08,
+      "usage": {
+        "prompt_tokens": 575,
+        "completion_tokens": 62,
+        "total_tokens": 637
+      },
+      "actual": {
+        "route": "chitchat",
+        "plan": [],
+        "agents_used": [
+          "chitchat"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "不客气，能帮上忙就好！后续需要推荐选购商品、查询订单/发货进度，或查询与申请售后，随时找我就行。祝你今天顺利～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "H01",
+      "category": "handoff",
+      "description": "明确要求转人工客服",
+      "query": "帮我转人工客服",
+      "elapsed_s": 0.62,
+      "usage": {
+        "prompt_tokens": 469,
+        "completion_tokens": 22,
+        "total_tokens": 491
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "H02",
+      "category": "handoff",
+      "description": "投诉升级拒绝机器人要求接人工",
+      "query": "我不要机器人，立刻给我接人工处理投诉！",
+      "elapsed_s": 0.72,
+      "usage": {
+        "prompt_tokens": 475,
+        "completion_tokens": 22,
+        "total_tokens": 497
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "H03",
+      "category": "handoff",
+      "description": "复杂问题主动申请人工介入",
+      "query": "这个问题太复杂了，请安排人工客服介入",
+      "elapsed_s": 0.58,
+      "usage": {
+        "prompt_tokens": 475,
+        "completion_tokens": 22,
+        "total_tokens": 497
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "P01",
+      "category": "policy_rag",
+      "description": "七天无理由退货起算时间",
+      "query": "七天无理由退货是从下单那天算，还是签收次日零时起算？",
+      "elapsed_s": 3.53,
+      "usage": {
+        "prompt_tokens": 2974,
+        "completion_tokens": 346,
+        "total_tokens": 3320
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 适用时效与基本条件",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.8364
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 不适用七天无理由退货的商品",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.7383
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.8003
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**从签收次日零时起算，不是下单日。**\n\n- 起算点：自买家**实际签收商品次日零时**起算，满 **7 个自然日（即 168 小时）**内可发起“七天无理由退货”申请。\n- 前提条件：不影响商品二次销售。商品完好标准如下：\n  - 商品本体无划痕、无污渍、无磕碰、无明显使用痕迹；\n  - 原厂包装、吊牌、说明书、充电线及赠品齐全且无破损；\n  - 数码类商品未激活绑定个人账号、无拆机维修痕迹。\n- 后续办理时效：提交申请后，商家在 48 小时内审核，并给出退货地址；审核通过后，买家需在 7 日内寄回商品，并填写物流单号；商家签收并质检无误后，在 48 小时内原路退款。\n\n[来源: 七天无理由退货规则]\n\n补充提醒：食品类（拆封后影响食品安全）、已剪吊牌或水洗的贴身服饰、定制类或鲜活易腐商品，以及页面明确标注不支持七天无理由退货的商品，除质量问题外不适用该规则。[来源: 七天无理由退货规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P02",
+      "category": "policy_rag",
+      "description": "七天无理由不适用商品范围",
+      "query": "剪了吊牌或者拆封的零食支持七天无理由退货吗？",
+      "elapsed_s": 3.5,
+      "usage": {
+        "prompt_tokens": 3963,
+        "completion_tokens": 481,
+        "total_tokens": 4444
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 不适用七天无理由退货的商品",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.7809
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品售后特殊说明",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.756
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 适用时效与基本条件",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.6891
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6561
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**结论：这两种情况都不支持七天无理由退货。**\n\n1. **已拆封的零食**\n   - 食品类商品一经拆封、影响食品安全与二次销售的，除质量问题外不支持七天无理由退货 **[来源: 七天无理由退货规则]**\n   - 未拆封（外包装完好、塑封未拆且不影响二次销售）的，签收后 7 天内方可按个人原因申请退货退款；已拆封且非质量问题的一经拆封即不支持 **[来源: 食品类商品售后与食品安全赔付规则]**\n\n2. **已剪吊牌**\n   - 商品“完好”标准要求原厂包装、吊牌、说明书、充电线及赠品齐全且无破损；贴身穿着服饰已剪除吊牌、水洗或沾染明显异味污渍的，不支持七天无理由退货 **[来源: 七天无理由退货规则]**\n\n**例外与补救**：如属破损、胀袋漏气、发错货或临期（发货时剩余保质期不足总保质期 1/3），需在**签收后 48 小时内**拍照留存外箱及商品生产日期，可支持全额仅退款或免费补发 **[来源: 食品类商品售后与食品安全赔付规则]**；若涉及过期变质、霉变、异物等严重食安问题，按《食品安全法》第一百四十八条主张十倍价款或三倍损失赔偿，不足 1000 元按 1000 元赔付 **[来源: 食品类商品售后与食品安全赔付规则]**。\n\n如需针对具体订单判定，请提供商品ID或回复“转人工”。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限与证据一致，结论准确"
+      }
+    },
+    {
+      "id": "P03",
+      "category": "policy_rag",
+      "description": "退货寄回与商家退款时效",
+      "query": "七天无理由退货审核通过后，我要在几天内寄回？商家收到后多久退款？",
+      "elapsed_s": 2.49,
+      "usage": {
+        "prompt_tokens": 2986,
+        "completion_tokens": 183,
+        "total_tokens": 3169
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.8565
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 适用时效与基本条件",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.8019
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 不适用七天无理由退货的商品",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.7464
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**时效说明：**\n\n- **寄回时限**：退货申请审核通过（商家会同时给出退货地址）后，你需要在 **7 日内**寄回商品并填写物流单号。\n- **退款时限**：商家签收并质检无误后，将在 **48 小时内**完成原路退款。\n\n补充：提交退货退款申请后，商家需在 48 小时内审核并给出退货地址。\n\n[来源: 七天无理由退货规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "寄回7日、退款48小时均与原文一致"
+      }
+    },
+    {
+      "id": "P04",
+      "category": "policy_rag",
+      "description": "退款到账银行卡与微信支付宝时效",
+      "query": "退款审核通过后，退到微信支付宝和银行卡分别要几个工作日到账？",
+      "elapsed_s": 3.06,
+      "usage": {
+        "prompt_tokens": 2990,
+        "completion_tokens": 237,
+        "total_tokens": 3227
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 退款金额与到账时效",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.808
+          },
+          {
+            "doc_key": "policy:14_payment_methods_timeout",
+            "title": "支付方式与未支付超时取消规则",
+            "heading_path": "支付方式与未支付超时取消规则 > 未支付订单超时关闭机制",
+            "source_path": "kb/policies/14_payment_methods_timeout.md",
+            "vector_score": 0.6354
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.693
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "退款审核通过并进入“退款中”状态后，款项按原路退回原支付账户，到账时限如下：\n\n- **微信 / 支付宝（零钱）**：通常在 **1–3 个工作日**到账\n- **银行卡 / 信用卡**：通常在 **3–7 个工作日**到账\n\n**补充说明**：到账时间以支付渠道实际处理为准；若只是“审核通过”但商家尚未完成退款操作，退货退款场景下商家签收并质检无误后会在 **48 小时内**完成原路退款，之后才起算上述到账天数。[来源: 仅退款与退货退款适用规则]、[来源: 七天无理由退货规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "时效数字与证据一致，未编造"
+      }
+    },
+    {
+      "id": "P05",
+      "category": "policy_rag",
+      "description": "同订单同时允许几条进行中售后",
+      "query": "同一笔订单可以同时提交两条售后退款工单吗？如果被驳回了还能再申请吗？",
+      "elapsed_s": 3.72,
+      "usage": {
+        "prompt_tokens": 3071,
+        "completion_tokens": 347,
+        "total_tokens": 3418
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:17_aftersale_review_dispute",
+            "title": "售后审核时效与驳回申诉流程",
+            "heading_path": "售后审核时效与驳回申诉流程 > 售后被驳回后的处理方式",
+            "source_path": "kb/policies/17_aftersale_review_dispute.md",
+            "vector_score": 0.7404
+          },
+          {
+            "doc_key": "policy:17_aftersale_review_dispute",
+            "title": "售后审核时效与驳回申诉流程",
+            "heading_path": "售后审核时效与驳回申诉流程 > 售后审核时效",
+            "source_path": "kb/policies/17_aftersale_review_dispute.md",
+            "vector_score": 0.6655
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 退款金额与到账时效",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.6388
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**1. 同一笔订单能否同时提交两条售后工单？**\n不能。同一笔订单在同一时间只允许存在 1 条进行中（待审核或退款中）的售后工单。[来源: 仅退款与退货退款适用规则]\n\n**2. 被驳回后还能再申请吗？**\n可以。工单被驳回后状态为“已拒绝”，被驳回的旧工单不会妨碍重新申请。您有以下两种方式继续维权：\n- **补充凭证重新发起**：按驳回备注补充清晰照片、开箱视频、物流底单或质检截图后，对原订单重新提交售后申请；\n- **申请平台介入**：若对商家驳回理由有异议，可回复“转人工”申请高级售后专员复核，平台复核团队将在 **24 小时内**给出终审结论。\n\n[来源: 售后审核时效与驳回申诉流程]\n\n另外提醒：商家售后专员承诺 **48 小时内**完成初审（未发货仅退款通常 **24 小时内**），审核通过后款项原路退回（微信/支付宝零钱 1–3 个工作日，银行卡/信用卡 3–7 个工作日）。[来源: 售后审核时效与驳回申诉流程、仅退款与退货退款适用规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与结论均与证据一致"
+      }
+    },
+    {
+      "id": "P06",
+      "category": "policy_rag",
+      "description": "延迟发货最低赔付上限与免责",
+      "query": "现货订单多久内必须发货？如果因为极端天气快递停运算延迟发货违约吗？",
+      "elapsed_s": 4.18,
+      "usage": {
+        "prompt_tokens": 3417,
+        "completion_tokens": 496,
+        "total_tokens": 3913
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 免责情形",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.7955
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.7661
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.7458
+          },
+          {
+            "doc_key": "policy:24_out_of_stock_presale",
+            "title": "缺货登记、下架商品与预售规则",
+            "heading_path": "缺货登记、下架商品与预售规则 > 预售商品特别规则",
+            "source_path": "kb/policies/24_out_of_stock_presale.md",
+            "vector_score": 0.7208
+          },
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.6762
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "## 一、现货订单发货时限\n\n- 现货订单从**买家付款成功之时起算，商家须在 48 小时内**完成打包出库，并**上传真实揽收物流单号**。\n- 预售商品、定制商品及大促期间（如双十一、618）页面另行公告发货时间的，以商品详情页承诺的时效为准（不适用 48 小时规则）。\n  [来源: 发货时效与延迟发货赔付规则] [来源: 缺货登记、下架商品与预售规则]\n\n如需对比违约标准：若非买家原因或不可抗力，商家未在承诺的 48 小时内完成发货（**以快递公司首次揽收记录为准**），视为延迟发货，按订单**实际支付商品金额的 5%** 赔付，**最低 5 元、最高 50 元**，以无门槛现金红包或原路退款发放，且不影响继续申请仅退款。[来源: 发货时效与延迟发货赔付规则]\n\n## 二、极端天气快递停运是否构成违约\n\n**不构成延迟发货违约**，但有条件：\n\n因**极端天气、自然灾害、交通管制、法定节假日快递停运**或买家收货地址不详导致无法揽收的，商家**提前公告或通知买家后**，不计入延迟发货违约。\n\n⚠️ 注意两个要点：\n1. 免责的前提是**商家已提前公告或通知买家**；若商家未履行告知义务，仍可能按延迟发货处理。\n2. 免责仅针对延迟发货违约金，不影响您对订单本身的退款等权利。\n\n[来源: 发货时效与延迟发货赔付规则]\n\n如您的订单已超 48 小时且商家未做任何公告或通知，建议保留截图证据申请延迟发货赔付；需要人工核实具体订单，可回复“转人工”。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "48小时、5%、5-50元及天气免责均与证据一致"
+      }
+    },
+    {
+      "id": "P07",
+      "category": "policy_rag",
+      "description": "赠送运费险门槛与最高理赔额",
+      "query": "单笔实付满多少钱送退货运费险？运费险最高赔多少钱？",
+      "elapsed_s": 2.7,
+      "usage": {
+        "prompt_tokens": 3088,
+        "completion_tokens": 229,
+        "total_tokens": 3317
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.8168
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.617
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 退换货运费责任划分",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.6241
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "关于退货运费险，知识库的规定如下：\n\n**赠送门槛**：店铺对单笔实付满 **99 元** 的现货订单默认赠送基础退货运费险（特殊大件与虚拟商品除外）。\n\n**最高赔付**：按收发地首重标准定额赔付，单笔最高赔付 **12 元**，超出部分由买家自行承担。\n\n**其他要点**：\n- 仅在退货退款成功且系统核实物流签收后自动触发理赔；\n- 同一笔订单仅理赔一次；\n- 拒签拦截件不触发理赔。\n\n[来源: 退换货运费承担与运费险规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "99元门槛与12元赔付均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P08",
+      "category": "policy_rag",
+      "description": "质量问题与个人原因运费承担划分",
+      "query": "发错货或者有质量问题退货谁出运费？拍错尺码无理由退货谁出运费？",
+      "elapsed_s": 3.21,
+      "usage": {
+        "prompt_tokens": 4822,
+        "completion_tokens": 541,
+        "total_tokens": 5363
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 退换货运费责任划分",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.7376
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.6643
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6542
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 质保申请方式",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.6613
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.6872
+          },
+          {
+            "doc_key": "policy:10_apparel_sizing_exchange",
+            "title": "服饰类尺码调换与洗涤养护说明",
+            "heading_path": "服饰类尺码调换与洗涤养护说明 > 尺码不合换货规则",
+            "source_path": "kb/policies/10_apparel_sizing_exchange.md",
+            "vector_score": 0.8095
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 适用时效与基本条件",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.753
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 不适用七天无理由退货的商品",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.7152
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.7402
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "## 一、发错货或存在质量问题\n\n**往返运费全部由商家承担。**\n\n- 商家原因导致的退换货包括：商品质量问题、发错货、少件漏发、运输破损、商品与页面描述严重不符。\n- 买家可先垫付普通快递运费（不含保价与顺丰特快溢价），商家收货核实后**按实报销**。\n[来源: 退换货运费承担与运费险规则]\n\n## 二、拍错尺码等无理由退货\n\n**退回运费由买家承担。**\n\n- 买家个人原因导致的退换货，包括不喜欢、拍错款式/尺码、多拍等七天无理由退货，退回运费由买家承担。\n- 若原订单为包邮商品，仅退回商品实付金额，**不扣除**原发货基础运费（偏远地区额外补差运费除外）。\n[来源: 退换货运费承担与运费险规则]\n\n补充两点：\n- **运费险**：店铺对单笔实付满 99 元的现货订单默认赠送基础退货运费险（特殊大件与虚拟商品除外），退货退款成功且系统核实物流签收后自动理赔，按收发地首重标准定额赔付、单笔最高 12 元，超出部分买家自担；同一笔订单仅理赔一次，拒签拦截件不触发理赔。[来源: 退换货运费承担与运费险规则]\n- **如果是服饰类尺码换货**：签收后 7 天内可免费调换尺码或颜色（吊牌完整、未下水、无异味污渍），换货单程退回运费参照退换货运费规则（有运费险可自动理赔），**新尺码寄出运费由商家承担**。[来源: 服饰类尺码调换与洗涤养护说明]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "运费责任与运费险数字均与证据一致，未编造"
+      }
+    },
+    {
+      "id": "P09",
+      "category": "policy_rag",
+      "description": "价保周期与差价退回时效",
+      "query": "商品价保是几天？价保审核通过后多久把差价退给我？",
+      "elapsed_s": 2.86,
+      "usage": {
+        "prompt_tokens": 2899,
+        "completion_tokens": 285,
+        "total_tokens": 3184
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 价保周期与适用条件",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.8148
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 差价计算与退款方式",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.7797
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 不参与价保的情形",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.6797
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**价保周期**：在售现货商品默认提供 **7 天价保**，从订单支付成功时起算，共 168 小时。只有在同一 SKU、同一规格，且商品因本店官方页面降价，导致降价后的到手价低于原实付单价时，才能申请退还差价。[来源: 商品价保服务规则]\n\n**差价到账时间**：价保审核通过后，差价会在 **24 小时内**原路退回到原支付渠道。[来源: 商品价保服务规则]\n\n补充提醒：以下情形不参与价保比价：\n- 限量前 N 件秒杀、直播间专属口令闪降、新人首单专享补贴；\n- 店铺清仓临期特卖或已下架商品；\n- 因平台随机红包、银行卡立减金或个人积分抵扣造成的个体实付差异；\n- 已发起整单退款或退货退款的订单。\n\n[来源: 商品价保服务规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "7天价保、24小时退款均与证据一致"
+      }
+    },
+    {
+      "id": "P10",
+      "category": "policy_rag",
+      "description": "限量秒杀与随机红包是否参与价保",
+      "query": "限量前N件秒杀或者直播间闪降掉价了，能申请7天价保退差价吗？",
+      "elapsed_s": 2.97,
+      "usage": {
+        "prompt_tokens": 3728,
+        "completion_tokens": 383,
+        "total_tokens": 4111
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 不参与价保的情形",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.6884
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 价保周期与适用条件",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.7148
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 差价计算与退款方式",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.6091
+          },
+          {
+            "doc_key": "policy:22_anti_fraud_abnormal_order",
+            "title": "异常订单与风控拦截说明",
+            "heading_path": "异常订单与风控拦截说明 > 高频访问与防刷单风控机制",
+            "source_path": "kb/policies/22_anti_fraud_abnormal_order.md",
+            "vector_score": 0.596
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**这种情况不能申请价保退差价。**\n\n按平台规则，限量前 N 件秒杀价格和直播间专属口令闪降价格都属于**不参与价保比价的情形**，因此不会计入价保比价范围，所以无法据此申请退差价。 [来源: 商品价保服务规则]\n\n补充说明：\n- 店铺在售现货商品默认提供 **7 天价保**（自订单支付成功起满 168 小时内）；但只有在同一商品（同 SKU、同规格）于本店官方页面正常降价，导致降价后的到手价低于原实付单价时，才能退差价。 [来源: 商品价保服务规则]\n- 除秒杀、直播闪降外，清仓或临期特卖、已下架商品、平台随机红包、银行卡立减金或积分抵扣造成的实付差异，以及已发起整单退款或退货退款的订单，也同样不参与价保。 [来源: 商品价保服务规则]\n\n如果你认为这次降价并非上述活动价，而是商品官方页面常规降价，可以提供订单信息，我来帮你核对是否在 168 小时价保期内。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，未编造数字"
+      }
+    },
+    {
+      "id": "P11",
+      "category": "policy_rag",
+      "description": "电子发票开具时效与补开期限",
+      "query": "确认收货后几天内自动开电子发票？忘记填抬头签收后多少天内能补开？",
+      "elapsed_s": 2.65,
+      "usage": {
+        "prompt_tokens": 2975,
+        "completion_tokens": 237,
+        "total_tokens": 3212
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 开票时效与补开期限",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.8478
+          },
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 换票与退货红冲",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.7336
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.6455
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**开票时效与补开期限：**\n\n1. **自动开票**：订单确认收货（已完成状态）后，系统会在 **3 个工作日内**自动开具电子发票，并推送至预留邮箱。\n2. **补开抬头**：若下单时忘记填写抬头，可在**签收后 30 个自然日内**联系客服或通过人工渠道提交补开发票申请；超过 30 天跨月账期，原则上不再支持补开。\n\n[来源: 发票开具与换票规则]\n\n补充：若抬头或税号填错，可在开票后 **15 天内**申请免费作废或红冲重开 1 次。 [来源: 发票开具与换票规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限均与证据一致"
+      }
+    },
+    {
+      "id": "P12",
+      "category": "policy_rag",
+      "description": "发票抬头填错重开时效与退货红冲",
+      "query": "发票抬头填错了多久内能免费重开？全额退货后电子发票怎么处理？",
+      "elapsed_s": 2.83,
+      "usage": {
+        "prompt_tokens": 3708,
+        "completion_tokens": 379,
+        "total_tokens": 4087
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 换票与退货红冲",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.7616
+          },
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 开票时效与补开期限",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.7753
+          },
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 发票类型与开票范围",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.5878
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**1）发票抬头或税号填错后重新开具的免费时限**\n- 可在**开票后 15 天内**申请免费作废或红冲重开，**限 1 次**。[来源: 发票开具与换票规则]\n\n**2）全额退货后电子发票的处理**\n- 订单发生**全额退款或退货退款**时，原已开具的电子发票会**自动红冲作废**，**无需买家寄回纸质件**。[来源: 发票开具与换票规则]\n\n**补充提示（可能与您相关）**\n- 电子发票一般在确认收货后 **3 个工作日内**自动开具，并推送至预留邮箱；若下单时忘记填写抬头，可在**签收后 30 个自然日内**申请补开，超过 30 天跨月账期原则上不再支持。[来源: 发票开具与换票规则]\n\n温馨提示：上述 15 天从**开票日**起算，而不是从下单日或签收起算；若已超过 15 天，知识库暂未约定额外免费重开的方式，建议您回复“转人工”由客服协助核实是否可特殊处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限与证据一致，未编造规则"
+      }
+    },
+    {
+      "id": "P13",
+      "category": "policy_rag",
+      "description": "数码三包7天退15天换1年质保",
+      "query": "数码产品三包政策具体是怎么规定的？质保期几个月？",
+      "elapsed_s": 4.19,
+      "usage": {
+        "prompt_tokens": 3850,
+        "completion_tokens": 538,
+        "total_tokens": 4388
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 三包核心时效",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.7857
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 质保申请方式",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.731
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.7026
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 退换货运费责任划分",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.6492
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "## 数码产品三包与质保规定\n\n适用于本店在售数码类商品（无线蓝牙耳机 Pro、智能手表 S2、机械键盘 87 键、便携充电宝 20000mAh 等），这些商品严格执行国家三包标准：\n\n**三包核心时效**\n- **7 日内**：自签收次日起 7 日内出现非人为性能故障，可免费退货、换货或维修；\n- **15 日内**：自签收次日起第 8 至第 15 日内出现非人为性能故障，可免费换新或维修；\n- **全国联保质保**：自签收之日起享受 **12 个月**（即 1 年）官方免费质保维修服务。\n\n**质保期：12 个月**，也就是你问的质保期是 12 个月。\n\n**质保申请方式**\n- 质保期内出现硬件故障，请准备**订单号**和**故障现象短视频**，联系人工客服登记寄修或换新；\n- 寄修后经检测确认属于产品自身故障的，**双程快递费由商家承担**。\n\n**可选延长保修（需另付费）**\n- 1 年延保（质保延至第 2 年）：69 元；\n- 2 年延保（质保延至第 3 年）：119 元；\n- 购买方式：下单时随单加购，或签收后 7 日内联系人工客服补购。服饰、食品、家居类商品暂不提供延保。\n\n[来源: 数码产品三包与质保规则] [来源: 店铺延长保修服务说明]\n\n> 补充说明：知识库未见“折旧费收取标准”“人为损坏是否收费维修”等更细的条款。如需确认，请回复“转人工”咨询人工客服。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与证据一致，未编造虚假规则"
+      }
+    },
+    {
+      "id": "P14",
+      "category": "policy_rag",
+      "description": "数码免费质保与人为损坏界定",
+      "query": "耳机电池鼓包或者蓝牙断连在免费质保范围内吗？自己摔裂了能免费修吗？",
+      "elapsed_s": 3.59,
+      "usage": {
+        "prompt_tokens": 3988,
+        "completion_tokens": 453,
+        "total_tokens": 4441
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 常见故障界定",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.7706
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 三包核心时效",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.7029
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.6686
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保保障范围与免责条款",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.6614
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**结论：**\n\n**1. 电池鼓包、蓝牙断连：属于免费质保范围 ✅**\n知识库明确将「蓝牙断连/无法配对、按键连击失灵、电池异常鼓包」等列为免费质保范围内的故障。\n- 自签收次日起 **7 日内**出现非人为性能故障：可免费退货、换货或维修；\n- 第 **8–15 日**内出现：可免费换新或维修；\n- 自签收之日起 **12 个月**内：可享受官方免费质保维修。\n[来源: 数码产品三包与质保规则]\n\n**2. 自己摔裂：不在免费质保范围内 ❌**\n「人为摔落导致的屏幕/外壳碎裂」被明确列为**不属于免费质保范围**，需付费维修。另外，进水进液腐蚀、使用非合规高压充电器烧毁主板、私自拆机或撕毁防拆标贴，同样不在免费质保范围内。\n[来源: 数码产品三包与质保规则]\n\n**补充（若您购买了延保）**：店铺延保同样**仅保自然性能故障，不包含意外进水、液体浸泡、人为摔裂、磕碰变形及外观自然磨损**。[来源: 店铺延长保修服务说明]\n\n建议：先按上述时效判断；出现鼓包时，请勿继续使用或充电。如需具体报修或付费维修报价，可回复“转人工”由人工客服协助。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "结论与证据一致，数字时限准确，延保免责内容有据"
+      }
+    },
+    {
+      "id": "P15",
+      "category": "policy_rag",
+      "description": "延保2年价格与服饰食品不支持",
+      "query": "店铺2年延长保修多少钱？服饰和食品能买延保吗？",
+      "elapsed_s": 3.01,
+      "usage": {
+        "prompt_tokens": 3095,
+        "completion_tokens": 319,
+        "total_tokens": 3414
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.7821
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保保障范围与免责条款",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.7207
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6261
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**1. 2年延长保修价格：119 元**（质保延至第 3 年）；另有 1 年延保 69 元（质保延至第 2 年）。\n\n**2. 服饰、食品不适用延保**：延保仅针对数码类商品（耳机、智能手表、机械键盘、充电宝），服饰、食品、家居类商品暂不提供延保服务。 [来源: 店铺延长保修服务说明]\n\n补充提示：\n- 购买方式：下单时随单加购，或签收后 7 日内联系人工客服补购。\n- 延保只保非人为硬件性能故障，不包含进水、液体浸泡、摔裂、磕碰变形及外观磨损。\n- 主商品 7 天内整单退货退款，延保同步全额退款；超过 7 天且未出险则不支持单独退保。 [来源: 店铺延长保修服务说明]\n\n如您想确认某款具体商品是否支持延保，可提供商品ID，我帮您核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "价格119元及服饰食品不适用均与证据一致"
+      }
+    },
+    {
+      "id": "P16",
+      "category": "policy_rag",
+      "description": "食品安全法退一赔十最低1000元",
+      "query": "如果买到的食品过期变质或有异物，按食品安全法怎么赔付？不足一千元怎么算？",
+      "elapsed_s": 3.39,
+      "usage": {
+        "prompt_tokens": 3632,
+        "completion_tokens": 346,
+        "total_tokens": 3978
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.7803
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品售后特殊说明",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.5974
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.6135
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.5666
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保保障范围与免责条款",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.5811
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**食品过期变质、异物污染的法定赔付标准**\n\n经核实确属过期变质、霉变、异物污染或不符合国家食品安全标准的严重食安问题：\n- 商家第一时间办理**全额退款**；\n- 严格依据《食品安全法》第一百四十八条执行赔付：除退款外，买家可主张**支付价款十倍或损失三倍的赔偿金**；\n- **增加赔偿金额不足 1000 元的，按 1000 元赔付**。所以即使您买的食品只花了几十元、十倍价款不足一千元，也按 1000 元计（标签瑕疵且不影响食品安全、未误导消费者的除外）。\n\n[来源: 食品类商品售后与食品安全赔付规则]\n\n**另外提醒（时效相关）**：破损、漏气、临期类问题需在**签收后 48 小时内**拍照留存外箱及商品生产日期申请；未拆封且不影响二次销售的可 7 天内按个人原因退货退款，已拆封非质量问题不支持七天无理由。[来源: 食品类商品售后与食品安全赔付规则]\n\n如涉及具体订单的定责或主张流程，可回复“转人工”由人工客服跟进。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "十倍/三倍、不足1000按1000元及48小时等均与证据一致"
+      }
+    },
+    {
+      "id": "P17",
+      "category": "policy_rag",
+      "description": "食品胀袋漏气临期举证时效",
+      "query": "每日坚果收货发现胀袋漏气，要在多少小时内拍照联系客服？",
+      "elapsed_s": 2.08,
+      "usage": {
+        "prompt_tokens": 3114,
+        "completion_tokens": 206,
+        "total_tokens": 3320
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品售后特殊说明",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6475
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.5765
+          },
+          {
+            "doc_key": "policy:11_home_fragile_damage",
+            "title": "家居易碎品破损签收与补发规则",
+            "heading_path": "家居易碎品破损签收与补发规则 > 签收验货与举证时效",
+            "source_path": "kb/policies/11_home_fragile_damage.md",
+            "vector_score": 0.5682
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**限时要求：签收后 48 小时内**。\n\n- 请在**签收后 48 小时内**拍照留存**外箱**及**商品生产日期**，然后联系客服。\n- 胀袋漏气属于包装破损类问题；经核实后，可支持**全额仅退款**或**免费补发**。\n- 此外提醒：食品未拆封且不影响二次销售的，签收后 7 天内可按个人原因退货退款；而已拆封且非质量问题的，不支持七天无理由退货。\n\n[来源: 食品类商品售后与食品安全赔付规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "48小时与退款补发均与证据一致"
+      }
+    },
+    {
+      "id": "P18",
+      "category": "policy_rag",
+      "description": "服饰换尺码时效与羽绒服洗涤",
+      "query": "买的白鸭绒轻薄羽绒服能用漂白剂或者暴晒吗？尺码不合几天内可以换？",
+      "elapsed_s": 3.48,
+      "usage": {
+        "prompt_tokens": 3755,
+        "completion_tokens": 424,
+        "total_tokens": 4179
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:10_apparel_sizing_exchange",
+            "title": "服饰类尺码调换与洗涤养护说明",
+            "heading_path": "服饰类尺码调换与洗涤养护说明 > 尺码不合换货规则",
+            "source_path": "kb/policies/10_apparel_sizing_exchange.md",
+            "vector_score": 0.8252
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 三包核心时效",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.6401
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.6416
+          },
+          {
+            "doc_key": "policy:10_apparel_sizing_exchange",
+            "title": "服饰类尺码调换与洗涤养护说明",
+            "heading_path": "服饰类尺码调换与洗涤养护说明 > 常见面料洗涤养护建议",
+            "source_path": "kb/policies/10_apparel_sizing_exchange.md",
+            "vector_score": 0.7052
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**1. 洗涤养护（白鸭绒轻薄羽绒服）**\n\n- ❌ **禁止使用漂白剂**，也禁止使用衣物柔顺剂。\n- ❌ **切勿暴晒**。洗后应放在阴凉通风处**平铺晾干**，干后轻拍使其蓬松。\n- ✅ 建议优先局部擦拭，或送专业干洗店用中性洗涤剂水洗；如需家用机洗，请拉好拉链、装入洗衣袋，选择羽绒服轻柔档。\n\n[来源: 服饰类尺码调换与洗涤养护说明]\n\n**2. 尺码不合换货**\n\n签收后 **7 天内**可免费申请调换尺码或颜色（本店服饰类商品，含轻薄羽绒服），需满足：\n- 吊牌完整、未下水洗涤、无香水或烟味、无化妆品污渍、无明显穿着褶皱；\n- 目标尺码有现货：仓库收到退回件并核验无误后 **48 小时内**发出新尺码；缺货可转为全额退货退款；\n- 退回运费按退换货运费规则处理（有运费险可自动理赔），新尺码寄出运费由商家承担。\n\n[来源: 服饰类尺码调换与洗涤养护说明]\n\n⚠️ 提醒：一旦下水洗涤，就不再符合换货条件，因此请先确认尺码再清洗。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "洗涤与7天换货等数字结论均与证据一致"
+      }
+    },
+    {
+      "id": "P19",
+      "category": "policy_rag",
+      "description": "重磅纯棉T恤洗涤水温建议",
+      "query": "260克重磅纯棉T恤建议多少度以下水温清洗？能高温烘干吗？",
+      "elapsed_s": 1.52,
+      "usage": {
+        "prompt_tokens": 1337,
+        "completion_tokens": 72,
+        "total_tokens": 1409
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": false,
+        "content": "您没有提供该商品ID，我无法核实具体面料成分和洗护说明，为避免误导，先不给洗涤建议。\n\n请提供商品ID，或补充店铺页面标注的洗护信息，我再帮您确认。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": false,
+        "fact_ok": false,
+        "passed": false,
+        "reasons": [
+          "group[0] none of ['search_knowledge_base'] called (actual=[])",
+          "missing keyword '30'",
+          "missing citation [来源: ...]"
+        ],
+        "citation_ok": false
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未查到证据且未编造洗涤数字，拒答合理"
+      }
+    },
+    {
+      "id": "P20",
+      "category": "policy_rag",
+      "description": "易碎品破损48h举证与免寄回补发",
+      "query": "香薰蜡烛玻璃瓶寄碎了要在签收后多久拍照？补发需要把碎玻璃寄回去吗？",
+      "elapsed_s": 2.73,
+      "usage": {
+        "prompt_tokens": 3158,
+        "completion_tokens": 284,
+        "total_tokens": 3442
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:11_home_fragile_damage",
+            "title": "家居易碎品破损签收与补发规则",
+            "heading_path": "家居易碎品破损签收与补发规则 > 赔付与处理方式",
+            "source_path": "kb/policies/11_home_fragile_damage.md",
+            "vector_score": 0.7658
+          },
+          {
+            "doc_key": "policy:11_home_fragile_damage",
+            "title": "家居易碎品破损签收与补发规则",
+            "heading_path": "家居易碎品破损签收与补发规则 > 签收验货与举证时效",
+            "source_path": "kb/policies/11_home_fragile_damage.md",
+            "vector_score": 0.6976
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品售后特殊说明",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6397
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**香薰蜡烛玻璃瓶破损处理：**\n\n1. **拍照和反馈时限**：请在**签收后 48 小时内**拍摄“快递面单 + 破损商品整体照 + 破损细节照”并联系客服。如果超过签收 48 小时后再反馈外力破损，因无法界定运输责任，就需要通过转人工客服结合物流记录协商处理。\n2. **补发时无需寄回碎玻璃**：核实属于运输破损后，您可以二选一：\n   - **免费极速补发**：无需寄回破损残件，商家会在 24 小时内免费补发全新正品；\n   - **全额仅退款**：按原支付路径退回该商品全额货款，同样无需寄回玻璃碎渣。\n3. 如果当面发现明显破损，可以直接拒签，并请联系客服登记免费补发。\n\n[来源: 家居易碎品破损签收与补发规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "时限48小时、24小时补发、无需寄回均与证据一致"
+      }
+    },
+    {
+      "id": "P21",
+      "category": "policy_rag",
+      "description": "合作快递与普通/偏远地区送达时效",
+      "query": "你们店默认发什么快递？普通地区和偏远地区分别几天送到？",
+      "elapsed_s": 3.19,
+      "usage": {
+        "prompt_tokens": 3529,
+        "completion_tokens": 356,
+        "total_tokens": 3885
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.7675
+          },
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 异常物流与丢件处理",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.6197
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.6723
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.6296
+          },
+          {
+            "doc_key": "policy:18_battery_safety_shipping",
+            "title": "充电宝与含锂电池商品航空携带与运输说明",
+            "heading_path": "充电宝与含锂电池商品航空携带与运输说明 > 含锂电池商品快递运输说明",
+            "source_path": "kb/policies/18_battery_safety_shipping.md",
+            "vector_score": 0.6024
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**快递公司**\n店铺会根据收货地址与商品品类**自动匹配**顺丰标快（数码高客单商品优先）或中通/圆通快递，**暂不支持下单时指定其他小众快递**。\n\n**配送时效（自发货起算）**\n- 普通地区：**2–4 天**送达\n- 新疆、西藏、青海、海南及港澳台以外偏远地区：**4–7 天**送达\n\n**补充提醒**\n- 现货订单需在付款后 **48 小时内**完成出库并上传揽收单号。\n- 内置锂电池数码商品（如蓝牙耳机、充电宝、智能手表等）发往新疆、西藏、海南及部分跨省远途地区默认走**陆运专线**，时效可能再顺延 **1–2 天**。\n\n[来源: 物流配送、签收与异常件处理] [来源: 发货时效与延迟发货赔付规则] [来源: 充电宝与含锂电池商品航空携带与运输说明]\n\n如需确认某个具体收货地址的可达时效，可提供商品ID，我再帮你核实商品信息。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时效与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P22",
+      "category": "policy_rag",
+      "description": "物流停滞与丢件72小时赔付",
+      "query": "快递几天没更新物流可以找你们核查？确认丢件后多少小时内补发或退款？",
+      "elapsed_s": 2.58,
+      "usage": {
+        "prompt_tokens": 3039,
+        "completion_tokens": 228,
+        "total_tokens": 3267
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 异常物流与丢件处理",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.7559
+          },
+          {
+            "doc_key": "policy:11_home_fragile_damage",
+            "title": "家居易碎品破损签收与补发规则",
+            "heading_path": "家居易碎品破损签收与补发规则 > 赔付与处理方式",
+            "source_path": "kb/policies/11_home_fragile_damage.md",
+            "vector_score": 0.6606
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.664
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**核查触发条件：**\n- 物流停滞超 **72 小时**，即连续 3 天没有新轨迹更新，可联系客服发起快递网点催件与核查。\n\n**确认丢件后的处理：**\n- 经快递核实确认包裹丢失后，商家在 **72 小时内**按买家意愿提供免费补发或全额退款，**无需买家自行向快递索赔**。\n\n另外，若属于“显示已签收但实际未收到”，可先核实驿站、丰巢柜或门卫代收；仍找不到时，商家在 **48 小时内**联合快递公司出具核实结果。\n\n[来源: 物流配送、签收与异常件处理]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "72小时核查与72小时补发退款均与证据一致"
+      }
+    },
+    {
+      "id": "P23",
+      "category": "policy_rag",
+      "description": "发货前后修改收货地址规则",
+      "query": "下单后填错收货地址了，发货前和发货后分别能改地址吗？",
+      "elapsed_s": 2.62,
+      "usage": {
+        "prompt_tokens": 3068,
+        "completion_tokens": 312,
+        "total_tokens": 3380
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:13_order_cancel_modify",
+            "title": "订单取消与修改收货地址规则",
+            "heading_path": "订单取消与修改收货地址规则 > 修改收货地址与收件人信息",
+            "source_path": "kb/policies/13_order_cancel_modify.md",
+            "vector_score": 0.8562
+          },
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.6411
+          },
+          {
+            "doc_key": "policy:13_order_cancel_modify",
+            "title": "订单取消与修改收货地址规则",
+            "heading_path": "订单取消与修改收货地址规则 > 订单取消规则",
+            "source_path": "kb/policies/13_order_cancel_modify.md",
+            "vector_score": 0.7235
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**能不能修改收货地址，要看订单所处的阶段：**\n\n**1）发货前（仓库尚未打包出库）**\n- 可以联系人工客服修改**同一省份内或同一运费区域内**的收货地址、收件人姓名或联系电话。\n- 如果新地址跨到偏远地区，并因此产生运费差额，建议先取消原订单，再重新下单。\n\n**2）发货后（包裹已被快递揽收）**\n- 商家**无法在系统里直接改地址**，只能协助向快递网点申请“转寄/拦截”。\n- 转寄**可能产生额外的转寄费，且不保证 100% 拦截成功**。\n\n因此，填错地址后尽量在发货前联系客服修改；如果已经发货，请尽快申请拦截，并留意包裹的物流状态。\n\n[来源: 订单取消与修改收货地址规则]\n\n补充说明：如果订单已发货，但你不想要这个包裹，已发货状态无法直接取消，需走退货退款流程或请客服协助拦截。 [来源: 订单取消与修改收货地址规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，未编造数字或承诺"
+      }
+    },
+    {
+      "id": "P24",
+      "category": "policy_rag",
+      "description": "未支付订单30分钟超时自动取消",
+      "query": "下单后一直没付款，多少分钟会自动取消关闭并释放库存？",
+      "elapsed_s": 2.57,
+      "usage": {
+        "prompt_tokens": 3093,
+        "completion_tokens": 222,
+        "total_tokens": 3315
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:14_payment_methods_timeout",
+            "title": "支付方式与未支付超时取消规则",
+            "heading_path": "支付方式与未支付超时取消规则 > 未支付订单超时关闭机制",
+            "source_path": "kb/policies/14_payment_methods_timeout.md",
+            "vector_score": 0.8096
+          },
+          {
+            "doc_key": "policy:13_order_cancel_modify",
+            "title": "订单取消与修改收货地址规则",
+            "heading_path": "订单取消与修改收货地址规则 > 订单取消规则",
+            "source_path": "kb/policies/13_order_cancel_modify.md",
+            "vector_score": 0.7366
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 按订单状态的售后类型限制",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.664
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**超时关闭规则：**\n\n- 订单创建后系统会锁定相应商品库存，买家需在 **30 分钟内**完成付款。\n- 超过 **30 分钟**仍未支付，订单会自动转为“已取消”状态，库存立即返还至可售库存池。\n- 已超时关闭的订单无法恢复支付，需重新下单，价格与库存以下单时页面实时显示为准。\n- 另外，待支付状态下你也可随时自助取消订单，系统自动释放预占库存，不产生任何费用。\n\n[来源: 支付方式与未支付超时取消规则] [来源: 订单取消与修改收货地址规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "30分钟与证据一致，无编造数字"
+      }
+    },
+    {
+      "id": "P25",
+      "category": "policy_rag",
+      "description": "支持的支付方式与货到付款限制",
+      "query": "你们支持哪些支付方式？能货到付款或者私下微信转账吗？",
+      "elapsed_s": 2.63,
+      "usage": {
+        "prompt_tokens": 3043,
+        "completion_tokens": 268,
+        "total_tokens": 3311
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:14_payment_methods_timeout",
+            "title": "支付方式与未支付超时取消规则",
+            "heading_path": "支付方式与未支付超时取消规则 > 支持的支付方式",
+            "source_path": "kb/policies/14_payment_methods_timeout.md",
+            "vector_score": 0.7851
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.6153
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 退款金额与到账时效",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.5976
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**平台支持的支付方式：**\n\n- 微信支付（零钱、零钱通、绑定储蓄卡与信用卡）\n- 支付宝（余额、余额宝、绑定银行卡）\n- 银联云闪付及主流国内借记卡快捷支付\n\n**关于货到付款：** 不支持，平台暂不支持货到付款（COD）。\n**关于私下微信转账：** 不支持，平台不支持个人私下微信转账或支付宝转账；所有交易须通过平台订单系统完成，以保障资金安全。\n\n**例外说明：** 如果是企业团购或批量采购，可走**对公银行账户转账**结算，并可签订采购合同、开具数电增值税专用发票；但需回复“转人工”对接企业大客户经理办理。\n\n[来源: 支付方式与未支付超时取消规则]、[来源: 企业团购与批量采购规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，未编造规则或数字"
+      }
+    },
+    {
+      "id": "P26",
+      "category": "policy_rag",
+      "description": "店铺优惠券叠加与过期返券规则",
+      "query": "一笔订单能叠加用两张店铺满减券吗？整单退款时已过期的券会补发吗？",
+      "elapsed_s": 4.84,
+      "usage": {
+        "prompt_tokens": 4879,
+        "completion_tokens": 427,
+        "total_tokens": 5306
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 优惠券使用规范",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.845
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 退款时的优惠分摊与返券规则",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.8365
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 差价计算与退款方式",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.6266
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 会员等级划分",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.6358
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.7014
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 团购起订门槛与阶梯折扣",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.631
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.6083
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "两个问题都有明确规则：\n\n**1. 一笔订单能否叠加两张店铺满减券？**\n不能。店铺满减券与品类券在单笔订单中**仅限使用 1 张，不可叠加使用**；只有**平台通用红包**可以与单张店铺优惠券按活动页面说明叠加使用。[来源: 优惠券、满减与退款分摊规则]\n\n**2. 整单退款时，已过期的券会补发吗？**\n不会补发。整单全额退款（发货前取消或整单退货）时：\n- 实际支付的现金部分原路退回；\n- 所用店铺优惠券**仍在有效期内**的，退款完成后系统自动返还至账户；\n- **已超过有效期的，不再补发**。[来源: 优惠券、满减与退款分摊规则]\n\n补充提醒：若是多件商品的**部分退款**，优惠金额按各商品原价占订单总原价的比例分摊，仅退对应分摊实付金额，已使用的满减券不予退还。[来源: 优惠券、满减与退款分摊规则]\n\n如需针对具体订单核实，请回复“转人工”由人工客服处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，无编造数字或承诺"
+      }
+    },
+    {
+      "id": "P27",
+      "category": "policy_rag",
+      "description": "多件商品部分退款满减分摊规则",
+      "query": "买了好几件凑了满减，只退其中一件时退款金额怎么算？",
+      "elapsed_s": 4.34,
+      "usage": {
+        "prompt_tokens": 3053,
+        "completion_tokens": 428,
+        "total_tokens": 3481
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 退款时的优惠分摊与返券规则",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.8069
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 优惠券使用规范",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.6901
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 退款金额与到账时效",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.6816
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "## 部分退款的金额计算方式\n\n**核心规则：按商品原价比例分摊优惠**\n\n当订单包含多件商品、只退其中一件（部分退款）时，满减及优惠券金额会**按各商品原价占订单总原价的比例进行分摊**，系统仅退还该商品对应的**实付分摊金额**；已使用的满减优惠券**不予退还**。[来源: 优惠券、满减与退款分摊规则]\n\n**举例说明（假设）：**\n- 订单有 A、B、C 三件，原价分别 100 / 200 / 200 元，合计 500 元\n- 使用了满 500 减 50 的券，实付 450 元\n- 只退 A（原价 100 元，占总原价 1/5）：分摊优惠 10 元，**退款 90 元**（并非原价 100 元）\n\n**另需注意：**\n- 退款金额以订单实际支付总金额为上限，由系统自动计算，不支持手动超额退款。[来源: 仅退款与退货退款适用规则]\n- 同一笔订单同一时间只能有 1 条进行中的售后工单。[来源: 仅退款与退货退款适用规则]\n- 仅**整单全额退款**时，优惠券在有效期内才会自动返还账户，过期不补发；部分退款不返券。[来源: 优惠券、满减与退款分摊规则]\n\n如需查询具体订单的分摊金额，建议您回复“转人工”，由人工客服为您核算。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，举例为假设说明，无虚假数字"
+      }
+    },
+    {
+      "id": "P28",
+      "category": "policy_rag",
+      "description": "会员银卡金卡消费门槛",
+      "query": "升级银卡会员和金卡会员分别需要一年消费满多少钱？金卡有哪些权益？",
+      "elapsed_s": 3.14,
+      "usage": {
+        "prompt_tokens": 3327,
+        "completion_tokens": 349,
+        "total_tokens": 3676
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 会员等级划分",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.7178
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.581
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.5852
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 优惠券使用规范",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.5905
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**会员升级门槛（按自然年内累计有效确认收货消费金额计算，不含已退款订单）：**\n\n| 等级 | 升级门槛 |\n|---|---|\n| 普通会员 | 注册即享 |\n| 银卡会员 | 年累计有效消费满 **1,000 元** |\n| 金卡会员 | 年累计有效消费满 **3,000 元** |\n\n**金卡会员权益：**\n- 1.5 倍积分加速\n- 优先顺丰发货\n- 生日月 50 元无门槛券\n\n**补充说明（银卡权益）：** 1.2 倍积分加速 + 每季度 1 张满 199 减 15 元券。\n\n另需注意：积分在订单“已完成（确认收货）”且超过 7 天无退货后发放，退款订单会扣回积分；积分 100 分 = 1 元，单笔抵扣上限为实付金额 20%，每年 12 月 31 日 24:00 清零上一年未使用积分。\n\n[来源: 会员等级与积分规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与权益均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P29",
+      "category": "policy_rag",
+      "description": "积分抵现比例上限与年底清零",
+      "query": "多少积分可以抵扣1元？单笔订单最多抵扣实付金额的百分之多少？积分会清零吗？",
+      "elapsed_s": 2.59,
+      "usage": {
+        "prompt_tokens": 3087,
+        "completion_tokens": 250,
+        "total_tokens": 3337
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.8377
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 优惠券使用规范",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.7409
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 会员等级划分",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.6856
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**积分抵扣与清零规则**\n\n| 问题 | 规则 |\n|---|---|\n| 多少积分抵扣 1 元 | **100 积分 = 1 元** |\n| 单笔订单最多抵扣比例 | 不超过该笔订单**实付金额的 20%** |\n| 积分会清零吗 | 会。实行跨年清零：每年 **12 月 31 日 24:00** 清零上一年获取且未使用的积分；系统会在每年 **12 月 1 日前**发送提醒通知 |\n\n补充说明：订单状态变为“已完成（确认收货）”且超过 **7 天**无退货后，积分才会发放到账户；发生退款的订单将扣回相应积分。\n\n[来源: 会员等级与积分规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与结论均与证据一致"
+      }
+    },
+    {
+      "id": "P30",
+      "category": "policy_rag",
+      "description": "售后初审时效与驳回申诉复核",
+      "query": "提交售后后一般多少小时审核完？如果被商家拒绝驳回了还能申诉吗？",
+      "elapsed_s": 3.3,
+      "usage": {
+        "prompt_tokens": 3869,
+        "completion_tokens": 421,
+        "total_tokens": 4290
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:17_aftersale_review_dispute",
+            "title": "售后审核时效与驳回申诉流程",
+            "heading_path": "售后审核时效与驳回申诉流程 > 售后审核时效",
+            "source_path": "kb/policies/17_aftersale_review_dispute.md",
+            "vector_score": 0.7876
+          },
+          {
+            "doc_key": "policy:01_return_7days",
+            "title": "七天无理由退货规则",
+            "heading_path": "七天无理由退货规则 > 办理流程与时效",
+            "source_path": "kb/policies/01_return_7days.md",
+            "vector_score": 0.6653
+          },
+          {
+            "doc_key": "policy:17_aftersale_review_dispute",
+            "title": "售后审核时效与驳回申诉流程",
+            "heading_path": "售后审核时效与驳回申诉流程 > 售后被驳回后的处理方式",
+            "source_path": "kb/policies/17_aftersale_review_dispute.md",
+            "vector_score": 0.6586
+          },
+          {
+            "doc_key": "policy:22_anti_fraud_abnormal_order",
+            "title": "异常订单与风控拦截说明",
+            "heading_path": "异常订单与风控拦截说明 > 风控拦截后的申诉处理",
+            "source_path": "kb/policies/22_anti_fraud_abnormal_order.md",
+            "vector_score": 0.5825
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 按订单状态的售后类型限制",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.5736
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**一、审核时效**\n- 提交售后工单（仅退款或退货退款）后，工单进入“待审核”状态；商家售后专员承诺 **48 小时内**完成初审，其中**未发货仅退款通常在 24 小时内**极速审核。\n- 审核通过后进入“退款中”流程；财务打款完成后，工单流转为“已退款”。\n- 若为退货退款：审核通过后你需要在 **7 日内**寄回商品并填写物流单号；商家签收且质检无误后，将在 **48 小时内**原路退款。\n[来源: 售后审核时效与驳回申诉流程] [来源: 七天无理由退货规则]\n\n**二、被驳回后可以申诉**\n工单状态为“已拒绝”时，你可以通过两种途径继续维权：\n1. **补充凭证重新发起**：按驳回备注补充清晰照片、开箱视频、物流底单或质检截图后，对原订单重新提交售后申请；被驳回的旧工单不会妨碍重新申请。\n2. **申请平台介入**：如果你对商家驳回理由有异议，可回复“转人工”申请高级售后专员介入复核；平台复核团队将在 **24 小时内**给出终审结论。\n[来源: 售后审核时效与驳回申诉流程]\n\n如需针对具体订单处理，请提供订单号或回复“转人工”。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与结论均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P31",
+      "category": "policy_rag",
+      "description": "20000mAh充电宝74Wh登机与托运规定",
+      "query": "你们卖的20000mAh便携充电宝额定能量多少Wh？可以带上飞机或办理托运吗？",
+      "elapsed_s": 3.08,
+      "usage": {
+        "prompt_tokens": 2907,
+        "completion_tokens": 410,
+        "total_tokens": 3317
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:18_battery_safety_shipping",
+            "title": "充电宝与含锂电池商品航空携带与运输说明",
+            "heading_path": "充电宝与含锂电池商品航空携带与运输说明 > 民航随身携带标准（20000mAh 充电宝）",
+            "source_path": "kb/policies/18_battery_safety_shipping.md",
+            "vector_score": 0.8446
+          },
+          {
+            "doc_key": "policy:18_battery_safety_shipping",
+            "title": "充电宝与含锂电池商品航空携带与运输说明",
+            "heading_path": "充电宝与含锂电池商品航空携带与运输说明 > 含锂电池商品快递运输说明",
+            "source_path": "kb/policies/18_battery_safety_shipping.md",
+            "vector_score": 0.7082
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**关于额定能量与登机：**\n\n- **额定能量**：本店在售的便携充电宝 20000mAh，按常规电芯标称电压 3.7V 计算，额定能量约 **74Wh**，低于 100Wh 的航空上限，机身印有清晰的容量与额定能量标识，符合国内及国际航班随身登机标准。\n- **能否登机**：额定能量不超过 **100Wh** 的充电宝无需航空公司批准，**可随身携带登机**。\n- **能否托运**：**严禁办理行李托运**，只能随身携带。\n- **数量与使用**：每位旅客随身携带的合规充电宝一般不超过 2 块，且飞行全程请勿在客舱内使用充电宝给设备充电或给充电宝充电。\n\n[来源: 充电宝与含锂电池商品航空携带与运输说明]\n\n**关于具体商品参数：**\n以上是知识库中该型号的通用说明。如需确认您所看中的那一款的具体规格（额定能量、库存、价格等），请提供**商品ID**，我帮您查询核实。\n\n（补充提醒：充电宝属含锂电池商品，发往新疆、西藏、海南及部分跨省远途地区默认走快递陆运专线，时效可能顺延 1–2 天。[来源: 充电宝与含锂电池商品航空携带与运输说明]）",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与结论均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P32",
+      "category": "policy_rag",
+      "description": "含锂电池发新疆西藏走陆运说明",
+      "query": "蓝牙耳机和充电宝发往新疆西藏为什么慢一点？走的是空运还是陆运？",
+      "elapsed_s": 3.48,
+      "usage": {
+        "prompt_tokens": 3791,
+        "completion_tokens": 393,
+        "total_tokens": 4184
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:18_battery_safety_shipping",
+            "title": "充电宝与含锂电池商品航空携带与运输说明",
+            "heading_path": "充电宝与含锂电池商品航空携带与运输说明 > 含锂电池商品快递运输说明",
+            "source_path": "kb/policies/18_battery_safety_shipping.md",
+            "vector_score": 0.7287
+          },
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.5603
+          },
+          {
+            "doc_key": "policy:18_battery_safety_shipping",
+            "title": "充电宝与含锂电池商品航空携带与运输说明",
+            "heading_path": "充电宝与含锂电池商品航空携带与运输说明 > 民航随身携带标准（20000mAh 充电宝）",
+            "source_path": "kb/policies/18_battery_safety_shipping.md",
+            "vector_score": 0.5929
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**走的是陆运专线，慢的原因如下：**\n\n1. **运输方式与慢的原因**\n- 蓝牙耳机、充电宝等内置锂电池的数码商品，受**民航货运安检限制**，发往新疆、西藏、海南及部分跨省远途地区时，默认安排**快递陆运专线**，不走空运。\n- 陆运时效相比普通空运可能**顺延 1–2 天**，属于正常的合规运输安排，建议提前规划收货时间。\n[来源: 充电宝与含锂电池商品航空携带与运输说明]\n\n2. **整体时效参考**\n- 新疆、西藏、青海、海南等偏远地区，发货后一般**4–7 天**送达，普通地区为2–4天。\n[来源: 物流配送、签收与异常件处理]\n\n**补充提醒：** 以上陆运限制针对的是*快递包裹*；如果您本人乘机随身携带充电宝登机，额定能量不超过100Wh（如本店20000mAh款约74Wh）可随身携带，但严禁托运、每人一般不超过2块、飞行途中不要使用。 [来源: 充电宝与含锂电池商品航空携带与运输说明]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限与证据一致，结论准确无编造"
+      }
+    },
+    {
+      "id": "P33",
+      "category": "policy_rag",
+      "description": "送礼隐藏价格单与代写贺卡规则",
+      "query": "买礼盒送人可以不放价格单并免费代写贺卡吗？贺卡字数和提交时间有什么要求？",
+      "elapsed_s": 3.38,
+      "usage": {
+        "prompt_tokens": 2855,
+        "completion_tokens": 304,
+        "total_tokens": 3159
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:19_gift_wrapping_note",
+            "title": "礼盒包装与代写贺卡服务规则",
+            "heading_path": "礼盒包装与代写贺卡服务规则 > 代写贺卡服务说明",
+            "source_path": "kb/policies/19_gift_wrapping_note.md",
+            "vector_score": 0.7587
+          },
+          {
+            "doc_key": "policy:19_gift_wrapping_note",
+            "title": "礼盒包装与代写贺卡服务规则",
+            "heading_path": "礼盒包装与代写贺卡服务规则 > 免费礼品包装与隐藏价格单",
+            "source_path": "kb/policies/19_gift_wrapping_note.md",
+            "vector_score": 0.7139
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "可以，两项服务都支持：\n\n**1. 不放价格单（隐藏价格发货单）**\n下单时备注“送礼不放价格单”，或联系客服登记后，仓库出库会移除含价格的明细小票，仅保留无价装箱清单；礼盒外层默认加厚气泡膜和硬质外箱防压加固。\n[来源: 礼盒包装与代写贺卡服务规则]\n\n**2. 免费代写贺卡**\n- 每笔送礼订单免费 1 张祝福贺卡，可人工代写或印刷，**字数建议控制在 80 字以内**；\n- 需在**付款后 1 小时内**（仓库打单前）联系人工客服提交祝福文案；已打包出库的订单无法补放贺卡；\n- 贺卡为免费附赠，不单独收费，不支持指定特殊定制插画。\n[来源: 礼盒包装与代写贺卡服务规则]\n\n如需我查询具体礼盒商品是否支持该服务，请提供商品ID。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P34",
+      "category": "policy_rag",
+      "description": "企业团购起订门槛与阶梯折扣",
+      "query": "公司想批量采购员工福利，多少件或满多少钱起享企业团购折扣？分别打几折？",
+      "elapsed_s": 4.12,
+      "usage": {
+        "prompt_tokens": 3732,
+        "completion_tokens": 360,
+        "total_tokens": 4092
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 团购起订门槛与阶梯折扣",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.8465
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.6837
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 退款时的优惠分摊与返券规则",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.6075
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**企业团购门槛与折扣**\n\n**起订门槛（满足其一即可申请专属报价）：**\n- 单一商品一次性采购满 **20 件**；\n- 或整单采购总金额满 **5,000 元**。\n\n**参考阶梯折扣（按件数）：**\n| 采购量 | 折扣 |\n|---|---|\n| 满 20 件 | 页面价 **95 折** |\n| 满 50 件 | **92 折** |\n| 满 100 件以上 | 按实时库存与品项**单独核价** |\n\n**注意：** 部分特价促销商品不叠加团购折扣。\n\n**补充：** 企业团购支持签订电子或纸质采购合同、对公银行账户转账结算，并可开具对应品类的数电增值税专用发票。因批量采购需提前锁定大额库存并核对开票资质，具体报价与锁库存请回复“转人工”对接企业大客户经理，在线助手无法直接改价或锁定大宗库存。\n\n[来源: 企业团购与批量采购规则]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "门槛20件/5000元、95折92折均与证据一致"
+      }
+    },
+    {
+      "id": "P35",
+      "category": "policy_rag",
+      "description": "企业团购对公转账与专票流程",
+      "query": "企业团购支持签采购合同、对公银行转账和开增值税专用发票吗？",
+      "elapsed_s": 3.76,
+      "usage": {
+        "prompt_tokens": 3076,
+        "completion_tokens": 384,
+        "total_tokens": 3460
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.8296
+          },
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 发票类型与开票范围",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.6382
+          },
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 团购起订门槛与阶梯折扣",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.5907
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "三项都支持：\n\n**1. 采购合同**\n支持签订正规的电子或纸质采购合同。\n\n**2. 对公银行转账**\n支持通过对公银行账户转账结算。\n\n**3. 增值税专用发票**\n企业团购可开具对应品类的**数电增值税专用发票**（如办公数码、劳保日用、节日食品礼盒），开票税率严格按国家财税规定执行。\n> 补充条件：数电增值税专用发票仅限**一般纳税人企业**开具，需提供完整企业名称、纳税人识别号、开户行及账号、注册地址及电话；发票金额按买家**实际支付金额**开具（不含店铺满减、优惠券及积分抵扣金额）。\n\n[来源: 企业团购与批量采购规则] [来源: 发票开具与换票规则]\n\n**顺带提示**：企业团购起订门槛为单一商品一次性满 **20 件**或整单满 **5,000 元**，满 20 件享页面价 **95 折**、满 50 件 **92 折**、满 100 件以上单独核价（部分特价促销商品不叠加折扣）。\n\n由于批量采购需提前锁定大额库存并核对开票资质，请直接回复**“转人工”**对接企业大客户经理；在线助手无法直接修改订单价格或锁定大宗库存。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "三项支持及门槛折扣均与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P36",
+      "category": "policy_rag",
+      "description": "物流面单脱敏与防诈骗安全提示",
+      "query": "快递面单会隐藏手机号吗？有人自称店铺客服要我提供短信验证码做理赔可信吗？",
+      "elapsed_s": 3.57,
+      "usage": {
+        "prompt_tokens": 3876,
+        "completion_tokens": 390,
+        "total_tokens": 4266
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:21_account_privacy_security",
+            "title": "账号安全、隐私保护与号码脱敏规则",
+            "heading_path": "账号安全、隐私保护与号码脱敏规则 > 订单与隐私数据隔离",
+            "source_path": "kb/policies/21_account_privacy_security.md",
+            "vector_score": 0.7456
+          },
+          {
+            "doc_key": "policy:21_account_privacy_security",
+            "title": "账号安全、隐私保护与号码脱敏规则",
+            "heading_path": "账号安全、隐私保护与号码脱敏规则 > 账号安全提醒",
+            "source_path": "kb/policies/21_account_privacy_security.md",
+            "vector_score": 0.603
+          },
+          {
+            "doc_key": "policy:19_gift_wrapping_note",
+            "title": "礼盒包装与代写贺卡服务规则",
+            "heading_path": "礼盒包装与代写贺卡服务规则 > 免费礼品包装与隐藏价格单",
+            "source_path": "kb/policies/19_gift_wrapping_note.md",
+            "vector_score": 0.6001
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5668
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "## 一、快递面单会隐藏手机号吗？\n\n会。物流面单默认隐藏收件人手机号的**中间 4 位数字**，以防止因快递面单造成信息泄露；在线客服系统同时采用隐私号与脱敏展示策略。[来源: 账号安全、隐私保护与号码脱敏规则]\n\n## 二、有人自称店铺客服索要验证码做理赔，可信吗？\n\n**不可信，这极可能是诈骗。** 平台规则明确规定：\n\n- 店铺官方客服**绝不会**以“订单异常、质量理赔、会员扣费取消”等名义向买家索要**银行卡密码、短信验证码**，或要求点击外部陌生链接、下载屏幕共享软件；\n- 所有退款与赔付均通过**官方平台原路退回**，不会要求你另行提供验证码或转账；\n- 如遇疑似诈骗电话或信息，请立刻通过**官方渠道核实订单状态并报警**。\n\n[来源: 账号安全、隐私保护与号码脱敏规则]\n\n**建议：** 立即挂断对方电话，不要提供任何验证码；如有订单疑问，请在平台 App 内自行查看订单与售后状态，或回复“转人工”由人工客服协助核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "回答与证据一致，隐藏中间4位及不要验证码结论均源自规则"
+      }
+    },
+    {
+      "id": "P37",
+      "category": "policy_rag",
+      "description": "高频操作限流与风控误拦截申诉",
+      "query": "公司同事共用一个地址下单被风控拦截了怎么办？多久能核实放行？",
+      "elapsed_s": 3.5,
+      "usage": {
+        "prompt_tokens": 3062,
+        "completion_tokens": 288,
+        "total_tokens": 3350
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:22_anti_fraud_abnormal_order",
+            "title": "异常订单与风控拦截说明",
+            "heading_path": "异常订单与风控拦截说明 > 风控拦截后的申诉处理",
+            "source_path": "kb/policies/22_anti_fraud_abnormal_order.md",
+            "vector_score": 0.7435
+          },
+          {
+            "doc_key": "policy:22_anti_fraud_abnormal_order",
+            "title": "异常订单与风控拦截说明",
+            "heading_path": "异常订单与风控拦截说明 > 高频访问与防刷单风控机制",
+            "source_path": "kb/policies/22_anti_fraud_abnormal_order.md",
+            "vector_score": 0.7234
+          },
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.5807
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**公司同事共用地址下单被风控拦截的处理办法**\n\n这种情况属于“公司集中下单、家庭多人同地址购买”等合理原因误触发风控，可以申诉放行：\n\n1. **申诉方式**：请回复“转人工”，并提供**订单号与收货人信息**。\n2. **核实时效**：客服将在 **2 小时内** 核实放行。\n3. **兜底保障**：如果订单因核验不通过被取消，已支付款项将 **100% 原路退回**，不扣除任何违约金。\n\n**补充说明**：平台对同一收货地址、手机号或设备短时间内批量抢购限购商品、倒卖套利等行为，会暂停发货并联系买家核验身份；如果只是接口层出现高频请求（提示“请求过于频繁”），间隔 **1 分钟**后正常操作即可。\n[来源: 异常订单与风控拦截说明]\n\n如需人工介入核实，请回复“转人工”。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字时限与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P38",
+      "category": "policy_rag",
+      "description": "人工客服工作时间与接入响应SLA",
+      "query": "你们人工客服几点上班到几点下班？回复转人工后大概几分钟能接入？",
+      "elapsed_s": 2.59,
+      "usage": {
+        "prompt_tokens": 3017,
+        "completion_tokens": 293,
+        "total_tokens": 3310
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:23_customer_service_sla",
+            "title": "客服服务时间与人工介入 SLA",
+            "heading_path": "客服服务时间与人工介入 SLA > 响应与处理 SLA 承诺",
+            "source_path": "kb/policies/23_customer_service_sla.md",
+            "vector_score": 0.7803
+          },
+          {
+            "doc_key": "policy:23_customer_service_sla",
+            "title": "客服服务时间与人工介入 SLA",
+            "heading_path": "客服服务时间与人工介入 SLA > 服务时段安排",
+            "source_path": "kb/policies/23_customer_service_sla.md",
+            "vector_score": 0.739
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.5865
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**客服服务时间与接入时长**\n\n- **人工在线客服**：每日 **09:00 – 22:00**（含周末与法定节假日）[来源: 客服服务时间与人工介入 SLA]\n- **转人工接入时长**：工作时段内您在回复“转人工”后，人工客服平均 **3 分钟内**接入响应 [来源: 客服服务时间与人工介入 SLA]\n- **非工作时段（22:00 – 次日 09:00）**：系统会自动登记留言工单，人工客服会在次日 **09:30 前**按提交顺序优先联系您 [来源: 客服服务时间与人工介入 SLA]\n- 另外，AI 客服全年 **7×24 小时**在线，可先协助查询库存价格、订单与售后进度 [来源: 客服服务时间与人工介入 SLA]\n\n如果您的问题涉及复杂售后争议、大额企业团购、紧急快递拦截或特殊发票处理，建议直接在人工时段发送“转人工”。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "数字与证据一致，无编造"
+      }
+    },
+    {
+      "id": "P39",
+      "category": "policy_rag",
+      "description": "夜间留言处理时间与投诉回访SLA",
+      "query": "晚上11点转人工有人接待吗？升级投诉工单承诺多少小时内回访？",
+      "elapsed_s": 0.6,
+      "usage": {
+        "prompt_tokens": 484,
+        "completion_tokens": 26,
+        "total_tokens": 510
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": false,
+        "tool_ok": false,
+        "fact_ok": false,
+        "passed": false,
+        "reasons": [
+          "route='handoff' not in ['product_qa']",
+          "missing agents ['product_qa'] (actual=['handoff'])",
+          "group[0] none of ['search_knowledge_base'] called (actual=[])",
+          "missing keyword '09:30'",
+          "missing keyword '24'",
+          "missing citation [来源: ...]"
+        ],
+        "citation_ok": false
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未编造接待时间或回访时限，仅记录转人工请求"
+      }
+    },
+    {
+      "id": "P40",
+      "category": "policy_rag",
+      "description": "缺货补货周期与预售商品取消规则",
+      "query": "热门缺货商品一般几天补货？预售商品发货前申请仅退款会扣定金吗？",
+      "elapsed_s": 4.12,
+      "usage": {
+        "prompt_tokens": 3856,
+        "completion_tokens": 434,
+        "total_tokens": 4290
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:24_out_of_stock_presale",
+            "title": "缺货登记、下架商品与预售规则",
+            "heading_path": "缺货登记、下架商品与预售规则 > 下架与无货商品说明",
+            "source_path": "kb/policies/24_out_of_stock_presale.md",
+            "vector_score": 0.7003
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.696
+          },
+          {
+            "doc_key": "policy:05_price_protection",
+            "title": "商品价保服务规则",
+            "heading_path": "商品价保服务规则 > 价保周期与适用条件",
+            "source_path": "kb/policies/05_price_protection.md",
+            "vector_score": 0.6932
+          },
+          {
+            "doc_key": "policy:24_out_of_stock_presale",
+            "title": "缺货登记、下架商品与预售规则",
+            "heading_path": "缺货登记、下架商品与预售规则 > 预售商品特别规则",
+            "source_path": "kb/policies/24_out_of_stock_presale.md",
+            "vector_score": 0.7183
+          },
+          {
+            "doc_key": "policy:15_coupon_promotion_rules",
+            "title": "优惠券、满减与退款分摊规则",
+            "heading_path": "优惠券、满减与退款分摊规则 > 退款时的优惠分摊与返券规则",
+            "source_path": "kb/policies/15_coupon_promotion_rules.md",
+            "vector_score": 0.6828
+          },
+          {
+            "doc_key": "policy:02_refund_rules",
+            "title": "仅退款与退货退款适用规则",
+            "heading_path": "仅退款与退货退款适用规则 > 按订单状态的售后类型限制",
+            "source_path": "kb/policies/02_refund_rules.md",
+            "vector_score": 0.6943
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "两个问题都有明确条款：\n\n**1. 热门缺货商品补货时间**\n- 库存售罄（库存为 0）或商家手动下架的商品，详情页会停止下单，也不出现在店铺在售列表中；\n- 买家可联系客服**登记补货提醒**，热门常青款商品通常在 **7–14 天内**完成补货并重新上架。\n[来源: 缺货登记、下架商品与预售规则]\n\n**2. 预售商品发货前申请仅退款 → 不扣定金**\n- 预售订单不适用现货 48 小时发货规则，以详情页承诺的**预售最晚发货日**为准；\n- 预售商品在**正式发货前**，买家可随时申请「仅退款」取消预售订单，**不扣除任何定金或手续费**（全款预售模式）。\n[来源: 缺货登记、下架商品与预售规则]\n\n**补充两点提醒：**\n- 已支付但未发货的订单，系统只支持申请「仅退款」，不支持「退货退款」[来源: 仅退款与退货退款适用规则]；\n- 整单退款时，现金部分原路退回；所用店铺优惠券若仍在有效期内会自动返还，已过有效期则不再补发 [来源: 优惠券、满减与退款分摊规则]。\n\n如需核实某款具体商品的库存或预售发货日，请提供商品ID，我帮你查询。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "补货7-14天及预售不扣定金均与证据一致"
+      }
+    },
+    {
+      "id": "S01",
+      "category": "semantic_guide",
+      "description": "模糊送礼: 给长辈监测健康礼物",
+      "query": "想给家里长辈挑一款能监测健康的礼物，有推荐吗？",
+      "elapsed_s": 4.01,
+      "usage": {
+        "prompt_tokens": 3125,
+        "completion_tokens": 321,
+        "total_tokens": 3446
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:2",
+            "title": "智能手表 S2",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/2",
+            "vector_score": 0.4898
+          },
+          {
+            "doc_key": "product:7",
+            "title": "每日坚果礼盒",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/7",
+            "vector_score": 0.4704
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "给长辈挑健康礼物，可以从“实时监测”和“日常养护”两个方向来看，这两款都是店铺在售的：\n\n**1. 智能手表 S2 —— 数码 · ¥899.00（库存 80）**\n- 核心卖点：血氧监测、全天候心率记录，续航 14 天\n- 适合：想要随时关注心率、血氧等指标的长辈，续航长、不用天天充电，长辈用起来省心\n\n**2. 每日坚果礼盒 —— 食品 · ¥89.00（库存 150）**\n- 核心卖点：30 日独立小包装，六种坚果科学配比\n- 适合：偏日常食补养护、包装体面好送礼，长辈每天一包也方便\n\n如果长辈更看重“数据看得见、能实时监测”，选智能手表 S2 更合适；如果只是表达心意的日常养护，坚果礼盒更稳妥。想再告诉我长辈的年龄段或有无慢性病关注点（如血压、心率），我帮你缩到一款？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S02",
+      "category": "semantic_guide",
+      "description": "模糊场景: 出差给笔记本应急供电",
+      "query": "经常出差怕电脑没电，有没有能给笔记本应急供电的装备？",
+      "elapsed_s": 3.13,
+      "usage": {
+        "prompt_tokens": 2995,
+        "completion_tokens": 225,
+        "total_tokens": 3220
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.677
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "为您找到一款符合需求的在售商品：\n\n**便携充电宝 20000mAh** — ¥129.00\n- 分类：数码\n- 卖点：双向快充，支持笔记本应急供电\n- 库存：200 件（上架中）\n\n出差场景下 20000mAh 的容量基本能给轻薄本补一次应急电量，双向快充也方便自己快速回血。\n\n如果您的笔记本是 65W 以上大功率的型号，建议再确认一下充电宝的协议兼容性——需要我帮您查这款的详细参数吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S03",
+      "category": "semantic_guide",
+      "description": "模糊场景: 地铁通勤安静听歌降噪",
+      "query": "每天坐地铁太吵了，想买个隔音降噪还能同时连手机和电脑听歌的装备",
+      "elapsed_s": 3.16,
+      "usage": {
+        "prompt_tokens": 3287,
+        "completion_tokens": 224,
+        "total_tokens": 3511
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:1",
+            "title": "无线蓝牙耳机 Pro",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/1",
+            "vector_score": 0.5723
+          },
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.4485
+          },
+          {
+            "doc_key": "product:6",
+            "title": "轻薄羽绒服",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/6",
+            "vector_score": 0.4102
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到了符合你需求的装备 👇\n\n**无线蓝牙耳机 Pro** —— ¥199.00\n- 主动降噪，地铁噪音可以有效压下去\n- 蓝牙 5.4，支持**双设备连接**，手机和电脑可同时连着，哪边出声切哪边\n- 库存：120 件，在售中\n\n另外两件（机械键盘、羽绒服）和降噪听歌关系不大，就不推荐了。\n\n如果你更在意长时间佩戴舒适度或者需要入耳/头戴形态的区分，可以说说，我再帮你缩小范围～",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S04",
+      "category": "semantic_guide",
+      "description": "模糊场景: 办公室无线三模打字外设",
+      "query": "推荐一个在办公室打字手感好、支持有线和无线多设备切换的外设",
+      "elapsed_s": 3.42,
+      "usage": {
+        "prompt_tokens": 3895,
+        "completion_tokens": 301,
+        "total_tokens": 4196
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products",
+          "search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.635
+          },
+          {
+            "doc_key": "product:1",
+            "title": "无线蓝牙耳机 Pro",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/1",
+            "vector_score": 0.5278
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.5161
+          },
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.4721
+          },
+          {
+            "doc_key": "product:6",
+            "title": "轻薄羽绒服",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/6",
+            "vector_score": 0.4671
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "最符合你需求的是这款 👇\n\n**机械键盘 87键** — ¥329.00（库存 60 件）\n- 支持 **有线、2.4G、蓝牙三模**连接，办公时可以在笔记本、台式机、平板之间切换\n- **热插拔轴体**，手感可按喜好更换轴，长时间打字更顺手\n- 87 键紧凑布局，桌面占用小，适合办公室\n\n如果更看重安静环境或需要数字小键盘，可以告诉我，我再帮你看别的；另外店里同类的数码外设目前只有这一款键盘在售。要不要我顺便给你看看可以搭配的桌面配件？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S05",
+      "category": "semantic_guide",
+      "description": "模糊场景: 卧室放松助眠香氛好物",
+      "query": "晚上失眠想在卧室放点能放松助眠、带自然木质或茶香味的居家好物",
+      "elapsed_s": 2.85,
+      "usage": {
+        "prompt_tokens": 3016,
+        "completion_tokens": 221,
+        "total_tokens": 3237
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:9",
+            "title": "香薰蜡烛礼盒",
+            "heading_path": "在售商品 > 家居",
+            "source_path": "mcp://product/9",
+            "vector_score": 0.5174
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到了这款很符合你需求的商品：\n\n**香薰蜡烛礼盒** — ¥159.00（库存 70 件，在售）\n- 天然大豆蜡，燃烧更温和、异味少\n- 香型：**雪松 + 白茶**，正好是木质调与茶香的组合，睡前点燃有助于放松\n\n如果你更偏好无明火的助眠方式（比如香薰石、扩香木、睡眠喷雾），告诉我，我再帮你看看店铺家居类目里还有哪些可选。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S06",
+      "category": "semantic_guide",
+      "description": "模糊场景: 秋冬上班轻便保暖外套",
+      "query": "天冷了想买件冬天通勤穿着轻便不臃肿的保暖鸭绒外套",
+      "elapsed_s": 3.06,
+      "usage": {
+        "prompt_tokens": 3168,
+        "completion_tokens": 279,
+        "total_tokens": 3447
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:6",
+            "title": "轻薄羽绒服",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/6",
+            "vector_score": 0.7076
+          },
+          {
+            "doc_key": "product:5",
+            "title": "纯棉圆领T恤",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/5",
+            "vector_score": 0.4709
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "为你找到一款很符合需求的商品：\n\n**轻薄羽绒服** — ¥499.00\n- 分类：服饰\n- 库存：50 件（在售）\n- 核心卖点：90% 白鸭绒填充，主打轻薄保暖，正是秋冬通勤场景的设计，穿起来不臃肿\n\n补充说明：这次搜索还匹配到一件纯棉圆领T恤（¥59.00），但它属于内搭，不符合你“保暖外套”的需求，这里就不推荐了。\n\n如果你愿意告诉我尺码或偏好的颜色、长度（短款/中长款），我可以再帮你确认细节；也可以告诉我预算范围，方便进一步缩小选择。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S07",
+      "category": "semantic_guide",
+      "description": "模糊场景: 办公室下午茶健康小包零食",
+      "query": "在公司上班嘴馋，有没有每天独立一小袋方便吃的健康营养零食？",
+      "elapsed_s": 3.24,
+      "usage": {
+        "prompt_tokens": 3271,
+        "completion_tokens": 309,
+        "total_tokens": 3580
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:7",
+            "title": "每日坚果礼盒",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/7",
+            "vector_score": 0.5931
+          },
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.5055
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.4705
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "为你找到最适合的一款，另附两件可能凑单的商品：\n\n**最推荐**\n- **每日坚果礼盒** — 89.00 元｜库存 150\n  30 日独立小包装，六种坚果科学配比。每天撕一袋正好，坚果属于健康脂肪+蛋白质组合，公司嘴馋时比饼干薯片友好得多。\n\n**其他可参考**\n- **挂耳咖啡 10包装** — 69.00 元｜库存 180\n  中度烘焙，坚果巧克力风味。如果嘴馋其实是\"下午想提神\"，这款可以搭配坚果当固定小仪式。\n- **便携充电宝 20000mAh** — 129.00 元｜库存 200（数码，非零食）\n\n如果你想进一步缩小范围，可以告诉我：更想\"扛饿解馋\"（坚果类）还是\"提神解馋\"（咖啡类）？我再帮你确认有没有别的同类可选。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S08",
+      "category": "semantic_guide",
+      "description": "模糊场景: 上班族提神手冲饮品",
+      "query": "早上犯困，店里有没有方便冲泡、带坚果巧克力风味的提神饮品？",
+      "elapsed_s": 3.07,
+      "usage": {
+        "prompt_tokens": 3281,
+        "completion_tokens": 245,
+        "total_tokens": 3526
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.5633
+          },
+          {
+            "doc_key": "product:7",
+            "title": "每日坚果礼盒",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/7",
+            "vector_score": 0.5231
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.4755
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "最符合您需求的是这款：\n\n☕ **挂耳咖啡 10包装** — 69.00 元｜库存 180 件\n- 中度烘焙，正是您想要的**坚果巧克力风味**，挂耳设计一冲就好，早上来一杯提神很合适\n\n另外两件只是语义顺带命中的，可能不是您要的：每日坚果礼盒（89.00 元，坚果零食但不带冲泡饮品属性）、便携充电宝（129.00 元，数码类）。\n\n如果您想要更强劲的提神效果，可以再告诉我是否接受速溶咖啡或茶类，我帮您看看有没有更合适的。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S09",
+      "category": "semantic_guide",
+      "description": "模糊场景: 厚实不易透宽松打底衣",
+      "query": "想买件面料厚实重磅、版型宽松透气百搭的基础款纯棉短袖",
+      "elapsed_s": 2.9,
+      "usage": {
+        "prompt_tokens": 3138,
+        "completion_tokens": 195,
+        "total_tokens": 3333
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:5",
+            "title": "纯棉圆领T恤",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/5",
+            "vector_score": 0.7233
+          },
+          {
+            "doc_key": "product:6",
+            "title": "轻薄羽绒服",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/6",
+            "vector_score": 0.5759
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "为你找到最匹配的在售款：\n\n**纯棉圆领T恤** — ¥59.00\n- 核心卖点：260克重磅纯棉，宽松版型\n- 库存：300 件（在售中）\n- 分类：服饰\n\n这款正好符合你对“重磅厚实、宽松、基础款纯棉短袖”的要求；需要我再看看它有没有其他颜色/尺码的详情吗？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S10",
+      "category": "semantic_guide",
+      "description": "模糊场景: 运动看心率长续航穿戴",
+      "query": "平时喜欢跑步运动，想要一块能全天候测心率血氧、两周不用充电的穿戴设备",
+      "elapsed_s": 2.97,
+      "usage": {
+        "prompt_tokens": 3590,
+        "completion_tokens": 253,
+        "total_tokens": 3843
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:2",
+            "title": "智能手表 S2",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/2",
+            "vector_score": 0.706
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.4998
+          },
+          {
+            "doc_key": "product:1",
+            "title": "无线蓝牙耳机 Pro",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/1",
+            "vector_score": 0.4688
+          },
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.4174
+          },
+          {
+            "doc_key": "product:7",
+            "title": "每日坚果礼盒",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/7",
+            "vector_score": 0.4617
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到一款正好符合你需求的设备：\n\n**智能手表 S2** — 899.00 元｜库存 80 件｜上架中\n- 血氧监测、全天候心率记录\n- 续航 14 天，约两周一充\n- 属于数码类，适合日常跑步佩戴\n\n其他搜索结果（蓝牙耳机、充电宝、机械键盘、坚果礼盒）与你的需求不相关，已为你略过。\n\n如果你还需要 GPS 轨迹、防水等级这类跑步细节，或想要更低价位的替代款，告诉我你的预算，我再帮你缩小范围。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S11",
+      "category": "semantic_guide",
+      "description": "模糊场景: 程序员DIY换轴小尺寸键盘",
+      "query": "桌面空间小，想找一款能自己换轴体的紧凑布局键盘",
+      "elapsed_s": 3.42,
+      "usage": {
+        "prompt_tokens": 3263,
+        "completion_tokens": 252,
+        "total_tokens": 3515
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products",
+          "semantic_search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.6571
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.4825
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到一款符合你需求的键盘：\n\n**机械键盘 87键** — ¥329.00（库存 60 件）\n- 热插拔轴体，可自主更换轴体\n- 支持有线 / 2.4G / 蓝牙三模连接\n- 87 键布局，比全尺寸更省桌面空间\n\n这款是店里目前唯一在售的机械键盘，热插拔 + 87 键紧凑布局基本对得上你的需求。如果你更想要 68 键或 75 键这类更极致的紧凑款，可以告诉我，我再帮你确认有没有其他选择。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S12",
+      "category": "semantic_guide",
+      "description": "模糊场景: 节假日送亲友高颜值伴手礼",
+      "query": "周末去朋友新家做客，想挑个百来块钱有格调的居家或零食伴手礼盒",
+      "elapsed_s": 3.91,
+      "usage": {
+        "prompt_tokens": 3655,
+        "completion_tokens": 406,
+        "total_tokens": 4061
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products",
+          "list_categories"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:7",
+            "title": "每日坚果礼盒",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/7",
+            "vector_score": 0.545
+          },
+          {
+            "doc_key": "product:9",
+            "title": "香薰蜡烛礼盒",
+            "heading_path": "在售商品 > 家居",
+            "source_path": "mcp://product/9",
+            "vector_score": 0.5447
+          },
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.5197
+          },
+          {
+            "doc_key": "product:6",
+            "title": "轻薄羽绒服",
+            "heading_path": "在售商品 > 服饰",
+            "source_path": "mcp://product/6",
+            "vector_score": 0.5054
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.479
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "按“百来块钱、有格调、新居做客伴手礼”这个需求，帮你在在售商品里挑出这几件（价格均为实时在售价）：\n\n| 商品 | 价格 | 库存 | 亮点 |\n|---|---|---|---|\n| 香薰蜡烛礼盒 | 159 元 | 70 | 天然大豆蜡，雪松与白茶香型，送新居最有格调 |\n| 每日坚果礼盒 | 89 元 | 150 | 30 日独立小包装，六种坚果配比，体面又实用 |\n| 挂耳咖啡 10 包装 | 69 元 | 180 | 中度烘焙坚果巧克力风味，适合爱喝咖啡的朋友 |\n\n更推荐：如果希望“有格调”这个点最突出，就选香薰蜡烛礼盒（159 元）；如果希望预算控制在百元左右又显得体面，就选每日坚果礼盒（89 元）。另外，可以用挂耳咖啡（69 元）和坚果（89 元）搭配，加起来 158 元，正好凑成一份双拼伴手礼。\n\n如果你更想控制在一百元以内，还是更偏向家居气味类，我可以再帮你缩小范围。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S13",
+      "category": "semantic_guide",
+      "description": "模糊场景: 长途旅行大容量快充电源",
+      "query": "周末出去露营旅游，手机耗电太快，推荐个容量大支持双向快充的移动电源",
+      "elapsed_s": 3.12,
+      "usage": {
+        "prompt_tokens": 3100,
+        "completion_tokens": 303,
+        "total_tokens": 3403
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products",
+          "search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.6354
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "按“移动电源”关键词没搜到结果，用语义检索找到 1 款符合的：\n\n**便携充电宝 20000mAh**（数码类）\n- 价格：**129.00 元**\n- 库存：200 件，在售\n- 核心卖点：20000mAh 大容量，**双向快充**，还能给笔记本应急供电——露营给手机、平板甚至笔电补电都够用\n\n这款正好满足你“容量大 + 双向快充”的需求，20000mAh 也符合民航随身携带标准，出门坐飞机、自驾都方便。\n\n要不要我再看看数码类里的其他配件（比如露营用的充电线、多口充电头），搭配着一起备齐？",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S14",
+      "category": "semantic_guide",
+      "description": "模糊场景: 健身房蓝牙双设备连接耳机",
+      "query": "想要一款最新蓝牙5.4、能同时连接平板和手机无缝切换的无线音频产品",
+      "elapsed_s": 3.46,
+      "usage": {
+        "prompt_tokens": 3731,
+        "completion_tokens": 291,
+        "total_tokens": 4022
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products",
+          "search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:1",
+            "title": "无线蓝牙耳机 Pro",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/1",
+            "vector_score": 0.6887
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.5347
+          },
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.4524
+          },
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.4727
+          },
+          {
+            "doc_key": "product:2",
+            "title": "智能手表 S2",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/2",
+            "vector_score": 0.4647
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "找到一款完全匹配的：\n\n**无线蓝牙耳机 Pro** —— ¥199.00（库存 120 件，在售）\n- 支持蓝牙 5.4，正好是你想要的最新版本\n- 支持双设备连接，手机和平板可同时连着、按需无缝切换\n- 带主动降噪，日常通勤或办公时听音更干净\n\n如需进一步缩小范围，可以告诉我你更看重音质、降噪强度，还是续航和佩戴形式（入耳/头戴）。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "S15",
+      "category": "semantic_guide",
+      "description": "模糊场景: 百元内两件居家办公提神加餐组合",
+      "query": "预算一百块以内，想给工位备点既能解馋又能提神的吃的喝的",
+      "elapsed_s": 4.44,
+      "usage": {
+        "prompt_tokens": 3641,
+        "completion_tokens": 382,
+        "total_tokens": 4023
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "semantic_search_products",
+          "search_products"
+        ],
+        "citations": [
+          {
+            "doc_key": "product:1",
+            "title": "无线蓝牙耳机 Pro",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/1",
+            "vector_score": 0.3525
+          },
+          {
+            "doc_key": "product:3",
+            "title": "机械键盘 87键",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/3",
+            "vector_score": 0.359
+          },
+          {
+            "doc_key": "product:8",
+            "title": "挂耳咖啡 10包装",
+            "heading_path": "在售商品 > 食品",
+            "source_path": "mcp://product/8",
+            "vector_score": 0.4767
+          },
+          {
+            "doc_key": "product:4",
+            "title": "便携充电宝 20000mAh",
+            "heading_path": "在售商品 > 数码",
+            "source_path": "mcp://product/4",
+            "vector_score": 0.4556
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "按你的需求，食品类目下目前只有 2 款在售，且都在 100 元以内：\n\n| 商品 | 价格 | 库存 | 卖点 |\n|---|---|---|---|\n| 挂耳咖啡 10包装 | 69.00 元 | 180 | 中度烘焙，坚果巧克力风味，冲泡即喝，提神很快 |\n| 每日坚果礼盒 | 89.00 元 | 150 | 30 日独立小包装，六种坚果配比，解馋也相对健康 |\n\n如果想“解馋和提神”都兼顾。**首选挂耳咖啡（69 元）**。因为预算还剩下 31 元，坚果是 89 元，所以两件不能同时买；如果更偏向下午解馋，就选坚果礼盒。\n\n另外，这款咖啡只有中度烘焙的经典口味。你平时更喜欢黑咖啡的苦感，还是带点奶香、甜感的？我可以据此帮你缩小选择范围。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": null
+    },
+    {
+      "id": "A01",
+      "category": "anti_hallucination",
+      "description": "库外: 跨境保税仓直邮关税税率",
+      "query": "跨境保税仓直邮商品怎么计算个人行邮税和关税？免税额度是多少？",
+      "elapsed_s": 2.86,
+      "usage": {
+        "prompt_tokens": 2590,
+        "completion_tokens": 264,
+        "total_tokens": 2854
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:20_bulk_corporate_purchase",
+            "title": "企业团购与批量采购规则",
+            "heading_path": "企业团购与批量采购规则 > 对公付款、合同与专票流程",
+            "source_path": "kb/policies/20_bulk_corporate_purchase.md",
+            "vector_score": 0.5512
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "当前知识库中**未收录**跨境保税仓直邮商品的行邮税、关税计算规则以及个人免税额度相关条款（唯一检索到的《企业团购与批量采购规则》仅涉及对公付款与专票开具，与您的问题无关）。\n\n由于税费比例、免税额度属于海关监管政策，我不能凭记忆给出具体数字或比例，以免误导您。建议您：\n\n- 回复 **“转人工”**，由人工客服为您核实跨境商品的税费与免税额度细则；\n- 或直接以海关总署及“掌上海关”等官方渠道公布的个人物品进境免税额度与税率规定为准。\n\n如果您还有其他平台规则（如退换货、价保、运费险等）或已提供商品ID的规格问题，我可以继续帮您查询。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确未查到，未编造税费数字，建议转人工"
+      }
+    },
+    {
+      "id": "A02",
+      "category": "anti_hallucination",
+      "description": "库外: 旧手机数码以旧换新折抵标准",
+      "query": "你们店铺支持旧手机或旧手表以旧换新吗？折价评估标准是什么？",
+      "elapsed_s": 3.23,
+      "usage": {
+        "prompt_tokens": 2860,
+        "completion_tokens": 278,
+        "total_tokens": 3138
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 三包核心时效",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.5517
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.5525
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "非常抱歉，**当前知识库中暂未收录「以旧换新」相关规则**，也未查到旧手机/旧手表的折价评估标准，因此我无法给出任何折价比例或评估细则（不能凭空编造）。\n\n检索到的相关文档仅涉及其他内容：\n- 数码类商品（智能手表等）执行国家三包：签收次日起 7 日内性能故障可退换修、8–15 日可换新或维修、12 个月全国联保免费质保 [来源: 数码产品三包与质保规则]\n- 会员积分抵现规则（100 积分 = 1 元，单笔最多抵订单实付 20%）[来源: 会员等级与积分规则]\n\n**建议**：如需确认是否支持以旧换新及折价标准，请回复「**转人工**」由人工客服核实最新活动政策。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确说明未查到以旧换新规则，未编造折价数字"
+      }
+    },
+    {
+      "id": "A03",
+      "category": "anti_hallucination",
+      "description": "库外: 线下实体门店自提地址",
+      "query": "你们在北京朝阳区有线下实体门店吗？支持线上下单门店自提吗？",
+      "elapsed_s": 2.57,
+      "usage": {
+        "prompt_tokens": 2603,
+        "completion_tokens": 169,
+        "total_tokens": 2772
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.557
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "当前知识库中**暂未查到**关于线下实体门店分布（如北京朝阳区是否有门店）以及“线上下单、门店自提”的具体条款——检索到的唯一文档是会员积分规则，与本问题无关，我不能据此作答或推测。\n\n建议您：回复“**转人工**”联系人工客服，确认门店位置与自提服务是否支持。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确表示未查到，未编造门店或自提政策"
+      }
+    },
+    {
+      "id": "A04",
+      "category": "anti_hallucination",
+      "description": "库外: 信用卡24期免息分期手续费",
+      "query": "买数码产品支持花呗或信用卡24期免息分期吗？每期手续费率是多少？",
+      "elapsed_s": 3.36,
+      "usage": {
+        "prompt_tokens": 2868,
+        "completion_tokens": 267,
+        "total_tokens": 3135
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.565
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 会员等级划分",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.5924
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "您好，关于您咨询的**花呗/信用卡24期免息分期及每期手续费率**：\n\n当前知识库**暂未查到**分期付款相关的具体条款（检索命中的两条内容均为会员积分规则，与分期无关）。因此无法为您确认：\n\n- 数码产品是否支持花呗或信用卡24期免息；\n- 各分期期数对应的手续费率。\n\n为避免给您错误信息，建议您**回复“转人工”**，由人工客服核实具体商品的分期支持情况与费率标准。\n\n📌 另外提醒：若您想确认某款具体商品的价格与库存，可直接提供**商品ID**，我帮您查询详情。\n\n[来源: 会员等级与积分规则]（仅用于说明本次检索结果未覆盖分期政策）",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确未查到分期政策，未编造费率"
+      }
+    },
+    {
+      "id": "A05",
+      "category": "anti_hallucination",
+      "description": "库外: 付费黑金会员年费多少钱",
+      "query": "开通你们店的付费黑金PLUS会员一年多少钱？送不送视频网站联合会员？",
+      "elapsed_s": 3.18,
+      "usage": {
+        "prompt_tokens": 3243,
+        "completion_tokens": 306,
+        "total_tokens": 3549
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 会员等级划分",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.5699
+          },
+          {
+            "doc_key": "policy:16_member_points_vip",
+            "title": "会员等级与积分规则",
+            "heading_path": "会员等级与积分规则 > 积分获取、抵扣与清零规则",
+            "source_path": "kb/policies/16_member_points_vip.md",
+            "vector_score": 0.5995
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "抱歉，当前知识库暂未查到关于“付费黑金PLUS会员”的价格（年费金额）及视频网站联合会员赠予的具体条款。\n\n知识库中仅有**免费成长型会员等级**规则：普通会员（注册即享，1元1分）、银卡会员（年累计有效消费满 1,000 元，1.2倍积分加速+每季度1张满199减15元券）、金卡会员（年累计有效消费满 3,000 元，1.5倍积分加速+优先顺丰发货+生日月50元无门槛券），并无“黑金PLUS”付费会员的任何价格或权益约定 [来源: 会员等级与积分规则]。\n\n为避免给您错误信息，建议您回复“**转人工**”联系人工客服核实该项付费会员的价格与权益。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确表示未查到付费会员条款，未编造价格或权益"
+      }
+    },
+    {
+      "id": "A06",
+      "category": "anti_hallucination",
+      "description": "库外: 海外国际快递邮费标准",
+      "query": "你们支持发DHL国际快递到美国或欧洲吗？首重国际运费多少钱一公斤？",
+      "elapsed_s": 3.5,
+      "usage": {
+        "prompt_tokens": 3737,
+        "completion_tokens": 358,
+        "total_tokens": 4095
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:12_logistics_delivery_sign",
+            "title": "物流配送、签收与异常件处理",
+            "heading_path": "物流配送、签收与异常件处理 > 合作快递与配送时效",
+            "source_path": "kb/policies/12_logistics_delivery_sign.md",
+            "vector_score": 0.605
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 退换货运费责任划分",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5853
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5749
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**抱歉，这两点目前知识库都没有覆盖，我不能给您编造数字。**\n\n**1. 是否支持 DHL 发往美国/欧洲**\n知识库只约定了境内配送：店铺根据收货地址与商品品类自动匹配顺丰标快（数码高客单商品优先）或中通/圆通，暂不支持下单指定快递。**条款中未涉及国际快递（含 DHL）及海外配送能力**，也未明确是否支持发往美国或欧洲。[来源: 物流配送、签收与异常件处理]\n\n**2. 国际运费首重价格**\n知识库中仅有境内退货运费险的定额赔付（单笔最高 12 元）与偏远地区补差说明，**没有任何国际运费、首重/续重报价的条款**，因此无法给出每公斤金额。[来源: 退换货运费承担与运费险规则]\n\n**建议**：如需确认跨境发货与报价，请回复 **“转人工”** 由人工客服核实（关税、清关等跨境事项同样建议一并咨询）。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确说明未查到国际快递与运费，未编造数字"
+      }
+    },
+    {
+      "id": "A07",
+      "category": "anti_hallucination",
+      "description": "库外: 好友拼团砍价0元拿规则",
+      "query": "邀请多少个新好友助力砍价可以0元免费拿智能手表？",
+      "elapsed_s": 3.14,
+      "usage": {
+        "prompt_tokens": 2869,
+        "completion_tokens": 246,
+        "total_tokens": 3115
+      },
+      "actual": {
+        "route": "guide",
+        "plan": [
+          "guide"
+        ],
+        "agents_used": [
+          "guide"
+        ],
+        "tools_called": [
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "关于“砍价0元免费拿”，这个信息我这边确实没有——我能查到的只有商品的在售价格和库存，店铺的砍价活动规则（比如需要邀请多少位好友助力）不在我的查询范围里，我也不能凭空编一个数字给您。建议您直接看商品页的活动说明或咨询店铺客服。\n\n顺便说下店里当前在售的这款手表：\n\n- **智能手表 S2**（数码类）｜价格：899.00 元｜库存：80 件\n- 卖点：血氧监测、全天候心率记录，续航 14 天\n\n如果您还想看看同价位的手环或其他数码产品做对比，告诉我预算和主要用途（运动记录/健康监测/接打电话），我帮您筛。",
+        "error": null
+      },
+      "score": {
+        "route_ok": false,
+        "tool_ok": false,
+        "fact_ok": true,
+        "passed": false,
+        "reasons": [
+          "route='guide' not in ['product_qa']",
+          "missing agents ['product_qa'] (actual=['guide'])",
+          "group[0] none of ['search_knowledge_base'] called (actual=['search_products'])"
+        ],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确未查到砍价规则，未编造数字"
+      }
+    },
+    {
+      "id": "A08",
+      "category": "anti_hallucination",
+      "description": "库外: 二手闲置寄卖抽成比例",
+      "query": "我把在你们店买过的旧耳机放到你们平台二手寄卖，平台收百分之几的手续费？",
+      "elapsed_s": 2.89,
+      "usage": {
+        "prompt_tokens": 3080,
+        "completion_tokens": 166,
+        "total_tokens": 3246
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.554
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5817
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 退换货运费责任划分",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5677
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "平台知识库中暂未收录“二手寄卖手续费”的相关条款。上面检索到的 3 条规则，分别涉及延迟发货赔付、运费险和退换货运费，都不是你问的寄卖佣金比例，所以按规则我不能凭空给出具体百分比。\n\n建议你**回复“转人工”**，由人工客服为你查询寄卖业务的收费标准和具体费率。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确表示未查到，未编造费率，建议转人工"
+      }
+    },
+    {
+      "id": "A09",
+      "category": "anti_hallucination",
+      "description": "库外: 生鲜海鲜冷链化冻赔付细则",
+      "query": "冷链生鲜海鲜寄过来化冻了，按重量每斤赔多少钱？",
+      "elapsed_s": 3.77,
+      "usage": {
+        "prompt_tokens": 3922,
+        "completion_tokens": 422,
+        "total_tokens": 4344
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品安全问题法定赔付",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.6099
+          },
+          {
+            "doc_key": "policy:04_return_shipping_freight",
+            "title": "退换货运费承担与运费险规则",
+            "heading_path": "退换货运费承担与运费险规则 > 运费险理赔说明",
+            "source_path": "kb/policies/04_return_shipping_freight.md",
+            "vector_score": 0.5782
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 延迟发货赔付标准",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.5604
+          },
+          {
+            "doc_key": "policy:11_home_fragile_damage",
+            "title": "家居易碎品破损签收与补发规则",
+            "heading_path": "家居易碎品破损签收与补发规则 > 赔付与处理方式",
+            "source_path": "kb/policies/11_home_fragile_damage.md",
+            "vector_score": 0.5771
+          },
+          {
+            "doc_key": "policy:09_food_quality_safety",
+            "title": "食品类商品售后与食品安全赔付规则",
+            "heading_path": "食品类商品售后与食品安全赔付规则 > 食品售后特殊说明",
+            "source_path": "kb/policies/09_food_quality_safety.md",
+            "vector_score": 0.5608
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "**当前知识库未查到“按重量每斤赔多少钱”这类赔付条款**。知识库中没有按斤（重量）折算的化冻/变质赔偿标准；我能提供的现行条款如下：\n\n**1. 若属于严重食品安全问题**（如变质、不符食品安全标准）\n- 商家第一时间全额退款；\n- 另依据《食品安全法》第一百四十八条，可主张**支付价款十倍或损失三倍的赔偿金**，增加赔偿金额不足 **1000 元**的按 **1000 元**赔付（标签瑕疵且不影响食品安全与误导消费者的除外）。\n[来源: 食品类商品售后与食品安全赔付规则]\n\n**2. 若属于包装破损、漏气等签收问题**\n- 需在**签收后 48 小时内**拍照留存外箱及商品生产日期，支持**全额仅退款或免费补发**。\n[来源: 食品类商品售后与食品安全赔付规则]\n\n补充：知识库现有条款中，唯一涉及“按重量”的表述不适用于生鲜，因此不建议套用。\n\n建议您先在签收后 48 小时内拍摄外箱、冰块/化冻状态和商品照片留存证据，并提交售后申请。若您需要明确“按斤赔付”的具体标准，请回复 **“转人工”** 由人工客服结合物流与商品情况核实处理。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确未查到按斤标准，未编造数字，建议转人工"
+      }
+    },
+    {
+      "id": "A10",
+      "category": "anti_hallucination",
+      "description": "库外: 激光定制刻字收费标准",
+      "query": "买智能手表或耳机盒支持免费激光刻字定制吗？收费多少？",
+      "elapsed_s": 4.09,
+      "usage": {
+        "prompt_tokens": 3126,
+        "completion_tokens": 410,
+        "total_tokens": 3536
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:19_gift_wrapping_note",
+            "title": "礼盒包装与代写贺卡服务规则",
+            "heading_path": "礼盒包装与代写贺卡服务规则 > 免费礼品包装与隐藏价格单",
+            "source_path": "kb/policies/19_gift_wrapping_note.md",
+            "vector_score": 0.6797
+          },
+          {
+            "doc_key": "policy:08_extended_warranty",
+            "title": "店铺延长保修服务说明",
+            "heading_path": "店铺延长保修服务说明 > 延保适用范围与收费标准",
+            "source_path": "kb/policies/08_extended_warranty.md",
+            "vector_score": 0.579
+          },
+          {
+            "doc_key": "policy:07_warranty_digital",
+            "title": "数码产品三包与质保规则",
+            "heading_path": "数码产品三包与质保规则 > 三包核心时效",
+            "source_path": "kb/policies/07_warranty_digital.md",
+            "vector_score": 0.5903
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "知识库检索结果中**没有关于“免费激光刻字定制”或刻字收费标准的条款**。\n\n现有查到的相关服务仅限以下内容：\n\n**1. 送礼定制（不含刻字）** —— 涉及无线蓝牙耳机 Pro、智能手表 S2 等数码送礼单品：\n- 隐藏价格发货单：下单时备注“送礼不放价格单”，或联系客服登记后，出库时移除含价格的明细小票，仅保留无价装箱清单；\n- 防压加固包装：礼盒外层默认加套加厚气泡膜与硬质外箱。\n[来源: 礼盒包装与代写贺卡服务规则]\n\n**2. 可选延长保修（需付费，非刻字）** —— 数码类商品可加购：\n- 1 年延保（质保延至第 2 年）：69 元\n- 2 年延保（质保延至第 3 年）：119 元\n[来源: 店铺延长保修服务说明]\n\n**关于激光刻字：当前知识库暂未查到相关条款**，因此无法确认智能手表、耳机盒是否支持刻字，也无法给出收费金额。建议您回复“**转人工**”，由人工客服核实具体商品是否提供刻字定制及报价。\n\n如果您能提供具体商品的 ID，我也可以帮您查询该商品的详情描述，看其中是否注明刻字服务。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "明确说明未查到刻字规则，未编造收费数字"
+      }
+    },
+    {
+      "id": "A11",
+      "category": "anti_hallucination",
+      "description": "库外: 直播间福袋抽奖兑奖有效期",
+      "query": "在你们直播间抢到的免单福袋奖品，几天内不领会过期作废？",
+      "elapsed_s": 2.91,
+      "usage": {
+        "prompt_tokens": 2893,
+        "completion_tokens": 187,
+        "total_tokens": 3080
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 标准发货时效",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.5909
+          },
+          {
+            "doc_key": "policy:03_shipping_delay_compensation",
+            "title": "发货时效与延迟发货赔付规则",
+            "heading_path": "发货时效与延迟发货赔付规则 > 免责情形",
+            "source_path": "kb/policies/03_shipping_delay_compensation.md",
+            "vector_score": 0.6147
+          },
+          {
+            "doc_key": "policy:06_invoice_policy",
+            "title": "发票开具与换票规则",
+            "heading_path": "发票开具与换票规则 > 开票时效与补开期限",
+            "source_path": "kb/policies/06_invoice_policy.md",
+            "vector_score": 0.5577
+          }
+        ],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "当前知识库中**暂未查到**关于\"直播间免单福袋奖品领取时效/逾期作废\"的具体条款。\n\n检索到的内容仅涉及普通订单的发货时效（48小时出库）和发票补开期限，均与福袋奖品的领取时限无关，因此无法给您准确的期限数字，也不便代为推测。\n\n建议您回复 **\"转人工\"**，由人工客服帮您核实该福袋活动的具体领取规则和有效期。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未查到即如实说明，未编造时限数字"
+      }
+    },
+    {
+      "id": "A12",
+      "category": "anti_hallucination",
+      "description": "库外: 线下品牌加盟代理保证金",
+      "query": "我想加盟代理你们品牌开线下分店，加盟费和保证金分别是多少钱？",
+      "elapsed_s": 1.02,
+      "usage": {
+        "prompt_tokens": 481,
+        "completion_tokens": 25,
+        "total_tokens": 506
+      },
+      "actual": {
+        "route": "handoff",
+        "plan": [],
+        "agents_used": [
+          "handoff"
+        ],
+        "tools_called": [],
+        "citations": [],
+        "tool_rounds": 0,
+        "handoff_requested": true,
+        "content": "好的，已为您记录转人工客服请求。人工客服将尽快为您接入处理；您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。",
+        "error": null
+      },
+      "score": {
+        "route_ok": false,
+        "tool_ok": false,
+        "fact_ok": true,
+        "passed": false,
+        "reasons": [
+          "route='handoff' not in ['product_qa']",
+          "missing agents ['product_qa'] (actual=['handoff'])",
+          "group[0] none of ['search_knowledge_base'] called (actual=[])"
+        ],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "库外题未编造加盟费，仅转人工"
+      }
+    },
+    {
+      "id": "A13",
+      "category": "anti_hallucination",
+      "description": "库外: 大学生教育优惠认证折扣",
+      "query": "通过学信网认证大学生教育优惠，买数码产品能打几折？",
+      "elapsed_s": 2.97,
+      "usage": {
+        "prompt_tokens": 2343,
+        "completion_tokens": 156,
+        "total_tokens": 2499
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "当前知识库暂未查到关于“学信网大学生教育优惠认证折扣”的具体条款，我无法确认折扣力度或适用商品范围，不做推测。\n\n建议您回复“**转人工**”，由人工客服为您核实教育优惠的具体政策。\n\n如果您手头有具体商品ID，也可以提供给我，我能帮您查询该商品的当前售价与库存。",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未查到即如实告知，未编造折扣数字"
+      }
+    },
+    {
+      "id": "A14",
+      "category": "anti_hallucination",
+      "description": "库外: 以租代购信用免押租用月费",
+      "query": "你们支持芝麻信用免押以租代购吗？租机械键盘一个月租金多少钱？",
+      "elapsed_s": 7.14,
+      "usage": {
+        "prompt_tokens": 5478,
+        "completion_tokens": 701,
+        "total_tokens": 6179
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa",
+          "guide"
+        ],
+        "agents_used": [
+          "product_qa",
+          "guide"
+        ],
+        "tools_called": [
+          "search_knowledge_base",
+          "search_products"
+        ],
+        "citations": [],
+        "tool_rounds": 2,
+        "handoff_requested": false,
+        "content": "您好，感谢您的咨询，关于您提到的问题，为您说明如下：\n\n**关于“芝麻信用免押、以租代购”**\n当前知识库暂未查询到该具体条款，暂时无法确认平台是否支持这类服务，也不好给出任何结论，建议您回复“转人工”联系人工客服，确认免押租赁业务的开放情况。\n\n**关于机械键盘的月租金**\n租金属于具体商品的租赁价格信息，由于您尚未提供商品ID，暂时无法核实；平台在售商品详情主要支持查询售卖类商品的价格、规格与库存，租赁价格可能不在其中。建议您同样回复“转人工”，向人工客服确认具体租金标准。\n\n**如果您愿意直接购买**\n目前有一款在售机械键盘可供参考：\n\n| 商品 | 价格 | 库存 | 核心卖点 |\n|---|---|---|---|\n| 机械键盘 87键 | ¥329.00 | 60 件 | 热插拔轴体，有线 / 2.4G / 蓝牙三模连接 |\n\n如果您对配列（87键、104键）、轴体手感或预算有具体要求，也可以告诉我，我帮您进一步缩小范围。\n\n[来源: 商品问答专员、导购专员]",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未编造免押或租金规则，如实告知未查到并建议转人工"
+      }
+    },
+    {
+      "id": "A15",
+      "category": "anti_hallucination",
+      "description": "库外: 宠物寄养与活体运输保障",
+      "query": "你们平台活体宠物运输途中生病了包赔几天？",
+      "elapsed_s": 3.12,
+      "usage": {
+        "prompt_tokens": 2325,
+        "completion_tokens": 185,
+        "total_tokens": 2510
+      },
+      "actual": {
+        "route": "product_qa",
+        "plan": [
+          "product_qa"
+        ],
+        "agents_used": [
+          "product_qa"
+        ],
+        "tools_called": [
+          "search_knowledge_base"
+        ],
+        "citations": [],
+        "tool_rounds": 1,
+        "handoff_requested": false,
+        "content": "当前知识库暂未查到关于**活体宠物运输途中生病包赔期限**的具体条款，我无法给出准确的包赔天数或赔付比例，请勿以我的回答作为依据。\n\n建议您：\n- 回复 **“转人工”** 咨询人工客服，核实宠物活体运输的赔付规则；\n- 同时可查看该商品详情页/订单页中的活体交易说明与保险条款。\n\n（如您有具体商品ID，我也可以帮您核实该商品页面上的相关说明。）",
+        "error": null
+      },
+      "score": {
+        "route_ok": true,
+        "tool_ok": true,
+        "fact_ok": true,
+        "passed": true,
+        "reasons": [],
+        "citation_ok": true
+      },
+      "judge": {
+        "faithful": true,
+        "hallucinated": false,
+        "reason": "未查到即如实告知，未编造天数比例，建议转人工"
+      }
+    }
+  ]
+}

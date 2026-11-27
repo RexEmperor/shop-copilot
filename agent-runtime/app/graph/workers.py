@@ -16,6 +16,7 @@ from app.graph.state import (
     merge_usage,
 )
 from app.llm.client import DeepSeekClient
+from app.llm.resilience import rule_based_fallback_reply
 from app.mcp_client import mcp_client
 from app.prompts import load_prompt
 from app.tools import all_schemas, execute
@@ -192,9 +193,27 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
     stream_this_worker = bool(state.get("stream_tokens")) and len(plan) == 1
 
     for _ in range(MAX_WORKER_TOOL_ROUNDS):
-        result = await _chat_maybe_stream(
-            llm, messages, tools=tool_schemas or None, stream_tokens=stream_this_worker
-        )
+        try:
+            result = await _chat_maybe_stream(
+                llm, messages, tools=tool_schemas or None, stream_tokens=stream_this_worker
+            )
+        except Exception as exc:
+            logger.warning("Worker %s LLM call failed, degrading to rule fallback: %r", role, exc)
+            emit_event({
+                "type": "agent_status",
+                "agent": role,
+                "label": label,
+                "status": "done",
+                "failed": True,
+            })
+            return {
+                "llm_degraded": True,
+                "degraded_reason": repr(exc),
+                "failed_agent": role,
+                "tool_rounds": tool_rounds,
+                "usage": usage,
+                "citations": citations,
+            }
         usage = merge_usage(usage, result.get("usage"))
         tool_calls = result.get("tool_calls") or []
         if not tool_calls:
@@ -303,27 +322,41 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
 
 @observe(name="graph-chitchat")
 async def chitchat_node(state: AgentState, llm: DeepSeekClient) -> dict:
-    """闲聊节点：零工具 Schema 开销，直接响应。"""
+    """闲聊节点：零工具 Schema 开销，直接响应；上游故障时优雅降级。"""
     emit_event({"type": "agent_status", "agent": "chitchat", "label": ROLE_LABELS["chitchat"], "status": "start"})
     system_prompt = load_prompt("chitchat", config.PROMPT_VERSION)
     history = state.get("history") or [{"role": "user", "content": state["user_message"]}]
-    result = await _chat_maybe_stream(
-        llm,
-        [{"role": "system", "content": system_prompt}, *history],
-        tools=None,
-        stream_tokens=bool(state.get("stream_tokens")),
-    )
-    reply = (result.get("content") or "您好！请问有什么可以帮您？").strip()
+    try:
+        result = await _chat_maybe_stream(
+            llm,
+            [{"role": "system", "content": system_prompt}, *history],
+            tools=None,
+            stream_tokens=bool(state.get("stream_tokens")),
+        )
+        reply = (result.get("content") or "您好！请问有什么可以帮您？").strip()
+        degraded = False
+        degraded_reason = None
+        new_usage = merge_usage(state.get("usage"), result.get("usage"))
+    except Exception as exc:
+        logger.warning("Chitchat LLM failed, returning rule fallback: %r", exc)
+        reply = rule_based_fallback_reply(state.get("user_message", ""), reason=repr(exc))
+        if state.get("stream_tokens"):
+            emit_event({"type": "delta", "content": reply})
+        degraded = True
+        degraded_reason = repr(exc)
+        new_usage = state.get("usage") or {}
     emit_event({"type": "agent_status", "agent": "chitchat", "label": ROLE_LABELS["chitchat"], "status": "done"})
     return {
         "final_reply": reply,
-        "usage": merge_usage(state.get("usage"), result.get("usage")),
+        "llm_degraded": degraded,
+        "degraded_reason": degraded_reason,
+        "usage": new_usage,
     }
 
 
 @observe(name="graph-synthesize")
 async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
-    """多专家协同汇总节点：把 2 个专家的查询结论整合成一段自然连贯的回复。"""
+    """多专家协同汇总节点：把 2 个专家的查询结论整合成一段自然连贯的回复；故障时直接拼接原结论兜底。"""
     emit_event({"type": "agent_status", "agent": "synthesize", "label": ROLE_LABELS["synthesize"], "status": "start"})
     outputs = state.get("agent_outputs") or []
     parts = [
@@ -345,20 +378,34 @@ async def synthesize_node(state: AgentState, llm: DeepSeekClient) -> dict:
             "content": f"用户原问题：{state['user_message']}\n\n各专家处理结果：\n" + "\n\n".join(parts),
         },
     ]
-    result = await _chat_maybe_stream(
-        llm, messages, tools=None, stream_tokens=bool(state.get("stream_tokens"))
-    )
-    reply = (result.get("content") or "\n\n".join(parts)).strip()
+    try:
+        result = await _chat_maybe_stream(
+            llm, messages, tools=None, stream_tokens=bool(state.get("stream_tokens"))
+        )
+        reply = (result.get("content") or "\n\n".join(parts)).strip()
+        degraded = False
+        degraded_reason = None
+        new_usage = merge_usage(state.get("usage"), result.get("usage"))
+    except Exception as exc:
+        logger.warning("Synthesize LLM failed, concatenating expert outputs: %r", exc)
+        reply = "\n\n".join(parts) or rule_based_fallback_reply(state.get("user_message", ""))
+        if state.get("stream_tokens"):
+            emit_event({"type": "delta", "content": reply})
+        degraded = True
+        degraded_reason = repr(exc)
+        new_usage = state.get("usage") or {}
     emit_event({"type": "agent_status", "agent": "synthesize", "label": ROLE_LABELS["synthesize"], "status": "done"})
     return {
         "final_reply": reply,
-        "usage": merge_usage(state.get("usage"), result.get("usage")),
+        "llm_degraded": degraded,
+        "degraded_reason": degraded_reason,
+        "usage": new_usage,
     }
 
 
 @observe(name="graph-fallback")
 async def fallback_node(state: AgentState) -> dict:
-    """兜底节点：区分“用户主动要人工”与“工具连续失败降级建议（不强行切走会话）”。"""
+    """兜底节点：区分“用户主动要人工”、“LLM 故障/熔断规则降级”与“工具连续失败降级”。"""
     emit_event({"type": "agent_status", "agent": "fallback", "label": ROLE_LABELS["fallback"], "status": "start"})
     if state.get("handoff_requested"):
         reply = (
@@ -366,6 +413,18 @@ async def fallback_node(state: AgentState) -> dict:
             "您可以先把订单号或具体问题描述发给我，方便客服同学更快核实。"
         )
         handoff = True
+    elif state.get("llm_degraded"):
+        prior_ok = [
+            item["reply"]
+            for item in (state.get("agent_outputs") or [])
+            if not item.get("failed") and item.get("reply")
+        ]
+        prefix = (prior_ok[0] + "\n\n") if prior_ok else ""
+        reply = prefix + rule_based_fallback_reply(
+            state.get("user_message", ""),
+            reason=state.get("degraded_reason") or "",
+        )
+        handoff = False
     else:
         failed_role = ROLE_LABELS.get(state.get("failed_agent") or "", "业务查询")
         prior_ok = [

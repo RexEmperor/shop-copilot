@@ -92,6 +92,7 @@ async def agent_chat(req: ChatRequest):
         "citations": result.get("citations") or [],
         "tool_rounds": result["tool_rounds"],
         "handoff_requested": result["handoff_requested"],
+        "degraded": result.get("degraded", False),
         "elapsed_s": result["elapsed_s"],
         "usage": result["usage"],
     }

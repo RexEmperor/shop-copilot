@@ -15,17 +15,19 @@ llm = DeepSeekClient()
 
 
 def _route_after_supervisor(state: AgentState) -> str:
+    if state.get("llm_degraded"):
+        return "fallback"
     route = state.get("route", "guide")
     if route == "chitchat":
         return "chitchat"
-    if route == "handoff":
+    if route in {"handoff", "fallback"}:
         return "fallback"
     plan = state.get("plan") or [route]
     return plan[0]
 
 
 def _route_after_worker(state: AgentState) -> str:
-    if state.get("tool_failed"):
+    if state.get("tool_failed") or state.get("llm_degraded"):
         return "fallback"
     plan = state.get("plan") or []
     step_index = int(state.get("step_index", 0))
@@ -148,6 +150,7 @@ async def run_graph(
             "citations": final_state.get("citations") or [],
             "tool_rounds": int(final_state.get("tool_rounds", 0)),
             "handoff_requested": bool(final_state.get("handoff_requested", False)),
+            "degraded": bool(final_state.get("llm_degraded", False)),
             "elapsed_s": elapsed_s,
             "usage": usage,
         }
@@ -215,6 +218,7 @@ async def run_graph_stream(
                 "citations": final_state.get("citations") or [],
                 "tool_rounds": int(final_state.get("tool_rounds", 0)),
                 "handoff_requested": bool(final_state.get("handoff_requested", False)),
+                "degraded": bool(final_state.get("llm_degraded", False)),
                 "usage": usage,
                 "elapsed_s": elapsed_s,
             }

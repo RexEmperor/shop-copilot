@@ -73,7 +73,32 @@ async def route_node(state: AgentState, llm: DeepSeekClient) -> dict:
     recent = (state.get("history") or [])[-ROUTER_HISTORY_LIMIT:]
     messages = [{"role": "system", "content": system_prompt}, *recent]
 
-    result = await llm.chat(messages, tools=None)
+    try:
+        result = await llm.chat(messages, tools=None)
+    except Exception as exc:
+        logger.warning("Router LLM failed, triggering rule fallback: session=%s err=%r",
+                       state.get("session_id"), exc)
+        emit_event({
+            "type": "route",
+            "route": "fallback",
+            "plan": [],
+            "reason": "llm_degraded",
+        })
+        return {
+            "route": "fallback",
+            "route_reason": "llm_degraded",
+            "plan": [],
+            "step_index": 0,
+            "agent_outputs": [],
+            "tool_rounds": 0,
+            "tool_failed": False,
+            "failed_agent": None,
+            "llm_degraded": True,
+            "degraded_reason": repr(exc),
+            "handoff_requested": False,
+            "usage": state.get("usage") or {},
+        }
+
     route, plan, reason = parse_route_decision(result.get("content"))
     logger.info("Router decision: session=%s route=%s plan=%s reason=%s",
                 state.get("session_id"), route, plan, reason)

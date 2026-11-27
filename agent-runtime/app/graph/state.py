@@ -44,6 +44,8 @@ class AgentState(TypedDict, total=False):
     tool_rounds: int
     tool_failed: bool
     failed_agent: str | None
+    llm_degraded: bool
+    degraded_reason: str | None
     handoff_requested: bool
     stream_tokens: bool
     final_reply: str

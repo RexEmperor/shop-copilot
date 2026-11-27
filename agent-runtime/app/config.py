@@ -33,3 +33,8 @@ RAG_MIN_VECTOR_SCORE = float(os.environ.get("RAG_MIN_VECTOR_SCORE", "0.45"))
 RAG_POLICY_MIN_VECTOR_SCORE = float(os.environ.get("RAG_POLICY_MIN_VECTOR_SCORE", "0.55"))
 SILICONFLOW_API_KEY = os.environ.get("SILICONFLOW_API_KEY", "")
 SILICONFLOW_RERANK_MODEL = os.environ.get("SILICONFLOW_RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
+
+# Phase 5 稳定性配置（熔断器、重试风暴防护、并发舱壁）
+LLM_CB_FAILURE_THRESHOLD = int(os.environ.get("LLM_CB_FAILURE_THRESHOLD", "3"))
+LLM_CB_RECOVERY_SECONDS = float(os.environ.get("LLM_CB_RECOVERY_SECONDS", "30.0"))
+LLM_MAX_CONCURRENCY = int(os.environ.get("LLM_MAX_CONCURRENCY", "20"))

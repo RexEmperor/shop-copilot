@@ -1,0 +1,59 @@
+name: shop-copilot CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+    inputs:
+      run_live_eval:
+        description: "Run live LLM eval smoke (requires DEEPSEEK_API_KEY secret)"
+        required: false
+        default: "false"
+
+jobs:
+  java-unit-tests:
+    name: Java Unit & Controller Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Run Java unit & MockMvc tests
+        working-directory: business-api
+        run: mvn -B test -Dtest='!*IntegrationTest, !BusinessApiApplicationTests'
+
+  python-unit-and-eval-gate:
+    name: Python Unit, Guardrail & Eval Contract Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        working-directory: agent-runtime
+        run: uv sync --frozen
+      - name: Run deterministic unit, resilience, guardrail, MQ & eval contract tests
+        working-directory: agent-runtime
+        env:
+          DATABASE_URL: "mysql+asyncmy://dummy:dummy@127.0.0.1:3306/agent"
+          DEEPSEEK_API_KEY: "ci-dummy-key"
+        run: >
+          uv run pytest
+          tests/test_resilience.py
+          tests/test_guardrails.py
+          tests/test_events.py
+          tests/test_metrics.py
+          tests/test_tools.py
+          tests/test_mcp_client.py
+          tests/test_rag_ingest.py
+          tests/test_rag_retriever.py
+          tests/test_rag_tools.py
+          tests/test_eval_v0.py
+          tests/test_eval_v1.py
+          -q

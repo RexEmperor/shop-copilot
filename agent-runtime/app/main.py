@@ -14,12 +14,14 @@ from app.chat import append_message, build_messages, get_history
 
 from app.agent import run_agent
 
-from fastapi.responses import StreamingResponse
+from fastapi.responses import PlainTextResponse, StreamingResponse
 from app import config
 from app.agent import run_agent, run_agent_stream
 from app.events import event_processor
 from app.graph import run_graph, run_graph_stream
+from app.graph.workflow import llm as graph_llm
 from app.mcp_client import mcp_client
+from app.metrics import metrics
 
 logging.basicConfig(level=logging.INFO)
 
@@ -167,3 +169,20 @@ async def ack_notifications(user_id: int = 10001):
     """清空已读通知。"""
     cleared = await event_processor.clear_notifications(user_id=user_id)
     return {"user_id": user_id, "cleared": cleared}
+
+
+# ── Phase 5 S4：监控指标（JSON + Prometheus 文本格式）─────────
+
+@app.get("/api/metrics")
+async def get_metrics_json():
+    """运行时稳定性、安全拦截与熔断状态 JSON 指标接口。"""
+    return metrics.snapshot(graph_llm.breaker.snapshot())
+
+
+@app.get("/metrics", response_class=PlainTextResponse)
+async def get_metrics_prometheus():
+    """Prometheus 标准抓取端点（text/plain）。"""
+    return PlainTextResponse(
+        metrics.to_prometheus(graph_llm.breaker.snapshot()),
+        media_type="text/plain; version=0.0.4; charset=utf-8",
+    )

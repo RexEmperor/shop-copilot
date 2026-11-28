@@ -13,6 +13,7 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,7 @@ public class AgentEventDispatcher {
     private final RestClient restClient;
     private volatile DefaultMQPushConsumer consumer;
 
+    @Autowired
     public AgentEventDispatcher(
             MqProperties props,
             StringRedisTemplate redisTemplate,

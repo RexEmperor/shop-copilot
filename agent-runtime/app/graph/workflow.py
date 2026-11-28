@@ -13,6 +13,7 @@ from app.graph.workers import chitchat_node, fallback_node, run_worker_node, syn
 from app.guardrails.confirmation import classify_confirmation_reply, confirmation_manager
 from app.guardrails.security import check_input_safety, sanitize_output
 from app.llm.client import DeepSeekClient
+from app.metrics import metrics
 from app.tools import execute as execute_tool
 
 llm = DeepSeekClient()
@@ -239,9 +240,17 @@ async def run_graph(
                 usage={},
                 elapsed_ms=int(elapsed_s * 1000),
             )
-            intercepted.pop("_executed_tool", None)
+            exec_tool = intercepted.pop("_executed_tool", None)
             intercepted["content"] = reply
             intercepted["elapsed_s"] = elapsed_s
+            metrics.record_chat(
+                route=intercepted["route"],
+                elapsed_s=elapsed_s,
+                usage={},
+                degraded=False,
+                blocked_by_guardrail=intercepted.get("blocked_by_guardrail"),
+                executed_confirmation=bool(exec_tool),
+            )
             return intercepted
 
         history = (await get_history(session_id))[-config.HISTORY_MAX_MESSAGES:]
@@ -271,6 +280,14 @@ async def run_graph(
         agents_used = [item["agent"] for item in (final_state.get("agent_outputs") or [])]
         if not agents_used and final_state.get("route"):
             agents_used = [final_state["route"]]
+
+        metrics.record_chat(
+            route=final_state.get("route", "guide"),
+            elapsed_s=elapsed_s,
+            usage=usage,
+            degraded=bool(final_state.get("llm_degraded", False)),
+            pending_confirmation=final_state.get("pending_confirmation"),
+        )
 
         return {
             "content": reply,
@@ -339,6 +356,14 @@ async def run_graph_stream(
                     usage={},
                     elapsed_ms=int(elapsed_s * 1000),
                 )
+                metrics.record_chat(
+                    route=intercepted["route"],
+                    elapsed_s=elapsed_s,
+                    usage={},
+                    degraded=False,
+                    blocked_by_guardrail=intercepted.get("blocked_by_guardrail"),
+                    executed_confirmation=bool(exec_tool),
+                )
                 yield {
                     "type": "final",
                     **intercepted,
@@ -382,6 +407,14 @@ async def run_graph_stream(
             agents_used = [item["agent"] for item in (final_state.get("agent_outputs") or [])]
             if not agents_used and final_state.get("route"):
                 agents_used = [final_state["route"]]
+
+            metrics.record_chat(
+                route=final_state.get("route", "guide"),
+                elapsed_s=elapsed_s,
+                usage=usage,
+                degraded=bool(final_state.get("llm_degraded", False)),
+                pending_confirmation=final_state.get("pending_confirmation"),
+            )
 
             yield {
                 "type": "final",

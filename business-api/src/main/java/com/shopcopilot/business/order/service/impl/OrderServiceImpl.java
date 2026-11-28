@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shopcopilot.business.aftersale.mapper.AftersaleTicketMapper;
 import com.shopcopilot.business.common.BusinessException;
 import com.shopcopilot.business.common.PageResult;
+import com.shopcopilot.business.mq.DomainEventPublisher;
+import com.shopcopilot.business.mq.DomainEvents.OrderStatusChangedEvent;
 import com.shopcopilot.business.order.dto.OrderCreateRequest;
 import com.shopcopilot.business.order.entity.Order;
 import com.shopcopilot.business.order.enums.OrderStatus;
@@ -34,18 +36,21 @@ public class OrderServiceImpl implements OrderService {
     private final OrderStateMachine orderStateMachine;
     private final AftersaleTicketMapper aftersaleTicketMapper;
     private final ProductCache productCache;
+    private final DomainEventPublisher eventPublisher;
 
     public OrderServiceImpl(
             ProductMapper productMapper,
             OrderMapper orderMapper,
             OrderStateMachine orderStateMachine,
             AftersaleTicketMapper aftersaleTicketMapper,
-            ProductCache productCache) {
+            ProductCache productCache,
+            DomainEventPublisher eventPublisher) {
         this.productMapper = productMapper;
         this.orderMapper = orderMapper;
         this.orderStateMachine = orderStateMachine;
         this.aftersaleTicketMapper = aftersaleTicketMapper;
         this.productCache = productCache;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -94,7 +99,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderVO transition(Long id, OrderStatus targetStatus) {
         Order order = requireOrder(id);
-        OrderStatus nextStatus = orderStateMachine.transition(order.getStatus(), targetStatus);
+        OrderStatus previousStatus = order.getStatus();
+        OrderStatus nextStatus = orderStateMachine.transition(previousStatus, targetStatus);
 
         if (nextStatus == OrderStatus.CANCELLED) {
             Order lockedOrder = orderMapper.selectByOrderNoForUpdate(order.getOrderNo());
@@ -131,6 +137,8 @@ public class OrderServiceImpl implements OrderService {
         if (nextStatus == OrderStatus.CANCELLED) {
             productCache.evict(order.getProductId());
         }
+        eventPublisher.publishOrderStatusChanged(
+            OrderStatusChangedEvent.of(order, previousStatus, nextStatus));
         return toVO(order);
     }
 

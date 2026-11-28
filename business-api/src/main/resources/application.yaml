@@ -29,3 +29,12 @@ app:
   rate-limit:
     enabled: ${RATE_LIMIT_ENABLED:true}
     trusted-proxies: ${RATE_LIMIT_TRUSTED_PROXIES:}
+  mq:
+    enabled: ${ROCKETMQ_ENABLED:false}
+    namesrv-addr: ${ROCKETMQ_NAMESRV:127.0.0.1:9876}
+    producer-group: ${ROCKETMQ_PRODUCER_GROUP:shop-copilot-business-producer}
+    consumer-group: ${ROCKETMQ_CONSUMER_GROUP:shop-copilot-agent-dispatcher}
+    order-topic: ${ROCKETMQ_ORDER_TOPIC:shop-copilot-order-events}
+    product-topic: ${ROCKETMQ_PRODUCT_TOPIC:shop-copilot-product-events}
+    agent-runtime-base-url: ${AGENT_RUNTIME_BASE_URL:http://127.0.0.1:8000}
+    consume-dedup-ttl-seconds: ${ROCKETMQ_DEDUP_TTL_SECONDS:86400}

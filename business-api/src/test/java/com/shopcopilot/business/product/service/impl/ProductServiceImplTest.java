@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.shopcopilot.business.common.BusinessException;
+import com.shopcopilot.business.mq.DomainEventPublisher;
 import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.dto.ProductSaveRequest;
 import com.shopcopilot.business.product.entity.Product;
@@ -29,6 +30,9 @@ class ProductServiceImplTest {
 
     @Mock
     private ProductCache productCache;
+
+    @Mock
+    private DomainEventPublisher eventPublisher;
 
     @InjectMocks
     private ProductServiceImpl productService;

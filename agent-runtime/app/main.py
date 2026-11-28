@@ -17,6 +17,7 @@ from app.agent import run_agent
 from fastapi.responses import StreamingResponse
 from app import config
 from app.agent import run_agent, run_agent_stream
+from app.events import event_processor
 from app.graph import run_graph, run_graph_stream
 from app.mcp_client import mcp_client
 
@@ -112,3 +113,57 @@ async def agent_chat_stream(req: ChatRequest):
     return StreamingResponse(sse(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache",
                                       "X-Accel-Buffering": "no"})  # 防将来 nginx 缓冲整个流
+
+
+# ── Phase 5 S3：RocketMQ 异步事件接收与主动播报通知接口 ─────────
+
+class OrderStatusEventRequest(BaseModel):
+    eventId: str = Field(min_length=1, max_length=128)
+    orderNo: str = Field(min_length=1, max_length=64)
+    userId: int = 10001
+    productId: int
+    productName: str
+    fromStatus: int
+    toStatus: int
+    toStatusText: str
+    totalAmountCents: int
+    occurredAt: str = ""
+
+
+class ProductChangedEventRequest(BaseModel):
+    eventId: str = Field(min_length=1, max_length=128)
+    productId: int
+    action: str
+    name: str
+    category: str
+    description: str = ""
+    priceCents: int = 0
+    stock: int = 0
+    status: int = 1
+    occurredAt: str = ""
+
+
+@app.post("/api/internal/events/order-status")
+async def on_order_status_event(req: OrderStatusEventRequest):
+    """接收 Java RocketMQ 转发的订单状态变更事件并生成主动播报通知。"""
+    return await event_processor.handle_order_status_event(req.model_dump())
+
+
+@app.post("/api/internal/events/product-sync")
+async def on_product_sync_event(req: ProductChangedEventRequest):
+    """接收 Java RocketMQ 转发的商品变更/下架事件并增量更新单条商品向量。"""
+    return await event_processor.handle_product_sync_event(req.model_dump())
+
+
+@app.get("/api/notifications")
+async def get_notifications(user_id: int = 10001, limit: int = 10):
+    """拉取用户待查看的订单状态主动播报通知列表。"""
+    items = await event_processor.list_notifications(user_id=user_id, limit=limit)
+    return {"user_id": user_id, "count": len(items), "items": items}
+
+
+@app.post("/api/notifications/ack")
+async def ack_notifications(user_id: int = 10001):
+    """清空已读通知。"""
+    cleared = await event_processor.clear_notifications(user_id=user_id)
+    return {"user_id": user_id, "cleared": cleared}

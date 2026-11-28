@@ -154,6 +154,14 @@ class RagVectorStore:
                         )
                     return cur.rowcount or 0
 
+    async def delete_document_by_key(self, doc_key: str) -> int:
+        """按业务键删除单篇文档（用于 RocketMQ 商品下架事件实时清理向量）。"""
+        async with self._connect() as conn:
+            async with conn.transaction():
+                async with conn.cursor() as cur:
+                    await cur.execute("DELETE FROM kb_document WHERE doc_key = %s", (doc_key,))
+                    return cur.rowcount or 0
+
     async def stats(self) -> dict[str, Any]:
         """返回知识库当前文档与分块统计。"""
         async with self._connect() as conn:

@@ -18,6 +18,7 @@ import com.shopcopilot.business.order.mapper.OrderMapper;
 import com.shopcopilot.business.order.service.impl.OrderServiceImpl;
 import com.shopcopilot.business.order.state.OrderStateMachine;
 import com.shopcopilot.business.order.vo.OrderVO;
+import com.shopcopilot.business.mq.DomainEventPublisher;
 import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.mapper.ProductMapper;
 import java.time.LocalDateTime;
@@ -45,12 +46,16 @@ class OrderStateTransitionServiceTest {
     @Mock
     private ProductCache productCache;
 
+    @Mock
+    private DomainEventPublisher eventPublisher;
+
     private OrderService orderService;
 
     @BeforeEach
     void setUp() {
         orderService = new OrderServiceImpl(
-            productMapper, orderMapper, new OrderStateMachine(), aftersaleTicketMapper, productCache);
+            productMapper, orderMapper, new OrderStateMachine(),
+            aftersaleTicketMapper, productCache, eventPublisher);
     }
 
     @Test

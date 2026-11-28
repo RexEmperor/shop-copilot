@@ -3,6 +3,8 @@ package com.shopcopilot.business.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shopcopilot.business.common.BusinessException;
 import com.shopcopilot.business.common.PageResult;
+import com.shopcopilot.business.mq.DomainEventPublisher;
+import com.shopcopilot.business.mq.DomainEvents.ProductChangedEvent;
 import com.shopcopilot.business.product.cache.ProductCache;
 import com.shopcopilot.business.product.dto.ProductSaveRequest;
 import com.shopcopilot.business.product.entity.Product;
@@ -23,10 +25,15 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductMapper productMapper;
     private final ProductCache productCache;
+    private final DomainEventPublisher eventPublisher;
 
-    public ProductServiceImpl(ProductMapper productMapper, ProductCache productCache) {
+    public ProductServiceImpl(
+            ProductMapper productMapper,
+            ProductCache productCache,
+            DomainEventPublisher eventPublisher) {
         this.productMapper = productMapper;
         this.productCache = productCache;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -86,6 +93,7 @@ public class ProductServiceImpl implements ProductService {
         product.setVersion(0);
         productMapper.insert(product);
         productCache.evict(product.getId());
+        eventPublisher.publishProductChanged(ProductChangedEvent.of(product, "CREATED"));
         return product.getId();
     }
 
@@ -96,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
         applyRequest(product, request);
         updateProduct(product);
         productCache.evict(id);
+        eventPublisher.publishProductChanged(ProductChangedEvent.of(product, "UPDATED"));
     }
 
     @Override
@@ -109,6 +118,8 @@ public class ProductServiceImpl implements ProductService {
         product.setStatus(targetStatus);
         updateProduct(product);
         productCache.evict(id);
+        eventPublisher.publishProductChanged(
+            ProductChangedEvent.of(product, targetStatus == ProductStatus.ON_SALE ? "ON_SALE" : "OFF_SALE"));
     }
 
     private Product requireProduct(Long id) {

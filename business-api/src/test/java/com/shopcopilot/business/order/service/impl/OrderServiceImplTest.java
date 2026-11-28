@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.shopcopilot.business.common.BusinessException;
+import com.shopcopilot.business.mq.DomainEventPublisher;
 import com.shopcopilot.business.order.dto.OrderCreateRequest;
 import com.shopcopilot.business.order.entity.Order;
 import com.shopcopilot.business.order.mapper.OrderMapper;
@@ -41,6 +42,9 @@ class OrderServiceImplTest {
 
     @Mock
     private ProductCache productCache;
+
+    @Mock
+    private DomainEventPublisher eventPublisher;
 
     @InjectMocks
     private OrderServiceImpl orderService;

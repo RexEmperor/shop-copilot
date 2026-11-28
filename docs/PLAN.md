@@ -161,14 +161,19 @@
 > **进度日志 2026-11-26(S4 已提交 `1a12119`)**:接入多 Agent 状态机——`product_qa` 挂载 `search_knowledge_base`(强制 `[来源: 文档标题]` 引用 + `strict_vector_threshold=0.55` 检索硬护栏 + 模型软拒答护栏),`guide` 挂载 `semantic_search_products`(语义召回 ID + 回源 Java MCP 校验实时在售价格库存),SSE/Gradio 透出 `citations` 引用展示;pytest 36 例全绿,3 场景真机冒烟全过。
 > **进度日志 2026-11-26(S5 100 题评测集 v1 与收官)**:构建 100 题无副作用评测集 `eval_set_v1.json`(30 回归 + 40 政策问答 + 15 语义导购 + 15 库外防幻觉)、检索消融器与 LLM-as-Judge 裁判(`run_eval_v1.py`),pytest **38 例全绿**。批次 `0505d1` 实测:①57 题检索消融——`bm25` Top-1 94.7% / Top-3 96.5%(MRR 0.956, 11.7ms) → `vector` Top-1 98.2% / Top-3 100.0%(MRR 0.991, 104.5ms) → **`hybrid` Top-1 100.0% / Top-3 100.0%(MRR 1.000, 68.3ms)**;②100 题端到端综合通过 **95/100(95.0%)**(路由 97%、工具 96%、事实 97%、语义导购 15/15 100%、规则引用率 40/42 95.2%、均耗时 3.16s,总耗时 86.15s);③57 题 LLM-as-Judge 忠实度 **100%(57/57)**、**幻觉率 0.0%(0/57)**;④`verify_shop.sh` 24/24 PASS 证实零副作用;⑤`docs/面试题库.md` 追加 Phase 4 口语化面试问答 6 题(含千万级大厂演进路径)。Phase 4 关闭。
 
-### Phase 5 · 企业级工程化(W11–W12,~24h)
-- [ ] RocketMQ:订单状态变更 → 异步通知 Agent 主动播报;批量向量索引任务
-- [ ] 稳定性:LLM 超时/失败降级(规则 fallback)、工具幂等、重试风暴防护
-- [ ] 安全护栏:敏感词、资金类操作二次确认、prompt injection 基础防御
-- [ ] 评测 CI:GitHub Actions 跑评测集并出报告(准确率/幻觉率/成本)
-- [ ] 可选:Prometheus + Grafana 业务监控
-- **验收**:人为制造 LLM 超时/接口故障,系统优雅降级不崩;CI 评测报告自动产出
-- **简历话术来源**:本阶段的降级设计、成本统计、评测数据是面试差异化核心
+### Phase 5 · 企业级工程化(W11–W12,~24h) ✅ 2026-11-28 关闭
+- [x] RocketMQ:订单状态变更 → 异步通知 Agent 主动播报;单条商品变更/下架增量向量索引任务(扣库存不触发重算)
+- [x] 稳定性:大模型三态熔断器 + 带抖动指数退避防重试风暴 + 规则兜底降级 + 流中断本地 Token 估算兜底 + 工具/MQ 幂等防重
+- [x] 安全护栏:敏感词拦截、资金类操作(发起售后)代码级强制二次确认与防重放、Prompt Injection 基础防御 + 输出脱敏
+- [x] 评测 CI:GitHub Actions 自动跑 Java 非集成单测与 MockMvc 测试 + Python 稳定性/攻防/MQ/评测契约回归门禁
+- [x] 监控指标:新增 `/api/metrics`(JSON) 与 `/metrics`(Prometheus 文本格式),覆盖请求量、降级、安全拦截、二次确认与熔断状态
+- **验收**:人为制造大模型超时/熔断/断流与越权注入攻击,系统优雅降级不崩、安全拦截与二次确认生效;CI 流水线配置完成且本地全绿 ✅
+
+> **进度日志 2026-11-28(S1 已提交 `31f517b`)**:落地大模型客户端三态熔断器(`CLOSED/OPEN/HALF_OPEN`)、带随机抖动退避(区分可重试故障与 4xx 确定性错误)、并发舱壁、流式中途断开本地 Token 估算补报(`usage_estimated=true`)及路由/专家/汇总全链路规则兜底降级;故障注入单测与回归 31 例全绿。
+> **进度日志 2026-11-28(S2 已提交 `82adc91`)**:落地入口敏感词与 Prompt Injection 前置短路拦截(0 大模型 Token 消耗)、输出凭证脱敏(`sk-***`)、以及代码层高危写操作(`create_aftersale`)强制二次确认与 Redis `SET NX` 幂等防重(拦截→取消 0 写库→确认 1 次写库→重复确认防重放);攻防单测与回归 35 例全绿。
+> **进度日志 2026-11-28(S3 已提交 `12d91d5`)**:Java 侧引入 RocketMQ 5.3.1(`DomainEventPublisher` 严格在事务 `afterCommit` 后发送,MQ 故障柔性降级记日志不回滚主交易;`AgentEventDispatcher` 基于 Redis `SET NX` 去重转发,下游 5xx 释放去重键触发 `RECONSUME_LATER` 重试);Python 侧落地订单状态主动播报(`/api/notifications`)与单条商品增量向量同步/下架删除(`/api/internal/events/product-sync`);Java + Python 37 例单测全绿。
+> **进度日志 2026-11-28(S4 已提交 `91c25d0`)**:新增 `RuntimeMetrics` 与 `/api/metrics` + `/metrics`(Prometheus 格式)实时暴露熔断状态、降级、护栏拦截与 Token 消耗;落地 `.github/workflows/ci.yml` 双语言 CI 门禁并补齐 `AgentEventDispatcher` `@Autowired` 修复;复跑与 CI 完全一致的 Java 非集成全量单测 + Python 39 例单测全绿。
+> **进度日志 2026-11-28(S5 收官)**:完成 `docs/PLAN.md` Phase 5 验收关闭,并在 `docs/面试题库.md` 补齐 5 道口语化企业级工程化面试问答。待确认后推送远端并开启 Phase 6(前端 Vue3 + Docker 全服务容器化)。
 
 ### Phase 6 · 前端 + 部署 + 打磨(W13–W14,~24h)
 - [ ] Vue3 简洁聊天页(SSE 流式、会话列表、引用展示)——我可直接帮你写,你负责联调

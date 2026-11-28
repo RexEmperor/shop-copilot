@@ -93,6 +93,8 @@ async def agent_chat(req: ChatRequest):
         "tool_rounds": result["tool_rounds"],
         "handoff_requested": result["handoff_requested"],
         "degraded": result.get("degraded", False),
+        "blocked_by_guardrail": result.get("blocked_by_guardrail"),
+        "pending_confirmation": result.get("pending_confirmation"),
         "elapsed_s": result["elapsed_s"],
         "usage": result["usage"],
     }

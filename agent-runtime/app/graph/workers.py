@@ -17,6 +17,7 @@ from app.graph.state import (
 )
 from app.llm.client import DeepSeekClient
 from app.llm.resilience import rule_based_fallback_reply
+from app.guardrails.confirmation import HIGH_RISK_WRITE_TOOLS, confirmation_manager
 from app.mcp_client import mcp_client
 from app.prompts import load_prompt
 from app.tools import all_schemas, execute
@@ -184,6 +185,7 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
     tool_trace: list[dict] = []
     citations = list(state.get("citations") or [])
     seen_citation_keys = {(c.get("doc_key"), c.get("heading_path")) for c in citations}
+    pending_confirmation = state.get("pending_confirmation")
     consecutive_failures = 0
     tool_failed = False
     reply = ""
@@ -235,9 +237,37 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
                 "name": call["name"],
                 "args": call["args"],
             })
-            output = await execute(
-                call["name"], call["args"], context={"session_id": state["session_id"]}
-            )
+            if call["name"] in HIGH_RISK_WRITE_TOOLS:
+                # 资金类高危写操作代码级强拦截：暂存参数并要求用户明确二次确认
+                pending = await confirmation_manager.create_pending(
+                    state["session_id"], call["name"], call["args"]
+                )
+                pending_confirmation = pending
+                emit_event({
+                    "type": "confirmation_required",
+                    "agent": role,
+                    "confirm_id": pending["confirm_id"],
+                    "summary": pending["summary"],
+                })
+                output = json.dumps(
+                    {
+                        "success": True,
+                        "code": 202,
+                        "requires_confirmation": True,
+                        "confirm_id": pending["confirm_id"],
+                        "summary": pending["summary"],
+                        "message": (
+                            "【资金操作二次确认拦截】系统已暂停直接提交售后申请。"
+                            "请向用户清晰核对以上订单号、售后类型与原因，并明确请用户回复"
+                            "“确认提交”完成申请，或回复“取消”放弃操作。"
+                        ),
+                    },
+                    ensure_ascii=False,
+                )
+            else:
+                output = await execute(
+                    call["name"], call["args"], context={"session_id": state["session_id"]}
+                )
             emit_event({
                 "type": "tool_result",
                 "agent": role,
@@ -309,6 +339,7 @@ async def run_worker_node(role: str, state: AgentState, llm: DeepSeekClient) -> 
     patch: dict = {
         "agent_outputs": outputs,
         "citations": citations,
+        "pending_confirmation": pending_confirmation,
         "step_index": next_index,
         "tool_rounds": tool_rounds,
         "tool_failed": tool_failed,

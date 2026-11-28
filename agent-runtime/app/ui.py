@@ -49,6 +49,13 @@ async def respond(message: str, history: list, state: dict):
             if titles:
                 trace_text += f"📚 命中引用：{'、'.join(titles)}\n"
                 yield "", history, trace_text
+        elif ev_type == "confirmation_required":
+            summary = ev.get("summary") or {}
+            trace_text += (
+                f"🔐 资金操作待二次确认：订单 {summary.get('orderNo')} / "
+                f"{summary.get('aftersaleType')}（请回复“确认提交”或“取消”）\n"
+            )
+            yield "", history, trace_text
         elif ev_type == "delta":
             reply += ev["content"]
             yield "", history + [{"role": "assistant", "content": reply}], trace_text
